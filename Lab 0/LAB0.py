@@ -1,11 +1,12 @@
 #Lab #0
 #Due Date: 08/28/2020, 11:59PM
-#Dominic Assia
 
-"""                                   
+'''
+Written by: Dominic Assia
+
 ### Collaboration Statement:
-             
-"""
+    I worked on this assignment alone, using only this semester's course materials
+'''
 
 def sumSquares(aList):
     '''
@@ -43,8 +44,12 @@ def sumSquares(aList):
         # Return the sum as an int
         return int(x)
 
-# Uncomment next 3 lines if not running doctest in the command line
-if __name__ == "__main__":
+    # If input is not a list, return none
+    else:
+        return None
 
-   import doctest
-   doctest.testmod()
+# # Uncomment next 3 lines if not running doctest in the command line
+# if __name__ == "__main__":
+
+#    import doctest
+#    doctest.testmod()
