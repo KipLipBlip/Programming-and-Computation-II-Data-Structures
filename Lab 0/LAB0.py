@@ -47,9 +47,3 @@ def sumSquares(aList):
     # If input is not a list, return none
     else:
         return None
-
-# # Uncomment next 3 lines if not running doctest in the command line
-# if __name__ == "__main__":
-
-#    import doctest
-#    doctest.testmod()
