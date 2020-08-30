@@ -6,39 +6,104 @@
 """
 def rectangle(perimeter,area):
     """
-        >>> rectangle(14, 10) # From a 2x5 rectangle
-        5
-        >>> rectangle(12, 5) # From a 1x5 rectangle
-        5
-        >>> rectangle(25, 25) # A 2.5x10, but one side is not an integer
-        -1
-        >>> rectangle(50, 100) # From a 5x20 rectangle
-        20
-        >>> rectangle(11, 5)
-        -1
-        >>> rectangle(11, 4)
-        -1
+        Returns the longest side of the rectangle with given perimeter and area 
+        if both sides are integer lengths
+
+        Doctest:
+            >>> rectangle(14, 10) # From a 2x5 rectangle
+            5
+            >>> rectangle(12, 5) # From a 1x5 rectangle
+            5
+            >>> rectangle(25, 25) # A 2.5x10, but one side is not an integer
+            -1
+            >>> rectangle(50, 100) # From a 5x20 rectangle
+            20
+            >>> rectangle(11, 5)
+            -1
+            >>> rectangle(11, 4)
+            -1
     """
-    #- YOUR CODE STARTS HERE
-    pass
+    areas = []
 
+    # Starting at 1 going until half the area
+    for i in range(1, int( area / 2 )):
 
+        # If the area divided by the iterable is an integer
+        if type(area // i) == int:
+
+            # Ensure the quotient == the area
+            if ( area // i ) * i == area:
+
+                # Add possible area values
+                areas.append([i,area // i])
+        else:
+            return -1
+
+    # Find which area combo results in the correct perimeter
+    for j in range(len(areas)):
+
+        # Find the perimeter of the combo and comapre it to the given perimeter
+        if (areas[j][0] * 2) + (areas[j][1] * 2) == perimeter:
+
+            # This combo matches the perimeter, at index j, return longest side
+            if areas[j][0] > areas[j][1]:
+                return areas[j][0]
+
+            else:
+                return areas[j][1]
+    else:
+        return -1
 
 def translate(dict_words, txt):
     """
-        >>> myDict = {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'} 
-        >>> text = '1 UP, 2 down / left right forward' 
-        >>> translate(myDict, text)
-        '2 down 2 up right left forward'
-        >>> text
-        '1 UP, 2 down / left right forward'
-        >>> translate({'a':'b'}, text)
-        '1 up 2 down left right forward'
+        Translates all words in the input string that have an entry in the given translation dictionary
+
+        Doctest:
+            >>> myDict = {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'} 
+            >>> text = '1 UP, 2 down / left right forward' 
+            >>> translate(myDict, text)
+            '2 down 2 up right left forward'
+            >>> text
+            '1 UP, 2 down / left right forward'
+            >>> translate({'a':'b'}, text)
+            '1 up 2 down left right forward'
     """
+    newTxt = ''
+    specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
 
-    #- YOUR CODE STARTS HERE
-    pass
+    # Split the string over spaces
+    txt = str(txt).split()
 
+    # Find any special characters
+    for g in range(len(txt)):
+
+        for h in range(len(specChar)):
+
+            if specChar[h] in txt[g]:
+                print(txt[g], specChar[h])
+
+    # For the length of the list
+    for i in range(len(txt)):
+
+        print('eval:', txt[i])
+
+        # For all the words in the string that are found in the dict
+        if txt[i] in dict_words:
+            print('adding')
+            newTxt += dict_words[txt[i]]
+            newTxt += ' '
+
+        elif txt[i].upper() in dict_words:
+            print('adding u')
+            newTxt += dict_words[txt[i].upper()]
+            newTxt += ' '
+
+        elif txt[i].lower() in dict_words:
+            print('adding l')
+            newTxt += dict_words[txt[i].lower()]
+            newTxt += ' '
+
+    return newTxt
 
 
 def successors(file):
@@ -119,3 +184,10 @@ def common(aList1, aList2):
         True
     """
     #- YOU CODE STARTS HERE
+
+
+if __name__ == "__main__":
+
+    print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
+    # import doctest
+    # doctest.testmod()

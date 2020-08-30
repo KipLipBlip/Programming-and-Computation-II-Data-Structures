@@ -32,7 +32,7 @@ def sumSquares(aList):
             # Check index type, int or float
             if type(aList[i]) == float or type(aList[i]) == int:
 
-                # Check if index is positive 
+                # Check if index is positive
                 if aList[i] >= 0:
 
                     # Check if index is divisible by 3 or 7
