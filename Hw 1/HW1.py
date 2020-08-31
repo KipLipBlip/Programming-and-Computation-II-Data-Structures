@@ -54,6 +54,7 @@ def rectangle(perimeter,area):
     else:
         return -1
 
+# TODO: FINISH THIS
 def translate(dict_words, txt):
     """
         Translates all words in the input string that have an entry in the given translation dictionary
@@ -80,7 +81,8 @@ def translate(dict_words, txt):
         for h in range(len(specChar)):
 
             if specChar[h] in txt[g]:
-                print(txt[g], specChar[h])
+
+                txt[g].remove(specChar[h])
 
     # For the length of the list
     for i in range(len(txt)):
@@ -108,36 +110,42 @@ def translate(dict_words, txt):
 
 def successors(file):
     """
-        >>> expected = {'.': ['He', 'But', '(', ')'], 'He': ['will'], 'will': ['be', 'see'], 'be': ['the'], 'the': ['president', 'company', 'importance'], 'president': ['of', '.'], 'of': ['the', 'it', 'these'], 'company': [';'], ';': ['right'], 'right': ['now'], 'now': ['he'], 'he': ['is', ',', 'will'], 'is': ['a', 'no'], 'a': ['vice'], 'vice': ['president'], 'But': ['he'], ',': ['himself', 'is'], 'himself': [','], 'no': ['sure'], 'sure': ['of'], 'it': ['.'], '(': ['Later'], 'Later': ['he'], 'see': ['the'], 'importance': ['of'], 'these': ['3'], '3': ['.']}
-        >>> returnedDict = successors('article.txt')
-        >>> expected == returnedDict
-        True
-        >>> returnedDict['the']
-        ['president', 'company', 'importance']
-        >>> returnedDict['will']
-        ['be', 'see']
-        >>> returnedDict['3']
-        ['.']
-        >>> returnedDict['.']
-        ['He', 'But', '(', ')']
-        >>> successors('article.tt') is None
-        True
-        >>> successors(2.3) is None
-        True
+        Opens a text file and creates a dictionary whose keys are words from the text file 
+        and whose values are lists of words that immediately follow the key word.
+
+        Doctest:
+            >>> expected = {'.': ['He', 'But', '(', ')'], 'He': ['will'], 'will': ['be', 'see'], 'be': ['the'], 'the': ['president', 'company', 'importance'], 'president': ['of', '.'], 'of': ['the', 'it', 'these'], 'company': [';'], ';': ['right'], 'right': ['now'], 'now': ['he'], 'he': ['is', ',', 'will'], 'is': ['a', 'no'], 'a': ['vice'], 'vice': ['president'], 'But': ['he'], ',': ['himself', 'is'], 'himself': [','], 'no': ['sure'], 'sure': ['of'], 'it': ['.'], '(': ['Later'], 'Later': ['he'], 'see': ['the'], 'importance': ['of'], 'these': ['3'], '3': ['.']}
+            >>> returnedDict = successors('article.txt')
+            >>> expected == returnedDict
+            True
+            >>> returnedDict['the']
+            ['president', 'company', 'importance']
+            >>> returnedDict['will']
+            ['be', 'see']
+            >>> returnedDict['3']
+            ['.']
+            >>> returnedDict['.']
+            ['He', 'But', '(', ')']
+            >>> successors('article.tt') is None
+            True
+            >>> successors(2.3) is None
+            True
     """
     # --- YOU INPUT VALIDATION STARTS HERE
 
+    dictionary = { '.' : [] }
 
-
+    # Input check
+    if type(file) != str:
+        return None
 
     # Open the file and read the contents
-    with open(file) as f:   #with ensures the file is properly closed after its suite finishes, even if an error ocurred
+    with open(file) as f:   # with ensures the file is properly closed after its suite finishes, even if an error ocurred
         contents = f.read() # use the read() function to read the entire file, contents has the data as string
 
+        newContents = contents.split(',')
 
-    # --- YOU CODE STARTS HERE
-    pass
-
+        print(newContents)
 
 
 def sumDigits(num):
@@ -188,6 +196,9 @@ def common(aList1, aList2):
 
 if __name__ == "__main__":
 
-    print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
+    successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
+
+    # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
+    
     # import doctest
     # doctest.testmod()
