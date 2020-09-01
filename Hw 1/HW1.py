@@ -108,44 +108,96 @@ def translate(dict_words, txt):
     return newTxt
 
 
-def successors(file):
-    """
-        Opens a text file and creates a dictionary whose keys are words from the text file 
-        and whose values are lists of words that immediately follow the key word.
+# def successors(file):
+#     """
+#         Opens a text file and creates a dictionary whose keys are words from the text file 
+#         and whose values are lists of words that immediately follow the key word.
 
-        Doctest:
-            >>> expected = {'.': ['He', 'But', '(', ')'], 'He': ['will'], 'will': ['be', 'see'], 'be': ['the'], 'the': ['president', 'company', 'importance'], 'president': ['of', '.'], 'of': ['the', 'it', 'these'], 'company': [';'], ';': ['right'], 'right': ['now'], 'now': ['he'], 'he': ['is', ',', 'will'], 'is': ['a', 'no'], 'a': ['vice'], 'vice': ['president'], 'But': ['he'], ',': ['himself', 'is'], 'himself': [','], 'no': ['sure'], 'sure': ['of'], 'it': ['.'], '(': ['Later'], 'Later': ['he'], 'see': ['the'], 'importance': ['of'], 'these': ['3'], '3': ['.']}
-            >>> returnedDict = successors('article.txt')
-            >>> expected == returnedDict
-            True
-            >>> returnedDict['the']
-            ['president', 'company', 'importance']
-            >>> returnedDict['will']
-            ['be', 'see']
-            >>> returnedDict['3']
-            ['.']
-            >>> returnedDict['.']
-            ['He', 'But', '(', ')']
-            >>> successors('article.tt') is None
-            True
-            >>> successors(2.3) is None
-            True
-    """
-    # --- YOU INPUT VALIDATION STARTS HERE
+#         Doctest:
+#             >>> expected = {'.': ['He', 'But', '(', ')'], 'He': ['will'], 'will': ['be', 'see'], 'be': ['the'], 'the': ['president', 'company', 'importance'], 'president': ['of', '.'], 'of': ['the', 'it', 'these'], 'company': [';'], ';': ['right'], 'right': ['now'], 'now': ['he'], 'he': ['is', ',', 'will'], 'is': ['a', 'no'], 'a': ['vice'], 'vice': ['president'], 'But': ['he'], ',': ['himself', 'is'], 'himself': [','], 'no': ['sure'], 'sure': ['of'], 'it': ['.'], '(': ['Later'], 'Later': ['he'], 'see': ['the'], 'importance': ['of'], 'these': ['3'], '3': ['.']}
+#             >>> returnedDict = successors('article.txt')
+#             >>> expected == returnedDict
+#             True
+#             >>> returnedDict['the']
+#             ['president', 'company', 'importance']
+#             >>> returnedDict['will']
+#             ['be', 'see']
+#             >>> returnedDict['3']
+#             ['.']
+#             >>> returnedDict['.']
+#             ['He', 'But', '(', ')']
+#             >>> successors('article.tt') is None
+#             True
+#             >>> successors(2.3) is None
+#             True
+#     """
+#     # --- YOU INPUT VALIDATION STARTS HERE
 
-    dictionary = { '.' : [] }
+#     dictionary = { '.' : [] }
+#     specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
 
-    # Input check
-    if type(file) != str:
-        return None
+#     # Input check
+#     if type(file) != str:
+#         return None
 
-    # Open the file and read the contents
-    with open(file) as f:   # with ensures the file is properly closed after its suite finishes, even if an error ocurred
-        contents = f.read() # use the read() function to read the entire file, contents has the data as string
+#     # Open the file and read the contents
+#     with open(file) as f:   # with ensures the file is properly closed after its suite finishes, even if an error ocurred
+#         contents = f.read() # use the read() function to read the entire file, contents has the data as string
 
-        newContents = contents.split(',')
+#         contents = contents.split()
+#         newContents = []
+#         x = 0
 
-        print(newContents)
+#         # Get the contents of the file organized
+
+#         for i in range(len(contents)):
+
+#             for j in range(len(specChar)):
+
+#                 # Check each special character
+#                 if specChar[j] in contents[i]:
+
+#                     # Set control loop condition
+#                     x = 0
+#                     break
+
+#                 else:
+#                     # Set control loop condition
+#                     x += 1
+            
+#             if x > 0:
+#                 # Everything in this indices string is alnumeric, just add it back
+#                 newContents.append(contents[i])
+
+#             if x == 0:
+#                 # The length of the string
+#                 for k in range(len(contents[i])):
+
+#                     # The special character is at the str index k
+#                     if contents[i][k] == specChar[j]:
+                        
+#                         # Set control loop condition
+#                         x = 0
+
+#                         # Remove the character and append the str w/o the character
+#                         newStr = contents[i].replace( contents[i][k], '' )
+
+#                         newContents.append(newStr)
+
+#                         # Append the special character to the list at its own index
+#                         newContents.append(specChar[j])
+                            
+#             # Each index should be either all alnum or not alnum, check for ['3)'] instance, any non alnum should be len 1
+#             if contents[i].alnum() == False and len(contents[i]) != 1:
+            
+#                 for l in range(len(contents[i])):
+
+#                     for m in range(len(specChar)):
+
+#                         # Check each special character
+#                         if specChar[j] in contents[i]:
+
+#             print('\n',newContents)
 
 
 def sumDigits(num):
@@ -196,9 +248,9 @@ def common(aList1, aList2):
 
 if __name__ == "__main__":
 
-    successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
+    # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
 
-    # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
+    print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
     
     # import doctest
     # doctest.testmod()
