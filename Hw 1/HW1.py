@@ -54,6 +54,77 @@ def rectangle(perimeter,area):
     else:
         return -1
 
+# Find any special characters and put them at their own index
+
+def separateChars(aList):
+    '''
+        Separate Special Characters
+        ~~~~
+        The goal of this function is to find special characters, remove them from the original str, 
+        and add both the str w/o the special character and the special character to their own index 
+        of the list while preserving the chronoglogical order of the indices
+
+        * The input list must be a list of strings
+
+        Doctest:
+            >>> aList = ['Hey','(Hi)','my','name;','is']
+            >>> separateChars(aList)
+            ['Hey','(','Hi',')','my','name',';','is']
+
+        ### Collaboration Statement:
+            I worked on this subfunction (separateChars) alone, using only this semester's course materials
+    '''
+    # Define all special characters
+    specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
+
+    # Iterate through all indices in given list
+    for i in range(len(aList)):
+        
+        for j in range(len(specChar)):
+
+            if specChar[j] in aList[i]:
+
+                # Find the index of the special character within the str 
+                for k in range(len(aList[i])):
+
+                    # Special character at index k
+                    if aList[i][k] == specChar[j]:
+
+                        # Remove the special character
+                        newStr = ''
+
+                        # Add every index except the one with the special character
+                        for l in range(len(aList[i])):
+                            
+                            # Skip the index with the special character
+                            if l != k:
+                                print(aList[i][l])
+
+                                newStr += aList[i][l]
+
+                        # Add str w/o special character
+                        newList = []
+
+                        # Append all indicies up to the index were working on
+                        for m in range( len(aList) - (len(aList)-i) ):
+
+                            newList.append(aList[m])
+
+                        # The special character is at the beginning
+                        if k == 0:
+
+                            # Append the special character then the rest of the string
+                            newList.append(specChar[j])
+                            newList.append(newStr)
+
+                        # The special character is at the end
+                        elif k == (len(aList[i])-1):
+
+                            # Append the string, then the special character
+                            newList.append(newStr)
+                            newList.append(specChar[j])                
+    print(newList)
+
 # TODO: FINISH THIS
 def translate(dict_words, txt):
     """
@@ -70,19 +141,11 @@ def translate(dict_words, txt):
             '1 up 2 down left right forward'
     """
     newTxt = ''
-    specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
 
     # Split the string over spaces
     txt = str(txt).split()
 
-    # Find any special characters
-    for g in range(len(txt)):
-
-        for h in range(len(specChar)):
-
-            if specChar[h] in txt[g]:
-
-                txt[g].remove(specChar[h])
+    # Find any special characters and put them at their own index
 
     # For the length of the list
     for i in range(len(txt)):
@@ -250,7 +313,9 @@ if __name__ == "__main__":
 
     # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
 
-    print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
+    separateChars(['Hey','(Hi)','my','name;','is'])
+
+    # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
     
     # import doctest
     # doctest.testmod()
