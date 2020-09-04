@@ -65,12 +65,15 @@ def separateChars(aList):
         of the list while preserving the chronoglogical order of the indices
 
         * The input list must be a list of strings
-
+        * This function cannot separate strings if special characters are not padding the word
         Doctest:
-            >>> aList = ['Hey','(Hi)','my','name;','is']
+            >>> aList = ['Hey', '(Hi)' ,'my', 'name;', 'is']
             >>> separateChars(aList)
-            ['Hey','(','Hi',')','my','name',';','is']
+            ['Hey', '(', 'Hi', ')', 'my', 'name', ';', 'is']
 
+            >>> separateChars([''])
+            ['']
+            
         ### Collaboration Statement:
             I worked on this subfunction (separateChars) alone, using only this semester's course materials
     '''
@@ -80,6 +83,7 @@ def separateChars(aList):
     lst = []
     x = 0
     y = 0
+    k = 0
 
     # Iterate through all indices in given list
     for i in range(len(aList)):
@@ -126,8 +130,12 @@ def separateChars(aList):
 
                             newStr += aList[i][k]                
 
-                # Add the sub list to the index of lst
-                lst.append(newLst)
+                # Add the sub list to the index of lst (append contents)
+                for n in range(len(newLst)):
+
+                    lst.append(newLst[n])
+
+                # Control Structure
                 x = 0
                 break
 
@@ -138,81 +146,11 @@ def separateChars(aList):
         # Append control structure
         if x > 0:
             lst.append(aList[i])
-
-
-    print(lst)
+    
+    return lst
 
 ############################################
-'''
-                # Find the index of the special character within the str 
-                for k in range(len(aList[i])):
 
-                    # Special character at index k
-                    if aList[i][k] == specChar[j]:
-
-                        # Remove the special character
-                        newStr = ''
-
-                        # Add every index except the one with the special character
-                        for l in range(len(aList[i])):
-                            
-                            # Skip the index with the special character
-                            if l != k:
-
-                                newStr += aList[i][l]
-
-                        if newStr.isalnum() == False:
-
-                            fixedStr = ''
-
-                            while newStr.isalnum() == False:
-
-                                for o in range(len(newStr)):
-
-                                    for p in range(len(specChar)):
-
-                                        if newStr[o] == specChar[p]:
-
-                                            # Add every index except the one with the special character
-                                            for q in range(len(newStr)):
-                                                
-                                                # Skip the index with the special character
-                                                if q != o:
-
-                                                    fixedStr += newStr[q]
-                                
-                                newStr = fixedStr
-
-                        print(newStr)
-
-                        # Add str w/o special character / add special character
-                        newList = []
-
-                        # Append all indicies up to the index were working on
-                        for m in range( len(aList) - (len(aList)-i) ):
-
-                            newList.append(aList[m])
-
-                        # The special character is at the beginning
-                        if k == 0:
-                            print('k==0')
-                            print(specChar[j], newStr)
-                            # Append the special character then the rest of the string
-                            lst.append(specChar[j])
-                            lst.append(newStr)
-                            print(newList,'\n')
-                            
-                        # The special character is at the end
-                        elif k == (len(aList[i])-1):
-                            print('k is at the end')
-                            print(newStr, specChar[j])
-                            # Append the string, then the special character
-                            lst.append(newStr)
-                            lst.append(specChar[j])     
-                            print(newList,'\n')
-
-    print(lst)
-           '''
 # TODO: FINISH THIS
 def translate(dict_words, txt):
     """
@@ -439,8 +377,6 @@ def common(aList1, aList2):
 if __name__ == "__main__":
 
     # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
-
-    separateChars(['Hey','(Hi)','my','name;','is'])
 
     # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
     
