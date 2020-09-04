@@ -77,12 +77,28 @@ def separateChars(aList):
     # Define all special characters
     specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
 
+    lst = []
+
     # Iterate through all indices in given list
     for i in range(len(aList)):
         
+        # Iterate through all special characters
         for j in range(len(specChar)):
 
+            # If a special character is found within the str
             if specChar[j] in aList[i]:
+
+                # Note the index of the str and the indices within the str
+                pass
+
+                
+
+            # No special character, just add it back to new list
+            else:
+
+                lst.append(aList[i])
+
+############################################
 
                 # Find the index of the special character within the str 
                 for k in range(len(aList[i])):
@@ -98,11 +114,34 @@ def separateChars(aList):
                             
                             # Skip the index with the special character
                             if l != k:
-                                print(aList[i][l])
 
                                 newStr += aList[i][l]
 
-                        # Add str w/o special character
+                        if newStr.isalnum() == False:
+
+                            fixedStr = ''
+
+                            while newStr.isalnum() == False:
+
+                                for o in range(len(newStr)):
+
+                                    for p in range(len(specChar)):
+
+                                        if newStr[o] == specChar[p]:
+
+                                            # Add every index except the one with the special character
+                                            for q in range(len(newStr)):
+                                                
+                                                # Skip the index with the special character
+                                                if q != o:
+
+                                                    fixedStr += newStr[q]
+                                
+                                newStr = fixedStr
+
+                        print(newStr)
+
+                        # Add str w/o special character / add special character
                         newList = []
 
                         # Append all indicies up to the index were working on
@@ -112,19 +151,24 @@ def separateChars(aList):
 
                         # The special character is at the beginning
                         if k == 0:
-
+                            print('k==0')
+                            print(specChar[j], newStr)
                             # Append the special character then the rest of the string
-                            newList.append(specChar[j])
-                            newList.append(newStr)
-
+                            lst.append(specChar[j])
+                            lst.append(newStr)
+                            print(newList,'\n')
+                            
                         # The special character is at the end
                         elif k == (len(aList[i])-1):
-
+                            print('k is at the end')
+                            print(newStr, specChar[j])
                             # Append the string, then the special character
-                            newList.append(newStr)
-                            newList.append(specChar[j])                
-    print(newList)
+                            lst.append(newStr)
+                            lst.append(specChar[j])     
+                            print(newList,'\n')
 
+    print(lst)
+           
 # TODO: FINISH THIS
 def translate(dict_words, txt):
     """
@@ -140,37 +184,76 @@ def translate(dict_words, txt):
             >>> translate({'a':'b'}, text)
             '1 up 2 down left right forward'
     """
-    newTxt = ''
 
-    # Split the string over spaces
+    newStr = ''
+    print(txt)
+    # Split over whitespace
     txt = str(txt).split()
 
-    # Find any special characters and put them at their own index
-
-    # For the length of the list
     for i in range(len(txt)):
 
-        print('eval:', txt[i])
-
-        # For all the words in the string that are found in the dict
         if txt[i] in dict_words:
-            print('adding')
-            newTxt += dict_words[txt[i]]
-            newTxt += ' '
+
+            print(txt[i].lower(), dict_words[txt[i].lower()])
+
+            newStr += dict_words[txt[i]]
+            newStr += ' '
 
         elif txt[i].upper() in dict_words:
-            print('adding u')
-            newTxt += dict_words[txt[i].upper()]
-            newTxt += ' '
+
+            print(txt[i].lower(), dict_words[txt[i].lower()])
+
+            newStr += dict_words[txt[i].upper()]
+            newStr += ' '
 
         elif txt[i].lower() in dict_words:
-            print('adding l')
-            newTxt += dict_words[txt[i].lower()]
-            newTxt += ' '
 
-    return newTxt
+            print(txt[i].lower(), dict_words[txt[i].lower()])
+
+            newStr += dict_words[txt[i].lower()]
+            newStr += ' '
+        
+        else:
+
+            newStr += txt[i]
+            newStr += ' '
+                
+    return newStr
 
 
+########################################
+
+    # newTxt = ''
+
+    # # Split the string over spaces
+    # txt = str(txt).split()
+
+    # # Find any special characters and put them at their own index
+
+    # # For the length of the list
+    # for i in range(len(txt)):
+
+    #     print('eval:', txt[i])
+
+    #     # For all the words in the string that are found in the dict
+    #     if txt[i] in dict_words:
+    #         print('adding')
+    #         newTxt += dict_words[txt[i]]
+    #         newTxt += ' '
+
+    #     elif txt[i].upper() in dict_words:
+    #         print('adding u')
+    #         newTxt += dict_words[txt[i].upper()]
+    #         newTxt += ' '
+
+    #     elif txt[i].lower() in dict_words:
+    #         print('adding l')
+    #         newTxt += dict_words[txt[i].lower()]
+    #         newTxt += ' '
+
+    # return newTxt
+
+######################################
 # def successors(file):
 #     """
 #         Opens a text file and creates a dictionary whose keys are words from the text file 
