@@ -78,6 +78,8 @@ def separateChars(aList):
     specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
 
     lst = []
+    x = 0
+    y = 0
 
     # Iterate through all indices in given list
     for i in range(len(aList)):
@@ -88,18 +90,60 @@ def separateChars(aList):
             # If a special character is found within the str
             if specChar[j] in aList[i]:
 
-                # Note the index of the str and the indices within the str
-                pass
+                newStr = ''
+                newLst = []
 
-                
+                # Find the index/indicies within the string that have a special character
+                for k in range(len(aList[i])):
 
-            # No special character, just add it back to new list
+                    # Iterate through all special characters
+                    for l in range(len(specChar)):
+
+                        # Create sub list for the chars within the str
+
+                        # Special character at this index of the str
+                        if aList[i][k] == specChar[l]:
+
+                            # If there is length to the new str, then there are chars before the special character
+                            if len(newStr) > 0:
+
+                                newLst.append(newStr)
+                                newLst.append(specChar[l])
+
+                            else:
+                                # Otherwise just add the special character
+                                newLst.append(specChar[l])
+
+                        # No special character, add back to str -- control structure
+                        else:
+                            y += 1
+
+                    # Append control structure
+                    if y > 0:
+
+                        # Check if there are prior special characters in the str
+                        if aList[i][k].isalnum():
+
+                            newStr += aList[i][k]                
+
+                # Add the sub list to the index of lst
+                lst.append(newLst)
+                x = 0
+                break
+
+            # No special character, just add it back to new list -- control structure
             else:
+                x += 1
 
-                lst.append(aList[i])
+        # Append control structure
+        if x > 0:
+            lst.append(aList[i])
+
+
+    print(lst)
 
 ############################################
-
+'''
                 # Find the index of the special character within the str 
                 for k in range(len(aList[i])):
 
@@ -168,7 +212,7 @@ def separateChars(aList):
                             print(newList,'\n')
 
     print(lst)
-           
+           '''
 # TODO: FINISH THIS
 def translate(dict_words, txt):
     """
