@@ -194,19 +194,30 @@ def successors(file):
     except FileNotFoundError:
         return None
 
-
 def sumDigits(num):
     """
-        >>> sumDigits(1001)
-        2
-        >>> sumDigits(59872)
-        31
+        Returns the sum of the digits of a positive integer.
 
+        Doctest:
+            >>> sumDigits(1001)
+            2
+            >>> sumDigits(59872)
+            31
     """
-    #- YOUR CODE STARTS HERE
-    pass
+    # Ignore input if negative
+    if num < 0:
+        return None
 
+    sum = 0
 
+    # Convert num to str to index and get length of digits
+    num = str(num)
+
+    # Add every digit in number
+    for i in range(len(num)):
+        sum += int(num[i])
+
+    return sum
 
 def hailstone(num):
     """
@@ -242,6 +253,6 @@ def common(aList1, aList2):
 
 
 if __name__ == "__main__":
-    
+
     import doctest
     doctest.testmod()
