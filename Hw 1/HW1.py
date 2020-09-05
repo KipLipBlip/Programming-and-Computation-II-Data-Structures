@@ -62,6 +62,7 @@ def separateChars(aStr):
     '''
         Separate Special Characters
         ~~~~
+        This function takes string and splits it over special non-alphanumeric characters, appending each split to a list index
 
         Doctest:
             >>> aStr = 'Hey m:y fr{end 54$ sp|it'
@@ -86,8 +87,6 @@ def separateChars(aStr):
 
     return newStr.split()
 
-############################################
-
 # TODO: FINISH THIS
 def translate(dict_words, txt):
     """
@@ -103,77 +102,39 @@ def translate(dict_words, txt):
             >>> translate({'a':'b'}, text)
             '1 up 2 down left right forward'
     """
-    print(txt)
-    
-    # Split over whitespace
-    txt = str(txt).split()
-
     # Find any special characters and put them at their own index
     txt = separateChars(txt)
-    print(txt)
 
     newStr = ''
 
     for i in range(len(txt)):
 
+        # Check if the word (regardless of case) matches anything in the dictionary
         if txt[i] in dict_words:
-
-            print(txt[i].lower(), dict_words[txt[i].lower()])
-
             newStr += dict_words[txt[i]]
-            newStr += ' '
-
-        elif txt[i].upper() in dict_words:
-
-            print(txt[i].lower(), dict_words[txt[i].lower()])
-
-            newStr += dict_words[txt[i].upper()]
-            newStr += ' '
 
         elif txt[i].lower() in dict_words:
-
-            print(txt[i].lower(), dict_words[txt[i].lower()])
-
             newStr += dict_words[txt[i].lower()]
-            newStr += ' '
-        
+
+        elif txt[i].upper() in dict_words:
+            newStr += dict_words[txt[i].upper()]
+
+        # Do not add something that is non-alnum and not in the dict
+        elif txt[i].isalnum() == False:
+            pass
+
+        # If nothing is found in the dictionary, add back original index but make sure its lowercase
         else:
-            newStr += txt[i]
-                
+            newStr += txt[i].lower()
+
+        # Add a space unless at the last index 
+        if i + 1 != len(txt):
+            newStr += ' '
+
+    # Fix double space issues
+    newStr = newStr.replace('  ', ' ')
+
     return newStr
-
-
-########################################
-
-    # newTxt = ''
-
-    # # Split the string over spaces
-    # txt = str(txt).split()
-
-    # # Find any special characters and put them at their own index
-
-    # # For the length of the list
-    # for i in range(len(txt)):
-
-    #     print('eval:', txt[i])
-
-    #     # For all the words in the string that are found in the dict
-    #     if txt[i] in dict_words:
-    #         print('adding')
-    #         newTxt += dict_words[txt[i]]
-    #         newTxt += ' '
-
-    #     elif txt[i].upper() in dict_words:
-    #         print('adding u')
-    #         newTxt += dict_words[txt[i].upper()]
-    #         newTxt += ' '
-
-    #     elif txt[i].lower() in dict_words:
-    #         print('adding l')
-    #         newTxt += dict_words[txt[i].lower()]
-    #         newTxt += ' '
-
-    # return newTxt
 
 ######################################
 # def successors(file):
@@ -317,10 +278,6 @@ def common(aList1, aList2):
 if __name__ == "__main__":
 
     # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
-
-    # print(separateChars('Hey m:y fr{end 54$ sp|it'))
-
-    # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
     
     import doctest
     doctest.testmod()
