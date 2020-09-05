@@ -291,41 +291,27 @@ def common(aList1, aList2):
 
     # Sort in ascending value
     
-    # Find the largest value in the common list (in order to find the smallest (upper bound))
-    lg = 0
-    try:
-        for k in range(len(common)):
-
-            if common[k] > lg:
-                lg = common[k]
-            
-    # Comparing two unlike types
-    except TypeError:
-        pass
-
-    # Find the smallest value in the common list
-    sm = lg
-    try:
-        for k in range(len(common)):
-
-            if common[k] < sm:
-                sm = common[k]
-            
-    # Comparing two unlike types
-    except TypeError:
-        pass
-
     # Put all types in their own list
     numLst = []
     strLst = []
 
-    
+    # Iterate through common 
+    for k in range(len(common)):
+        
+        if type(common[k]) == int or type(common[k]) == float:
+            numLst.append(common[k])
+        if type(common[k]) == str:
+            strLst.append(common[k])
 
-    return common
+    # Sort numbers
+    numLst = sorted(numLst)
+
+    # Add lists together
+    return numLst + strLst
 
 if __name__ == "__main__":
 
-    print(common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1,'hey', 'bro', 129],[12,3,3,3,'hey',3,3,3,3,3,3,3,3,3,3,1,1,44]))
+    print(common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1,'hey', 'e', 129],[12,'e',False,3,3,3,'hey',3,3,3,3,3,3,3,3,3,3,1,1,44]))
 
     # import doctest
     # doctest.testmod()
