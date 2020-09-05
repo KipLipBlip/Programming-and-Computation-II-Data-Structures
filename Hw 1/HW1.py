@@ -4,6 +4,10 @@
 ### Collaboration Statement:
              
 """
+from multiprocessing.pool import AsyncResult
+from unittest.signals import registerResult
+
+
 def rectangle(perimeter,area):
     """
         Returns the longest side of the rectangle with given perimeter and area 
@@ -54,100 +58,33 @@ def rectangle(perimeter,area):
     else:
         return -1
 
-# Find any special characters and put them at their own index
-
-def separateChars(aList):
+def separateChars(aStr):
     '''
         Separate Special Characters
         ~~~~
-        The goal of this function is to find special characters, remove them from the original str, 
-        and add both the str w/o the special character and the special character to their own index 
-        of the list while preserving the chronoglogical order of the indices
 
-        * The input list must be a list of strings
-        * This function cannot separate strings if special characters are not padding the word
         Doctest:
-            >>> aList = ['Hey', '(Hi)' ,'my', 'name;', 'is']
-            >>> separateChars(aList)
-            ['Hey', '(', 'Hi', ')', 'my', 'name', ';', 'is']
-
-            >>> separateChars([''])
-            ['']
+            >>> aStr = 'Hey m:y fr{end 54$ sp|it'
+            >>> separateChars(aStr)
+            ['Hey', 'm', ':', 'y', 'fr', '{', 'end', '54', '$', 'sp', '|', 'it']
             
         ### Collaboration Statement:
             I worked on this subfunction (separateChars) alone, using only this semester's course materials
     '''
     # Define all special characters
-    specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
-
-    lst = []
-    x = 0
-    y = 0
-    k = 0
+    newStr = ''
 
     # Iterate through all indices in given list
-    for i in range(len(aList)):
-        
-        # Iterate through all special characters
-        for j in range(len(specChar)):
+    for i in range(len(aStr)):
 
-            # If a special character is found within the str
-            if specChar[j] in aList[i]:
+        if aStr[i].isalnum() == False:
+            newStr += ' '
+            newStr += aStr[i]
+            newStr += ' '
+        elif aStr[i].isalnum() == True:
+            newStr += aStr[i]
 
-                newStr = ''
-                newLst = []
-
-                # Find the index/indicies within the string that have a special character
-                for k in range(len(aList[i])):
-
-                    # Iterate through all special characters
-                    for l in range(len(specChar)):
-
-                        # Create sub list for the chars within the str
-
-                        # Special character at this index of the str
-                        if aList[i][k] == specChar[l]:
-
-                            # If there is length to the new str, then there are chars before the special character
-                            if len(newStr) > 0:
-
-                                newLst.append(newStr)
-                                newLst.append(specChar[l])
-
-                            else:
-                                # Otherwise just add the special character
-                                newLst.append(specChar[l])
-
-                        # No special character, add back to str -- control structure
-                        else:
-                            y += 1
-
-                    # Append control structure
-                    if y > 0:
-
-                        # Check if there are prior special characters in the str
-                        if aList[i][k].isalnum():
-
-                            newStr += aList[i][k]                
-
-                # Add the sub list to the index of lst (append contents)
-                for n in range(len(newLst)):
-
-                    lst.append(newLst[n])
-
-                # Control Structure
-                x = 0
-                break
-
-            # No special character, just add it back to new list -- control structure
-            else:
-                x += 1
-
-        # Append control structure
-        if x > 0:
-            lst.append(aList[i])
-    
-    return lst
+    return newStr.split()
 
 ############################################
 
@@ -166,11 +103,16 @@ def translate(dict_words, txt):
             >>> translate({'a':'b'}, text)
             '1 up 2 down left right forward'
     """
-
-    newStr = ''
     print(txt)
+    
     # Split over whitespace
     txt = str(txt).split()
+
+    # Find any special characters and put them at their own index
+    txt = separateChars(txt)
+    print(txt)
+
+    newStr = ''
 
     for i in range(len(txt)):
 
@@ -196,9 +138,7 @@ def translate(dict_words, txt):
             newStr += ' '
         
         else:
-
             newStr += txt[i]
-            newStr += ' '
                 
     return newStr
 
@@ -378,7 +318,9 @@ if __name__ == "__main__":
 
     # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
 
+    # print(separateChars('Hey m:y fr{end 54$ sp|it'))
+
     # print(translate({'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left', '1':'2'}, '1 UP, 2 down / left right forward'))
     
-    # import doctest
-    # doctest.testmod()
+    import doctest
+    doctest.testmod()
