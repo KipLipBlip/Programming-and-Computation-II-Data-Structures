@@ -2,7 +2,7 @@
 #Due Date: 09/11/2020, 11:59PM
 """                                   
 ### Collaboration Statement:
-             
+    I worked on this subfunction (separateChars) alone, using only this semester's course materials
 """
 
 def rectangle(perimeter,area):
@@ -155,115 +155,44 @@ def successors(file):
             >>> successors(2.3) is None
             True
     """
-    # Input check
-    if type(file) != str:
+    # Ensure the string ends in .txt & input type check
+    if type(file) != str or str(file[-4] + file[-3] + file[-2] + file[-1]) != '.txt':
         return None
-    
-    # Ensure the string ends in .txt
-    
-
+        
     try:
         # Open the file and read the contents
         with open(file) as f:       # with ensures the file is properly closed after its suite finishes, even if an error ocurred
             contents = f.read()     # use the read() function to read the entire file, contents has the data as string
+            
+            # Split string over spaces and special characters
+            lst = separateChars(contents)
 
-            dictionary = { '.' : [] }
+            # Initialize dictionary with first string in file
+            dictionary = { '.' : [ lst[0] ] }
+            
+            for i in range(len(lst)):
+
+                # If the key is not already in the dictionary, add it
+                if lst[i] not in dictionary:
+
+                    dictionary[lst[i]] = []
+
+            for k in range(len(lst)):
+                
+                try:
+                    dictionary[lst[k]].append(lst[k+1])
+
+                except IndexError:
+                    pass
+
+            # Delete the last key, it will always be empty
+            dictionary.pop(lst[-1], None)
+
+            return dictionary
 
     # Check for file not found error
     except FileNotFoundError:
         return None
-
-######################################
-# def successors(file):
-#     """
-#         Opens a text file and creates a dictionary whose keys are words from the text file 
-#         and whose values are lists of words that immediately follow the key word.
-
-#         Doctest:
-#             >>> expected = {'.': ['He', 'But', '(', ')'], 'He': ['will'], 'will': ['be', 'see'], 'be': ['the'], 'the': ['president', 'company', 'importance'], 'president': ['of', '.'], 'of': ['the', 'it', 'these'], 'company': [';'], ';': ['right'], 'right': ['now'], 'now': ['he'], 'he': ['is', ',', 'will'], 'is': ['a', 'no'], 'a': ['vice'], 'vice': ['president'], 'But': ['he'], ',': ['himself', 'is'], 'himself': [','], 'no': ['sure'], 'sure': ['of'], 'it': ['.'], '(': ['Later'], 'Later': ['he'], 'see': ['the'], 'importance': ['of'], 'these': ['3'], '3': ['.']}
-#             >>> returnedDict = successors('article.txt')
-#             >>> expected == returnedDict
-#             True
-#             >>> returnedDict['the']
-#             ['president', 'company', 'importance']
-#             >>> returnedDict['will']
-#             ['be', 'see']
-#             >>> returnedDict['3']
-#             ['.']
-#             >>> returnedDict['.']
-#             ['He', 'But', '(', ')']
-#             >>> successors('article.tt') is None
-#             True
-#             >>> successors(2.3) is None
-#             True
-#     """
-#     # --- YOU INPUT VALIDATION STARTS HERE
-
-#     dictionary = { '.' : [] }
-#     specChar = [',','.','/','?',';',':','(',')','*','&','^','%','$','#','@','!','`','~','=','+','_','-','\\','|','<','>','[',']','{','}']
-
-#     # Input check
-#     if type(file) != str:
-#         return None
-
-#     # Open the file and read the contents
-#     with open(file) as f:   # with ensures the file is properly closed after its suite finishes, even if an error ocurred
-#         contents = f.read() # use the read() function to read the entire file, contents has the data as string
-
-#         contents = contents.split()
-#         newContents = []
-#         x = 0
-
-#         # Get the contents of the file organized
-
-#         for i in range(len(contents)):
-
-#             for j in range(len(specChar)):
-
-#                 # Check each special character
-#                 if specChar[j] in contents[i]:
-
-#                     # Set control loop condition
-#                     x = 0
-#                     break
-
-#                 else:
-#                     # Set control loop condition
-#                     x += 1
-            
-#             if x > 0:
-#                 # Everything in this indices string is alnumeric, just add it back
-#                 newContents.append(contents[i])
-
-#             if x == 0:
-#                 # The length of the string
-#                 for k in range(len(contents[i])):
-
-#                     # The special character is at the str index k
-#                     if contents[i][k] == specChar[j]:
-                        
-#                         # Set control loop condition
-#                         x = 0
-
-#                         # Remove the character and append the str w/o the character
-#                         newStr = contents[i].replace( contents[i][k], '' )
-
-#                         newContents.append(newStr)
-
-#                         # Append the special character to the list at its own index
-#                         newContents.append(specChar[j])
-                            
-#             # Each index should be either all alnum or not alnum, check for ['3)'] instance, any non alnum should be len 1
-#             if contents[i].alnum() == False and len(contents[i]) != 1:
-            
-#                 for l in range(len(contents[i])):
-
-#                     for m in range(len(specChar)):
-
-#                         # Check each special character
-#                         if specChar[j] in contents[i]:
-
-#             print('\n',newContents)
 
 
 def sumDigits(num):
@@ -313,8 +242,6 @@ def common(aList1, aList2):
 
 
 if __name__ == "__main__":
-
-    # successors('C:\\Users\\Domin\\github\\CMPSC-132\\Hw 1\\article.txt')
     
-    # import doctest
-    # doctest.testmod()
+    import doctest
+    doctest.testmod()
