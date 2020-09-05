@@ -266,17 +266,66 @@ def hailstone(num):
 
 def common(aList1, aList2):
     """
-        >>> common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1],[12,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1,44])
-        [1, 3, 12, 44]
-        >>> common([1,2,3],[4,5,6])
-        []
-        >>> common(1, [3.5]) is None
-        True
-    """
-    #- YOU CODE STARTS HERE
+        Returns a list containing only the elements that are common between the two lists
+        in ascending order, without duplicates.
 
+        Doctest:
+            >>> common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1],[12,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1,44])
+            [1, 3, 12, 44]
+            >>> common([1,2,3],[4,5,6])
+            []
+            >>> common(1, [3.5]) is None
+            True
+    """
+    common = []
+
+    # Iterate through both lists
+    for i in range(len(aList1)):
+
+        for j in range(len(aList2)):
+
+            # If they have an index with the same value that is not already in the common list, append it
+            if aList1[i] == aList2[j] and aList1[i] not in common:
+
+                common.append( aList2[j] )
+
+    # Sort in ascending value
+    
+    # Find the largest value in the common list (in order to find the smallest (upper bound))
+    lg = 0
+    try:
+        for k in range(len(common)):
+
+            if common[k] > lg:
+                lg = common[k]
+            
+    # Comparing two unlike types
+    except TypeError:
+        pass
+
+    # Find the smallest value in the common list
+    sm = lg
+    try:
+        for k in range(len(common)):
+
+            if common[k] < sm:
+                sm = common[k]
+            
+    # Comparing two unlike types
+    except TypeError:
+        pass
+
+    # Put all types in their own list
+    numLst = []
+    strLst = []
+
+    
+
+    return common
 
 if __name__ == "__main__":
 
-    import doctest
-    doctest.testmod()
+    print(common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1,'hey', 'bro', 129],[12,3,3,3,'hey',3,3,3,3,3,3,3,3,3,3,1,1,44]))
+
+    # import doctest
+    # doctest.testmod()
