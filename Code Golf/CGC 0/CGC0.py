@@ -1,7 +1,3 @@
-
-from typing import final
-
-
 def finalQuizScore(l,h,q1,q2,p):
     '''
         Challenge 0 details:
