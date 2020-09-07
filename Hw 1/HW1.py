@@ -290,34 +290,9 @@ def common(aList1, aList2):
 
                 common.append( aList2[j] )
 
-    # Sort in ascending value
-    
-    # Put all types in their own list
-    numLst = []
-    strLst = []
-    boolLst = []
-    listLst = []
-
-    # Iterate through common 
-    for k in range(len(common)):
-        
-        if type(common[k]) == int or type(common[k]) == float:
-            numLst.append(common[k])
-        if type(common[k]) == str:
-            strLst.append(common[k])
-        if type(common[k]) == bool:
-            boolLst.append(common[k])
-        if type(common[k]) == list:
-            listLst.append(common[k])
-
-    # Sort numbers
-    numLst = sorted(numLst)
-
-    # Add lists together
-    return numLst + strLst + boolLst + listLst
+    return sorted(common)
 
 if __name__ == "__main__":
 
-    print(common([12,3,5,8,90,11,44,[1],66,8,9,34,56,False,-1,0,5,3333,3,2,1,'hey', 'e', 129],[12,'e',False,3,3,3,'hey',3,3,[1],3,3,3,3,3,3,3,3,1,1,44]))
     import doctest
     doctest.testmod()
