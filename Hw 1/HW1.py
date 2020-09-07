@@ -5,9 +5,6 @@
     I worked on this subfunction (separateChars) alone, using only this semester's course materials
 """
 
-import re
-
-
 def rectangle(perimeter,area):
     """
         Returns the longest side of the rectangle with given perimeter and area 
@@ -248,7 +245,7 @@ def hailstone(num):
     """
     # Invalid input
     if num < 1 or type(num) != int:
-        return
+        return None
 
     lst = [num]
 
@@ -277,6 +274,10 @@ def common(aList1, aList2):
             >>> common(1, [3.5]) is None
             True
     """
+
+    if type(aList1) != list or type(aList2) != list:
+        return None  
+
     common = []
 
     # Iterate through both lists
@@ -294,6 +295,8 @@ def common(aList1, aList2):
     # Put all types in their own list
     numLst = []
     strLst = []
+    boolLst = []
+    listLst = []
 
     # Iterate through common 
     for k in range(len(common)):
@@ -302,16 +305,19 @@ def common(aList1, aList2):
             numLst.append(common[k])
         if type(common[k]) == str:
             strLst.append(common[k])
+        if type(common[k]) == bool:
+            boolLst.append(common[k])
+        if type(common[k]) == list:
+            listLst.append(common[k])
 
     # Sort numbers
     numLst = sorted(numLst)
 
     # Add lists together
-    return numLst + strLst
+    return numLst + strLst + boolLst + listLst
 
 if __name__ == "__main__":
 
-    print(common([12,3,5,8,90,11,44,66,8,9,34,56,-1,0,5,3333,3,2,1,'hey', 'e', 129],[12,'e',False,3,3,3,'hey',3,3,3,3,3,3,3,3,3,3,1,1,44]))
-
-    # import doctest
-    # doctest.testmod()
+    print(common([12,3,5,8,90,11,44,[1],66,8,9,34,56,False,-1,0,5,3333,3,2,1,'hey', 'e', 129],[12,'e',False,3,3,3,'hey',3,3,[1],3,3,3,3,3,3,3,3,1,1,44]))
+    import doctest
+    doctest.testmod()
