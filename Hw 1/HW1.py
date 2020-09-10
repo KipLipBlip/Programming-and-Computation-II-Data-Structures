@@ -23,6 +23,17 @@ def rectangle(perimeter,area):
             -1
             >>> rectangle(11, 4)
             -1
+            >>> rectangle(264, 4355)
+            67
+            >>> rectangle(10, 6)
+            3
+            >>> rectangle(-10, -6)
+            -1
+
+            >>> rectangle(2384, 421578)
+            -1
+            >>> rectangle(-4, -8)
+            -1
     """
     areas = []
 
@@ -69,6 +80,10 @@ def separateChars(aStr):
         ### Collaboration Statement:
             I worked on this subfunction (separateChars) alone, using only this semester's course materials
     '''
+    # Input rejection
+    if type(aStr) != str:
+        return None
+
     # Define all special characters
     newStr = ''
 
@@ -97,7 +112,14 @@ def translate(dict_words, txt):
             '1 UP, 2 down / left right forward'
             >>> translate({'a':'b'}, text)
             '1 up 2 down left right forward'
+            >>> translate([1,2,3], 'I have OnE big PoSiTiVe number THERE')
+            >>> translate({'one':'uno', 'there':'change', 'positive':'negative'}, 'I have OnE big PoSiTiVe number THERE')
+            'i have uno big negative number change'
     """
+    # Input rejection
+    if type(dict_words) != dict or type(txt) != str:
+        return None
+
     # Find any special characters and put them at their own index
     txt = separateChars(txt)
 
@@ -204,9 +226,12 @@ def sumDigits(num):
             >>> sumDigits(59872)
             31
     """
-    # Ignore input if negative
+    # Input Rejection
     if num < 0:
         return None
+    elif type(num) != int:
+        if type(num) != float:
+            return None
 
     sum = 0
 
@@ -274,7 +299,7 @@ def common(aList1, aList2):
             >>> common(1, [3.5]) is None
             True
     """
-
+    # Input Rejection
     if type(aList1) != list or type(aList2) != list:
         return None  
 
