@@ -225,6 +225,18 @@ def sumDigits(num):
             2
             >>> sumDigits(59872)
             31
+            >>> sumDigits(1248)
+            15
+            >>> sumDigits(6688)
+            28
+            >>> sumDigits(54146)
+            20
+            >>> sumDigits(938)
+            20
+            >>> sumDigits(845323)
+            25
+            >>> sumDigits(-1)
+            >>> sumDigits(-1234234523465)
     """
     # Input Rejection
     if num < 0:
