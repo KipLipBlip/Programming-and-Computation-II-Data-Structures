@@ -1,5 +1,6 @@
+from Module_2_Practice import countOdd
 import unittest 
-import Module_2_Practice 
+
 
 class CountOddTestCases(unittest.TestCase):
     '''
@@ -18,13 +19,11 @@ class CountOddTestCases(unittest.TestCase):
         self.assertEqual( countOdd( 5.34 ),             'Error', '\tFailed: Float input\n' )
         self.assertEqual( countOdd( 5 ),                'Error', '\tFailed: Int input\n' )
 
-
     # def test_for_integer_input(self):
     #     '''Are even digists correctly computed in a positive number?'''
     #     self.assertEqual(countEven(15),0, "Failed test for 15")
     #     self.assertEqual(countEven(246589913),4, "Failed test for 246589913")
-    #     self.assertEqual(   countOdd([1,3,5,7]),    4,  'Failed Tes' )
-
+    #     self.assertEqual(   countOdd([1,3,5,7]),    4,  'Failed Test' )
 
     # def test_for_negative_input(self):
     #     '''Is function returning None for negative numbers?'''    #Condition not included in the m2.py
@@ -36,7 +35,6 @@ class CountOddTestCases(unittest.TestCase):
     #     '''Is function returning None for invalid input?''' #Condition not included in the m2.py
     #     self.assertEqual(countEven([1,5]),None, "Failed test for [1,5]")
     #     self.assertEqual(countEven("246589913"),None, "Failed test for '246589913'")      
-
 
 
 if __name__ == '__main__':
