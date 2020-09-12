@@ -29,4 +29,5 @@ def countOdd(aList):
             >>> countOdd(“Hello”)
             Error
     '''
-
+    print(aList)
+    
