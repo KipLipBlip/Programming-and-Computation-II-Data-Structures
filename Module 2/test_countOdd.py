@@ -1,8 +1,8 @@
 import unittest 
 import 
 
-class CountEvenTestCases(unittest.TestCase):
-    """Tests for m2.py"""
+class CountOddTestCases(unittest.TestCase):
+    '''Tests for '''
 
     def test_for_integer_input(self):
         """Are even digists correctly computed in a positive number?"""
