@@ -74,46 +74,123 @@ class VendingMachine:
     '''
 
     def __init__(self):
-        #--- YOUR CODE STARTS HERE
-        pass
 
+        # Initialize stock & Balance
+        balance = 0
 
-
-    def purchase(self, item, qty=1):
-        #--- YOUR CODE STARTS HERE
-        pass
+        # ID : [price , qty]
+        stock = {
+            '156'   : [ 1.5, 3 ],
+            '254'   : [ 2.0, 3 ],
+            '384'   : [ 2.5, 3 ],
+            '879'   : [ 3.0, 3 ] 
+        }
         
+    def purchase(self, item, qty=1):
+        ''' Attempts to buy something from the machine. '''
+        
+        # Does the item exist
+        if item in VendingMachine.stock:
+
+            # Is the machine stocked
+            if VendingMachine.isStocked:
+
+                # Is the item in stock
+                if VendingMachine.stock[item][1] > 0:
+
+                    # Enough stock to fulfill purchase
+                    if qty > VendingMachine.stock[item][1]:
+
+                        total = VendingMachine.stock[item][0] * qty
+
+                        # Enough balance
+                        if total < VendingMachine.balance:
+
+                            # There will be change
+                            pass
+
+                        elif total == VendingMachine.balance:
+
+                            # There will not be change
+                            pass
+
+
+                        else:
+                            return 'Please deposit ${}'.format((VendingMachine.stock[item][0] * qty ) - VendingMachine.balance)
+
+                    else:
+                        return 'Current {} stock: {}, try again'.format(item, VendingMachine.stock[item][1])
+
+                else: 
+                    return 'Item out of stock'
+
+            else:
+                return 'Machine out of stock'
+
+        else:
+            return 'Invalid item'
 
 
     def deposit(self, amount):
-        #--- YOUR CODE STARTS HERE
-        pass
+        ''' Deposits money into the vending machine. '''
 
+        if self.isStocked == True:
+            VendingMachine.balance += amount
+            return 'Balance: ${}'.format(amount)
+        else:
+            return 'Machine out of stock. Take your ${} back'.format(amount)
 
     def restock(self, item, stock):
-        #--- YOUR CODE STARTS HERE
-        pass
-
-
-    #--- YOUR CODE STARTS HERE
-   
-    def isStocked(self):
-        pass
+        ''' Adds stock to the vending machine. '''
         
+        # Find the item by id
+        if item in VendingMachine.stock:
+            
+            # Update the stock
+            VendingMachine.stock[item][1] += stock
+            return 'Current item stock: {}'.format(VendingMachine.stock[item][1])
 
-    #--- YOUR CODE STARTS HERE
+        else:
+            return 'Invalid item'
 
+    def isStocked(self):
+        ''' A property method that checks for the stock status. '''
+        
+        x=0
+
+        for i in range(len(VendingMachine.stock)):
+
+            # An item has zero stock
+            if VendingMachine.stock[i][1] == 0:
+                x+=1
+
+            # An item has nonzero stock, return True
+            else: 
+                return True
+
+        # Every item has zero stock, return False
+        if x == len(VendingMachine.stock):
+            return False
+        
     def getStock(self):
-        pass
-
+        ''' A property method that  gets the current stock status of the machine. '''
+        
+        # Return stock value
+        return VendingMachine.stock
 
     def setPrice(self, item, new_price):
-        #--- YOUR CODE STARTS HERE
-        pass
-       
+        ''' Changes the price of an item in the vending machine '''
 
+        # Make sure the item exists and the price is numerical
+        if item in VendingMachine.stock and str(new_price).isnumeric():
 
+            # Update the items price
+            VendingMachine.stock[item][0] = new_price
+            
+        else:
+            return 'Invalid item'
 
+#################################
 
 ## Section 2
 class Point2D:
