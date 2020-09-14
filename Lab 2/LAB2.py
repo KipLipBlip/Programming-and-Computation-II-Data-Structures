@@ -6,80 +6,22 @@
 """
 
 ## Section 1
+
 class VendingMachine:
     '''
         >>> x=VendingMachine()
         >>> x.getStock
         {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
-        >>> x.restock(215, 9)
-        'Invalid item'
-        >>> x.isStocked
-        True
-        >>> x.restock(156, 1)
-        'Current item stock: 4'
-        >>> x.getStock
-        {156: [1.5, 4], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
-        >>> x.purchase(156)
-        'Please deposit $1.5'
-        >>> x.purchase(156,2)
-        'Please deposit $3.0'
-        >>> x.purchase(156,23)
-        'Current 156 stock: 4, try again'
-        >>> x.deposit(3)
-        'Balance: $3'
-        >>> x.purchase(156,3)
-        'Please deposit $1.5'
-        >>> x.purchase(156)
-        'Item dispensed, take your $1.5 back'
-        >>> x.getStock
-        {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
-        >>> x.deposit(300)
-        'Balance: $300'
-        >>> x.purchase(876)
-        'Invalid item'
-        >>> x.purchase(384,3)
-        'Item dispensed, take your $292.5 back'
-        >>> x.purchase(156,10)
-        'Current 156 stock: 3, try again'
-        >>> x.purchase(156,3)
-        'Please deposit $4.5'
-        >>> x.deposit(4.5)
-        'Balance: $4.5'
-        >>> x.purchase(156,3)
-        'Item dispensed'
-        >>> x.getStock
-        {156: [1.5, 0], 254: [2.0, 3], 384: [2.5, 0], 879: [3.0, 3]}
-        >>> x.purchase(156)
-        'Item out of stock'
-        >>> x.deposit(6)
-        'Balance: $6'
-        >>> x.purchase(254,3)
-        'Item dispensed'
-        >>> x.deposit(9)
-        'Balance: $9'
-        >>> x.purchase(879,3)
-        'Item dispensed'
-        >>> x.isStocked
-        False
-        >>> x.deposit(5)
-        'Machine out of stock. Take your $5 back'
-        >>> x.purchase(156,2)
-        'Machine out of stock'
-        >>> y=VendingMachine()
-        >>> x.setPrice(156, 2.5)
-        >>> x.getStock
-        {156: [2.5, 0], 254: [2.0, 0], 384: [2.5, 0], 879: [3.0, 0]}
-        >>> y.getStock
-        {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
+        
     '''
 
     def __init__(self):
 
         # Initialize stock & Balance
-        balance = 0
+        self.balance = 0
 
         # ID : [price , qty]
-        stock = {
+        self.stock = {
             '156'   : [ 1.5, 3 ],
             '254'   : [ 2.0, 3 ],
             '384'   : [ 2.5, 3 ],
@@ -90,36 +32,41 @@ class VendingMachine:
         ''' Attempts to buy something from the machine. '''
         
         # Does the item exist
-        if item in VendingMachine.stock:
+        if item in self.stock:
 
             # Is the machine stocked
-            if VendingMachine.isStocked:
+            if self.isStocked:
 
                 # Is the item in stock
-                if VendingMachine.stock[item][1] > 0:
+                if self.stock[item][1] > 0:
 
                     # Enough stock to fulfill purchase
-                    if qty > VendingMachine.stock[item][1]:
+                    if qty > self.stock[item][1]:
 
-                        total = VendingMachine.stock[item][0] * qty
+                        total = self.stock[item][0] * qty
 
                         # Enough balance
-                        if total < VendingMachine.balance:
+                        if total <= self.balance:
 
-                            # There will be change
-                            pass
+                            # Update the qty
+                            self.stock[item][1] -= qty
 
-                        elif total == VendingMachine.balance:
+                            # Calc new balance set balance to zero
+                            change = self.balance - total
+                            self.balance = 0
 
-                            # There will not be change
-                            pass
+                            if change > 0:
 
+                                return 'Item dispensed, take your ${} back'.format(change)
+
+                            else:
+                                return 'Item dispensed' 
 
                         else:
-                            return 'Please deposit ${}'.format((VendingMachine.stock[item][0] * qty ) - VendingMachine.balance)
+                            return 'Please deposit ${}'.format((self.stock[item][0] * qty ) - self.balance)
 
                     else:
-                        return 'Current {} stock: {}, try again'.format(item, VendingMachine.stock[item][1])
+                        return 'Current {} stock: {}, try again'.format(item, self.stock[item][1])
 
                 else: 
                     return 'Item out of stock'
@@ -130,12 +77,11 @@ class VendingMachine:
         else:
             return 'Invalid item'
 
-
     def deposit(self, amount):
         ''' Deposits money into the vending machine. '''
 
         if self.isStocked == True:
-            VendingMachine.balance += amount
+            self.balance += amount
             return 'Balance: ${}'.format(amount)
         else:
             return 'Machine out of stock. Take your ${} back'.format(amount)
@@ -144,11 +90,11 @@ class VendingMachine:
         ''' Adds stock to the vending machine. '''
         
         # Find the item by id
-        if item in VendingMachine.stock:
+        if item in self.stock:
             
             # Update the stock
-            VendingMachine.stock[item][1] += stock
-            return 'Current item stock: {}'.format(VendingMachine.stock[item][1])
+            self.stock[item][1] += stock
+            return 'Current item stock: {}'.format(self.stock[item][1])
 
         else:
             return 'Invalid item'
@@ -158,10 +104,10 @@ class VendingMachine:
         
         x=0
 
-        for i in range(len(VendingMachine.stock)):
+        for i in range(len(self.stock)):
 
             # An item has zero stock
-            if VendingMachine.stock[i][1] == 0:
+            if self.stock[i][1] == 0:
                 x+=1
 
             # An item has nonzero stock, return True
@@ -169,98 +115,103 @@ class VendingMachine:
                 return True
 
         # Every item has zero stock, return False
-        if x == len(VendingMachine.stock):
+        if x == len(self.stock):
             return False
         
     def getStock(self):
         ''' A property method that  gets the current stock status of the machine. '''
         
-        # Return stock value
-        return VendingMachine.stock
+        # Return stock
+        return self.stock
 
     def setPrice(self, item, new_price):
         ''' Changes the price of an item in the vending machine '''
 
         # Make sure the item exists and the price is numerical
-        if item in VendingMachine.stock and str(new_price).isnumeric():
+        if item in self.stock:
 
             # Update the items price
-            VendingMachine.stock[item][0] = new_price
+            self.stock[item][0] = new_price
             
         else:
             return 'Invalid item'
 
 #################################
 
-## Section 2
-class Point2D:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+# ## Section 2
+# class Point2D:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
 
-    ## * YOU MAY IMPLEMENT SPECIAL METHODS TO SIMPLIFY LINE METHODS
+#     ## * YOU MAY IMPLEMENT SPECIAL METHODS TO SIMPLIFY LINE METHODS
 
 
         
 
-class Line: 
-    ''' 
-        >>> p1 = Point2D(-7, -9)
-        >>> p2 = Point2D(1, 5.6)
-        >>> line1 = Line(p1, p2)
-        >>> line1.getDistance
-        16.648
-        >>> line1.getSlope
-        1.825
-        >>> line1
-        y = 1.825x + 3.775
-        >>> line2 = line1*4
-        >>> line2.getDistance
-        66.592
-        >>> line2.getSlope
-        1.825
-        >>> line2
-        y = 1.825x + 15.1
-        >>> line1
-        y = 1.825x + 3.775
-        >>> line3 = 4*line1
-        >>> line3
-        y = 1.825x + 15.1
-        >>> line1==line2
-        False
-        >>> line3==line2
-        True
-        >>> line5=Line(Point2D(6,48),Point2D(9,21))
-        >>> line5
-        y = -9.0x + 102.0
-        >>> line5==9
-        False
-        >>> line6=Line(Point2D(2,6), Point2D(2,3))
-        >>> line6.getDistance
-        3.0
-        >>> line6.getSlope
-        inf
-        >>> line6
-        Undefined
-        >>> line7=Line(Point2D(6,5), Point2D(9,5))
-        >>> line7.getSlope
-        0.0
-        >>> line7
-        y = 5.0
-    '''
-    def __init__(self, point1, point2):
-        #--- YOUR CODE STARTS HERE
-        pass
+# class Line: 
+#     ''' 
+#         >>> p1 = Point2D(-7, -9)
+#         >>> p2 = Point2D(1, 5.6)
+#         >>> line1 = Line(p1, p2)
+#         >>> line1.getDistance
+#         16.648
+#         >>> line1.getSlope
+#         1.825
+#         >>> line1
+#         y = 1.825x + 3.775
+#         >>> line2 = line1*4
+#         >>> line2.getDistance
+#         66.592
+#         >>> line2.getSlope
+#         1.825
+#         >>> line2
+#         y = 1.825x + 15.1
+#         >>> line1
+#         y = 1.825x + 3.775
+#         >>> line3 = 4*line1
+#         >>> line3
+#         y = 1.825x + 15.1
+#         >>> line1==line2
+#         False
+#         >>> line3==line2
+#         True
+#         >>> line5=Line(Point2D(6,48),Point2D(9,21))
+#         >>> line5
+#         y = -9.0x + 102.0
+#         >>> line5==9
+#         False
+#         >>> line6=Line(Point2D(2,6), Point2D(2,3))
+#         >>> line6.getDistance
+#         3.0
+#         >>> line6.getSlope
+#         inf
+#         >>> line6
+#         Undefined
+#         >>> line7=Line(Point2D(6,5), Point2D(9,5))
+#         >>> line7.getSlope
+#         0.0
+#         >>> line7
+#         y = 5.0
+#     '''
+#     def __init__(self, point1, point2):
+#         #--- YOUR CODE STARTS HERE
+#         pass
 
 
 
-    #--- YOUR CODE STARTS HERE
-    def getDistance(self):
-        pass
+#     #--- YOUR CODE STARTS HERE
+#     def getDistance(self):
+#         pass
         
-    #--- YOUR CODE STARTS HERE
-    def getSlope(self):
-        pass
+#     #--- YOUR CODE STARTS HERE
+#     def getSlope(self):
+#         pass
 
 
-    #--- YOUR CODE CONTINUES HERE
+#     #--- YOUR CODE CONTINUES HERE
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
