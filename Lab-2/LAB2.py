@@ -9,10 +9,7 @@
 
 class VendingMachine:
     '''
-        >>> x=VendingMachine()
-        >>> x.getStock
-        {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
-        
+        Classic Vending Machine Class
     '''
 
     def __init__(self):
@@ -22,10 +19,10 @@ class VendingMachine:
 
         # ID : [price , qty]
         self.stock = {
-            '156'   : [ 1.5, 3 ],
-            '254'   : [ 2.0, 3 ],
-            '384'   : [ 2.5, 3 ],
-            '879'   : [ 3.0, 3 ] 
+            156 : [ 1.5, 3 ],
+            254 : [ 2.0, 3 ],
+            384 : [ 2.5, 3 ],
+            879 : [ 3.0, 3 ] 
         }
         
     def purchase(self, item, qty=1):
@@ -119,8 +116,8 @@ class VendingMachine:
             return False
         
     def getStock(self):
-        ''' A property method that  gets the current stock status of the machine. '''
-        
+        ''' A property method that gets the current stock status of the machine. '''
+
         # Return stock
         return self.stock
 
@@ -136,6 +133,8 @@ class VendingMachine:
         else:
             return 'Invalid item'
 
+def foo():
+    pass
 #################################
 
 # ## Section 2
