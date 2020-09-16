@@ -133,8 +133,6 @@ class VendingMachine:
         else:
             return 'Invalid item'
 
-def foo():
-    pass
 #################################
 
 # ## Section 2
