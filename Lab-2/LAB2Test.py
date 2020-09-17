@@ -78,43 +78,45 @@ class VendingMachineTestCases(unittest.TestCase):
 
         self.assertEqual( x.purchase(384, 3), 'Item dispensed, take your $292.5 back', '15. Failed purchase 384 and give change')
 
+        self.assertEqual( x.purchase(156, 10), 'Current 156 stock: 3, try again', '16. Failed to purchase w/ invalid stock')
 
-'''             
-        >>> x.purchase(384,3)
-        
-        >>> x.purchase(156,10)
-        'Current 156 stock: 3, try again'
-        >>> x.purchase(156,3)
-        'Please deposit $4.5'
-        >>> x.deposit(4.5)
-        'Balance: $4.5'
-        >>> x.purchase(156,3)
-        'Item dispensed'
-        >>> x.getStock
-        {156: [1.5, 0], 254: [2.0, 3], 384: [2.5, 0], 879: [3.0, 3]}
-        >>> x.purchase(156)
-        'Item out of stock'
-        >>> x.deposit(6)
-        'Balance: $6'
-        >>> x.purchase(254,3)
-        'Item dispensed'
-        >>> x.deposit(9)
-        'Balance: $9'
-        >>> x.purchase(879,3)
-        'Item dispensed'
-        >>> x.isStocked
-        False
-        >>> x.deposit(5)
-        'Machine out of stock. Take your $5 back'
-        >>> x.purchase(156,2)
-        'Machine out of stock'
-        >>> y=VendingMachine()
-        >>> x.setPrice(156, 2.5)
-        >>> x.getStock
-        {156: [2.5, 0], 254: [2.0, 0], 384: [2.5, 0], 879: [3.0, 0]}
-        >>> y.getStock
-        {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
-    '''
+        self.assertEqual( x.purchase(156, 3), 'Please deposit $4.5', '17. Failed to purchase w/ no balance')
+
+        self.assertEqual( x.deposit(4.5), 'Balance: $4.5', '18. Failed to deposit $4.5' )
+
+        self.assertEqual( x.purchase(156, 3), 'Item dispensed', '19. Cleared stock on 156')
+
+        stock = {156: [1.5, 0], 254: [2.0, 3], 384: [2.5, 0], 879: [3.0, 3]}
+
+        self.assertEqual( x.getStock(), stock, '20. Failed to get stock after purchase' )
+
+        self.assertEqual( x.purchase(156), 'Item out of stock', '21. Failed to purchase out of stock item')
+
+        self.assertEqual( x.deposit(6), 'Balance: $6', '22. Failed to deposit $6')
+
+        self.assertEqual( x.purchase(254, 3), 'Item dispensed', '23. Failed to purchase 254')
+
+        self.assertEqual( x.deposit(9), 'Balance: $9', '24. Failed to deposit $9')
+
+        self.assertEqual( x.purchase(879, 3), 'Item dispensed', '25. Failed to purchase 879')
+
+        self.assertEqual( x.isStocked(), False, '26. Failed isStocked test')
+
+        self.assertEqual( x.deposit(5), 'Machine out of stock. Take your $5 back', '27. Machine out of stock deposit')
+
+        self.assertEqual( x.purchase(156, 2), 'Machine out of stock', '28. Machine out of stock purchase')
+
+        y = VendingMachine()
+
+        self.assertIsNone( x.setPrice(156, 2.5), '1.1. Failed to set price of x156' )
+
+        stock = {156: [2.5, 0], 254: [2.0, 0], 384: [2.5, 0], 879: [3.0, 0]}
+
+        self.assertEqual( x.getStock(), stock, '2.1. Failed to get stock after price change' )
+
+        stock = {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
+
+        self.assertEqual( y.getStock(), stock, '3.1. Failed to get stock for new object' )
 
 if __name__ == '__main__':
 	unittest.main(exit=False)
