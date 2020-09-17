@@ -32,7 +32,7 @@ class VendingMachine:
         if item in self.stock:
 
             # Is the machine stocked
-            if self.isStocked:
+            if self.isStocked():
 
                 # Is the item in stock
                 if self.stock[item][1] > 0:
@@ -77,7 +77,7 @@ class VendingMachine:
     def deposit(self, amount):
         ''' Deposits money into the vending machine. '''
 
-        if self.isStocked:
+        if self.isStocked():
             self.balance += amount
             return 'Balance: ${}'.format(amount)
         else:
@@ -99,11 +99,9 @@ class VendingMachine:
     def isStocked(self):
         ''' A property method that checks for the stock status. '''
         
-        x = 0
-
         for item in self.stock:
-
             # An item has nonzero stock, return True
+
             if self.stock[item][1] > 0:
                 return True
 
