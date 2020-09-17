@@ -32,7 +32,7 @@ class VendingMachine:
         if item in self.stock:
 
             # Is the machine stocked
-            if self.isStocked():
+            if self.isStocked:
 
                 # Is the item in stock
                 if self.stock[item][1] > 0:
@@ -77,7 +77,7 @@ class VendingMachine:
     def deposit(self, amount):
         ''' Deposits money into the vending machine. '''
 
-        if self.isStocked():
+        if self.isStocked:
             self.balance += amount
             return 'Balance: ${}'.format(amount)
         else:
@@ -96,6 +96,7 @@ class VendingMachine:
         else:
             return 'Invalid item'
 
+    @property
     def isStocked(self):
         ''' A property method that checks for the stock status. '''
         
@@ -107,7 +108,8 @@ class VendingMachine:
 
         # All items have zero stock
         return False
-        
+    
+    @property
     def getStock(self):
         ''' A property method that gets the current stock status of the machine. '''
 
@@ -135,23 +137,14 @@ class Point2D:
         self.x = x
         self.y = y
 
-    ## * YOU MAY IMPLEMENT SPECIAL METHODS TO SIMPLIFY LINE METHODS
+    def __eq__(self):
+        ''' equality checker '''
+
+        pass
+
 
 class Line: 
     ''' 
-        >>> line1
-        y = 1.825x + 3.775
-        
-        >>> line2 = line1*4
-        >>> line2.getDistance
-        66.592
-        >>> line2.getSlope
-        1.825
-        >>> line2
-        y = 1.825x + 15.1
-        >>> line1
-        y = 1.825x + 3.775
-        >>> line3 = 4*line1
         >>> line3
         y = 1.825x + 15.1
         >>> line1==line2
@@ -187,8 +180,21 @@ class Line:
     def __repr__(self):
         ''' Returns the standard form of the lines equation when the class is called '''
         
-        return 'y = {}x + {}'.format(self.getSlope(), self.getIntercept())
+        if self.getIntercept() >= 0:
+            return 'y = {}x + {}'.format(self.getSlope(), abs(self.getIntercept()))
+        else:
+            return 'y = {}x - {}'.format(self.getSlope(), abs(self.getIntercept()))
 
+    def __eq__(self, other):
+        ''' Determines whether two lines are equal '''
+
+        pass
+
+    def __mul__(self, other):
+        ''' multiplies the object by an integer and returns new object '''
+
+        return Line( Point2D( self.x1*other, self.y1*other ), Point2D( self.x2*other, self.y2*other ) )
+        
     def getDistance(self):
         ''' Returns the distance given the two init points '''
         
@@ -203,9 +209,3 @@ class Line:
         ''' Returns the Y-intercept of the line '''
 
         return round( self.y1 - ( self.getSlope() * self.x1), 3)
-
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

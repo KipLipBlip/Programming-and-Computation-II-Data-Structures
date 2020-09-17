@@ -20,7 +20,7 @@ class VendingMachineTestCases(unittest.TestCase):
         s = { 156 : [1.5, 3], 254 : [2.0, 3], 384 : [2.5, 3], 879 : [3.0, 3]}
         x = VendingMachine()
 
-        self.assertEqual( x.getStock(), s, 'Failed getStock check' )
+        self.assertEqual( x.getStock, s, 'Failed getStock check' )
 
     def test_restock(self):
         ''' Correctly restocking items / rejecting invalid items '''
@@ -31,12 +31,12 @@ class VendingMachineTestCases(unittest.TestCase):
 
         s = {156: [1.5, 4], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
-        self.assertEqual( x.getStock(), s, 'Failed to get stock after restock')
+        self.assertEqual( x.getStock, s, 'Failed to get stock after restock')
         
     def test_isStocked(self):
         x = VendingMachine()
 
-        self.assertEqual(x.isStocked(), True, 'Failed stocked test')
+        self.assertEqual(x.isStocked, True, 'Failed stocked test')
 
     def test_session(self):
         ''' Contains everything in the docstring '''
@@ -44,17 +44,17 @@ class VendingMachineTestCases(unittest.TestCase):
         x = VendingMachine()
         stock = {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
-        self.assertEqual( x.getStock(), stock, '1. Failed to get stock' )
+        self.assertEqual( x.getStock, stock, '1. Failed to get stock' )
 
         self.assertEqual( x.restock(215,9), 'Invalid item', '2. Failed to restock invalid item')
 
-        self.assertEqual( x.isStocked(), True, '3. Failed isStocked bool test')
+        self.assertEqual( x.isStocked, True, '3. Failed isStocked bool test')
 
         self.assertEqual( x.restock(156, 1), 'Current item stock: 4', '4. Failed 156 restock' )
 
         stock = {156: [1.5, 4], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
-        self.assertEqual( x.getStock(), stock, '5. Failed to get stock after 156 restock' )
+        self.assertEqual( x.getStock, stock, '5. Failed to get stock after 156 restock' )
 
         self.assertEqual( x.purchase(156), 'Please deposit $1.5', '6. Failed purchase attempt with 0 balance')
 
@@ -70,7 +70,7 @@ class VendingMachineTestCases(unittest.TestCase):
 
         stock = {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
-        self.assertEqual( x.getStock(), stock, '12. Failed to get stock after purchase' )
+        self.assertEqual( x.getStock, stock, '12. Failed to get stock after purchase' )
 
         self.assertEqual( x.deposit(300), 'Balance: $300', '13. Failed to deposit $300')
 
@@ -88,7 +88,7 @@ class VendingMachineTestCases(unittest.TestCase):
 
         stock = {156: [1.5, 0], 254: [2.0, 3], 384: [2.5, 0], 879: [3.0, 3]}
 
-        self.assertEqual( x.getStock(), stock, '20. Failed to get stock after purchase' )
+        self.assertEqual( x.getStock, stock, '20. Failed to get stock after purchase' )
 
         self.assertEqual( x.purchase(156), 'Item out of stock', '21. Failed to purchase out of stock item')
 
@@ -100,7 +100,7 @@ class VendingMachineTestCases(unittest.TestCase):
 
         self.assertEqual( x.purchase(879, 3), 'Item dispensed', '25. Failed to purchase 879')
 
-        self.assertEqual( x.isStocked(), False, '26. Failed isStocked test')
+        self.assertEqual( x.isStocked, False, '26. Failed isStocked test')
 
         self.assertEqual( x.deposit(5), 'Machine out of stock. Take your $5 back', '27. Machine out of stock deposit')
 
@@ -112,11 +112,11 @@ class VendingMachineTestCases(unittest.TestCase):
 
         stock = {156: [2.5, 0], 254: [2.0, 0], 384: [2.5, 0], 879: [3.0, 0]}
 
-        self.assertEqual( x.getStock(), stock, '2.1. Failed to get stock after price change' )
+        self.assertEqual( x.getStock, stock, '2.1. Failed to get stock after price change' )
 
         stock = {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
-        self.assertEqual( y.getStock(), stock, '3.1. Failed to get stock for new object' )
+        self.assertEqual( y.getStock, stock, '3.1. Failed to get stock for new object' )
 
 class LineAndPointTestCases(unittest.TestCase):
     ''' Test given cases in doctest '''
@@ -144,12 +144,21 @@ class LineAndPointTestCases(unittest.TestCase):
 
         # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
 
-        # New Line
+        # New Line from old line
 
         line2 = line1*4
 
         self.assertEqual( line2.getDistance(), 66.592, 'Failed to get distance: line2')
 
+        self.assertEqual( line2.getSlope(), 1.825, 'Failed to get slope: line2')
+
+        # self.assertEqual( line2, 'y = 1.825x + 15.1', 'Failed to get equation: line2')
+
+        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+
+        line3 = 4*line1
+
+        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
 
 if __name__ == '__main__':
 	unittest.main(exit=False)
