@@ -128,78 +128,82 @@ class VendingMachine:
 
 #################################
 
-# ## Section 2
-# class Point2D:
-#     def __init__(self, x, y):
-#         self.x = x
-#         self.y = y
+## Section 2
 
-#     ## * YOU MAY IMPLEMENT SPECIAL METHODS TO SIMPLIFY LINE METHODS
+class Point2D:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
+    ## * YOU MAY IMPLEMENT SPECIAL METHODS TO SIMPLIFY LINE METHODS
 
+class Line: 
+    ''' 
+        >>> line1
+        y = 1.825x + 3.775
         
+        >>> line2 = line1*4
+        >>> line2.getDistance
+        66.592
+        >>> line2.getSlope
+        1.825
+        >>> line2
+        y = 1.825x + 15.1
+        >>> line1
+        y = 1.825x + 3.775
+        >>> line3 = 4*line1
+        >>> line3
+        y = 1.825x + 15.1
+        >>> line1==line2
+        False
+        >>> line3==line2
+        True
+        >>> line5=Line(Point2D(6,48),Point2D(9,21))
+        >>> line5
+        y = -9.0x + 102.0
+        >>> line5==9
+        False
+        >>> line6=Line(Point2D(2,6), Point2D(2,3))
+        >>> line6.getDistance
+        3.0
+        >>> line6.getSlope
+        inf
+        >>> line6
+        Undefined
+        >>> line7=Line(Point2D(6,5), Point2D(9,5))
+        >>> line7.getSlope
+        0.0
+        >>> line7
+        y = 5.0
+    '''
+    def __init__(self, point1, point2):
+        # Convert given objects to useable variables
+        self.x1 = point1.x
+        self.x2 = point2.x
 
-# class Line: 
-#     ''' 
-#         >>> p1 = Point2D(-7, -9)
-#         >>> p2 = Point2D(1, 5.6)
-#         >>> line1 = Line(p1, p2)
-#         >>> line1.getDistance
-#         16.648
-#         >>> line1.getSlope
-#         1.825
-#         >>> line1
-#         y = 1.825x + 3.775
-#         >>> line2 = line1*4
-#         >>> line2.getDistance
-#         66.592
-#         >>> line2.getSlope
-#         1.825
-#         >>> line2
-#         y = 1.825x + 15.1
-#         >>> line1
-#         y = 1.825x + 3.775
-#         >>> line3 = 4*line1
-#         >>> line3
-#         y = 1.825x + 15.1
-#         >>> line1==line2
-#         False
-#         >>> line3==line2
-#         True
-#         >>> line5=Line(Point2D(6,48),Point2D(9,21))
-#         >>> line5
-#         y = -9.0x + 102.0
-#         >>> line5==9
-#         False
-#         >>> line6=Line(Point2D(2,6), Point2D(2,3))
-#         >>> line6.getDistance
-#         3.0
-#         >>> line6.getSlope
-#         inf
-#         >>> line6
-#         Undefined
-#         >>> line7=Line(Point2D(6,5), Point2D(9,5))
-#         >>> line7.getSlope
-#         0.0
-#         >>> line7
-#         y = 5.0
-#     '''
-#     def __init__(self, point1, point2):
-#         #--- YOUR CODE STARTS HERE
-#         pass
+        self.y1 = point1.y
+        self.y2 = point2.y 
 
-
-
-#     #--- YOUR CODE STARTS HERE
-#     def getDistance(self):
-#         pass
+    def __repr__(self):
+        ''' Returns the standard form of the lines equation when the class is called '''
         
-#     #--- YOUR CODE STARTS HERE
-#     def getSlope(self):
-#         pass
+        return 'y = {}x + {}'.format(self.getSlope(), self.getIntercept())
 
+    def getDistance(self):
+        ''' Returns the distance given the two init points '''
+        
+        return round(((self.y2 - self.y1)**2 + (self.x2 - self.x1)**2)**0.5, 3)
 
-#     #--- YOUR CODE CONTINUES HERE
+    def getSlope(self):
+        ''' Return the slope given the init points '''
+
+        return (self.y2 - self.y1)/(self.x2 - self.x1)
+
+    def getIntercept(self):
+        ''' Returns the Y-intercept of the line '''
+
+        return round( self.y1 - ( self.getSlope() * self.x1), 3)
+
 
 
 if __name__ == "__main__":

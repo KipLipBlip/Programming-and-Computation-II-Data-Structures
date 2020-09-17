@@ -1,6 +1,6 @@
 from logging import setLoggerClass
 import unittest
-from LAB2 import VendingMachine
+from LAB2 import *
 
 class VendingMachineTestCases(unittest.TestCase):
     ''' Tests various cases for VendingMachine in Lab 2 '''
@@ -117,6 +117,39 @@ class VendingMachineTestCases(unittest.TestCase):
         stock = {156: [1.5, 3], 254: [2.0, 3], 384: [2.5, 3], 879: [3.0, 3]}
 
         self.assertEqual( y.getStock(), stock, '3.1. Failed to get stock for new object' )
+
+class LineAndPointTestCases(unittest.TestCase):
+    ''' Test given cases in doctest '''
+
+    def test_point(self):
+        ''' Point 2D Test Cases'''
+
+        z = Point2D(-7,-9)
+
+        self.assertEqual( z.x, -7, 'Failed to set x')
+        self.assertEqual( z.y, -9, 'Failed to set y')
+
+        z = Point2D(1, 5.6)
+
+        self.assertEqual( z.x, 1, 'Failed to set x')
+        self.assertEqual( z.y, 5.6, 'Failed to set y')
+
+    def test_line1(self):
+
+        line1 = Line( Point2D(-7,-9), Point2D(1, 5.6) )
+
+        self.assertEqual( line1.getDistance(), 16.648, 'Failed to get distance: line1')
+
+        self.assertEqual( line1.getSlope(), 1.825, 'Failed to get slope: line1')
+
+        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+
+        # New Line
+
+        line2 = line1*4
+
+        self.assertEqual( line2.getDistance(), 66.592, 'Failed to get distance: line2')
+
 
 if __name__ == '__main__':
 	unittest.main(exit=False)
