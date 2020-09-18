@@ -3,7 +3,6 @@ import unittest
 from LAB2 import *
 
 class VendingMachineTestCases(unittest.TestCase):
-    ''' Tests various cases for VendingMachine in Lab 2 '''
 
     def test_init(self):
         ''' Correctly initializing values '''
@@ -119,9 +118,8 @@ class VendingMachineTestCases(unittest.TestCase):
         self.assertEqual( y.getStock, stock, '3.1. Failed to get stock for new object' )
 
 class LineAndPointTestCases(unittest.TestCase):
-    ''' Test given cases in doctest '''
 
-    def test_point(self):
+    def test_Point2D(self):
         ''' Point 2D Test Cases'''
 
         z = Point2D(-7,-9)
@@ -134,31 +132,95 @@ class LineAndPointTestCases(unittest.TestCase):
         self.assertEqual( z.x, 1, 'Failed to set x')
         self.assertEqual( z.y, 5.6, 'Failed to set y')
 
-    def test_line1(self):
+    def test_Line(self):
 
+        '>>> p1 = Point2D(-7, -9)'
+        '>>> p2 = Point2D(1, 5.6)'
+        '>>> line1 = Line(p1, p2)'
         line1 = Line( Point2D(-7,-9), Point2D(1, 5.6) )
 
-        self.assertEqual( line1.getDistance(), 16.648, 'Failed to get distance: line1')
+        '>>> line1.getDistance'
+        '16.648'
+        self.assertEqual( line1.getDistance, 16.648, 'Failed to get distance: line1')
 
-        self.assertEqual( line1.getSlope(), 1.825, 'Failed to get slope: line1')
+        '>>> line1.getSlope'
+        '1.825'
+        self.assertEqual( line1.getSlope, 1.825, 'Failed to get slope: line1')
 
-        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+        '>>> line1'
+        'y = 1.825x + 3.775'
+        self.assertEqual( str(line1), 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
 
-        # New Line from old line
-
+        '>>> line2 = line1*4'
         line2 = line1*4
 
-        self.assertEqual( line2.getDistance(), 66.592, 'Failed to get distance: line2')
+        '>>> line2.getDistance'
+        '66.592'
+        self.assertEqual( line2.getDistance, 66.592, 'Failed to get distance: line2')
 
-        self.assertEqual( line2.getSlope(), 1.825, 'Failed to get slope: line2')
+        '>>> line2.getSlope'
+        '1.825'
+        self.assertEqual( line2.getSlope, 1.825, 'Failed to get slope: line2')
 
-        # self.assertEqual( line2, 'y = 1.825x + 15.1', 'Failed to get equation: line2')
+        '>>> line2'
+        'y = 1.825x + 15.1'
+        self.assertEqual( str(line2), 'y = 1.825x + 15.1', 'Failed to get equation: line2')
 
-        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+        '>>> line1'
+        'y = 1.825x + 3.775'
+        self.assertEqual( str(line1), 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
 
+        '>>> line3 = 4*line1'
         line3 = 4*line1
 
-        # self.assertEqual( line1, 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+        '>>> line3'
+        'y = 1.825x + 15.1'
+        self.assertEqual( str(line1), 'y = 1.825x + 3.775', 'Failed to get Equation: line1' )
+
+        '>>> line1==line2'
+        'False'
+        self.assertEqual( line1 == line3, False, 'Failed line comparison 1&3')
+
+        '>>> line3==line2'
+        'True'
+        self.assertEqual( line2 == line3, True, 'Failed line comparison 2&3')
+
+        '>>> line5=Line(Point2D(6,48),Point2D(9,21))'
+        line5 = Line( Point2D(6,48), Point2D(9,21) )
+
+        '>>> line5'
+        'y = -9.0x + 102.0'
+        self.assertEqual( str(line5), 'y = -9.0x + 102.0', 'Failed to get Equation: line5' )
+
+        '>>> line5==9'
+        'False'
+        self.assertEqual( line5 == 9, False, 'Failed false comparison: line5')
+
+        '>>> line6=Line(Point2D(2,6), Point2D(2,3))'
+        line6 = Line( Point2D(2,6), Point2D(2,3) )
+
+        '>>> line6.getDistance'
+        '3.0'
+        self.assertEqual( line6.getDistance, 3.0, 'Failed to get distance: line6')
+
+        '>>> line6.getSlope'
+        'inf'
+        self.assertEqual( line6.getSlope, 'inf', 'Failed to get inf slope: line6')
+
+        '>>> line6'
+        'Undefined'
+        self.assertEqual( str(line6), 'Undefined', 'Failed to return an undef line: line6')
+
+        '>>> line7=Line(Point2D(6,5), Point2D(9,5))'
+        line7 = Line( Point2D(6,5), Point2D(9,5) )
+
+        '>>> line7.getSlope'
+        '0.0'
+        self.assertEqual( line7.getSlope, 0.0, 'Failed to get inf slope: line6')
+
+        '>>> line7'
+        'y = 5.0'
+        self.assertEqual( str(line7), 'y = 5.0', 'Failed to get equation: line7')
 
 if __name__ == '__main__':
 	unittest.main(exit=False)

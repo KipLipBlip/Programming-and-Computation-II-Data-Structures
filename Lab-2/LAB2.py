@@ -1,8 +1,8 @@
 # LAB2
-#Due Date: 09/18/2020, 11:59PM
+# Due Date: 09/18/2020, 11:59PM
 """                                   
 ### Collaboration Statement:
-             
+    I worked on this assignment alone, using only this semester's course materials
 """
 
 ## Section 1
@@ -128,8 +128,6 @@ class VendingMachine:
         else:
             return 'Invalid item'
 
-#################################
-
 ## Section 2
 
 class Point2D:
@@ -137,37 +135,11 @@ class Point2D:
         self.x = x
         self.y = y
 
-    def __eq__(self):
-        ''' equality checker '''
-
-        pass
-
-
 class Line: 
     ''' 
-        >>> line3
-        y = 1.825x + 15.1
-        >>> line1==line2
-        False
-        >>> line3==line2
-        True
-        >>> line5=Line(Point2D(6,48),Point2D(9,21))
-        >>> line5
-        y = -9.0x + 102.0
-        >>> line5==9
-        False
-        >>> line6=Line(Point2D(2,6), Point2D(2,3))
-        >>> line6.getDistance
-        3.0
-        >>> line6.getSlope
-        inf
-        >>> line6
-        Undefined
-        >>> line7=Line(Point2D(6,5), Point2D(9,5))
-        >>> line7.getSlope
-        0.0
-        >>> line7
-        y = 5.0
+        Computes basic calculations pertaining to a line
+        Attributes: getSlope, getDistance, getIntercept
+        *Supports equality and multiplication operators
     '''
     def __init__(self, point1, point2):
         # Convert given objects to useable variables
@@ -180,32 +152,81 @@ class Line:
     def __repr__(self):
         ''' Returns the standard form of the lines equation when the class is called '''
         
-        if self.getIntercept() >= 0:
-            return 'y = {}x + {}'.format(self.getSlope(), abs(self.getIntercept()))
+        s = self.getSlope
+        i = self.getIntercept
+
+        # If the slope is undef
+        if s == 'inf' or i == 'Undefinded':
+            return 'Undefined'
+
+        # If the slope is zero, constant horz line
+        if s == 0:
+            return str('y = {}'.format(i))
+
+        elif self.getIntercept >= 0:
+            # If the y-int is pos
+            return str('y = {}x + {}'.format(s, abs(i)))
+
         else:
-            return 'y = {}x - {}'.format(self.getSlope(), abs(self.getIntercept()))
+            # If the y-int is neg
+            return str('y = {}x - {}'.format(s, abs(i)))
 
     def __eq__(self, other):
         ''' Determines whether two lines are equal '''
 
-        pass
+        # Is other line class?
+        if isinstance(other, Line):
+            # If the points are the same, the lines are the same
+            if self.x1 == other.x1 and self.x2 == other.x2 and self.y1 == other.y1 and self.y2 == other.y2:
+                return True
+            else:
+                return False
+        # Not a line object
+        else:
+            return False
 
     def __mul__(self, other):
         ''' multiplies the object by an integer and returns new object '''
 
+        # Multiplies each point by the int and returns a line
         return Line( Point2D( self.x1*other, self.y1*other ), Point2D( self.x2*other, self.y2*other ) )
-        
+    
+    def __rmul__(self, other):
+        ''' multiplies the object by an integer and returns new object '''
+
+        # Multiplies each point by the int and returns a line
+        return Line( Point2D( self.x1*other, self.y1*other ), Point2D( self.x2*other, self.y2*other ) )
+    
+    @property
     def getDistance(self):
         ''' Returns the distance given the two init points '''
         
         return round(((self.y2 - self.y1)**2 + (self.x2 - self.x1)**2)**0.5, 3)
 
+    @property
     def getSlope(self):
         ''' Return the slope given the init points '''
 
-        return (self.y2 - self.y1)/(self.x2 - self.x1)
+        n = self.y2 - self.y1
+        d = self.x2 - self.x1
 
+        # Zero division error gives infinite slope
+        if d == 0.0:
+            return 'inf'
+
+        # Zero in numerator gives zero slope
+        elif n == 0.0:
+            return 0.0
+
+        # Return normal calc
+        else:
+            return n/d
+
+    @property
     def getIntercept(self):
         ''' Returns the Y-intercept of the line '''
+        
+        if self.getSlope == 'inf':
+            return 'Undefined'
 
-        return round( self.y1 - ( self.getSlope() * self.x1), 3)
+        return round( self.y1 - ( self.getSlope * self.x1), 3)
