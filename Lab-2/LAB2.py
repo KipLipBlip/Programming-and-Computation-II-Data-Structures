@@ -161,7 +161,11 @@ class Line:
 
         # If the slope is zero, constant horz line
         if s == 0:
-            return str('y = {}'.format(i))
+            # If the intercept is neg, put the sign
+            if i < 0:
+                return str('y = - {}'.format(abs(i)))
+            else:
+                return str('y = {}'.format(i))
 
         elif self.getIntercept >= 0:
             # If the y-int is pos
@@ -220,7 +224,7 @@ class Line:
 
         # Return normal calc
         else:
-            return n/d
+            return round(n/d, 3)
 
     @property
     def getIntercept(self):
