@@ -1,0 +1,9 @@
+def addQuotes(s):
+    x,y,i='',len(s),0
+    while i!=y:
+        if s[i].isupper() or not s[i].isalnum(): x,i=x+s[i],i+1
+        else: 
+            x+='"'
+            while i!=y and s[i].islower(): x,i=x+s[i],i+1
+            x+='"'
+    return x
