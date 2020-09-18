@@ -22,23 +22,18 @@ def addQuotes(s):
             >>> addQuotes('')
             ''
     '''
-    y=''
-    for i in range(len(s)):
-        x=''
-        z=''
-        if s[i].islower():
-            while s[i].islower():
-                z+=s[i]
-                i+=1
-            x+='"'+z+'"'
-        else:
+    x,y,i='',len(s),0
+    while i!=y:
+        if s[i].isupper() or s[i].isalnum()==False:
             x+=s[i]
-        y+=x
-
-    return y
-
-    # x=lambda s: [[] if [if s[i].islower() for j in range(len(s))] else s for i in range(len(s)) ]
-    # return x
+            i+=1
+        else:
+            x+='"'
+            while i!=y and s[i].islower():
+                x+=s[i]
+                i+=1
+            x+='"'
+    return x  
 
 if __name__ == "__main__":
 
