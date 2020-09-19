@@ -1,9 +1,9 @@
 # HW2
 #Due Date: 09/25/2020, 11:59PM
-"""                                   
+'''                                   
 ### Collaboration Statement:
-             
-"""
+    I worked on this assignment alone, using only this semester's course materials
+'''
 
 import random
 
@@ -27,22 +27,32 @@ class Course:
         >>> print(c1)
         CMPSC132(3): Programming in Python II
     '''
+
     def __init__(self, cid, cname, credits):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Set initial class attributes. '''
 
-
+        self.cid = cid
+        self.cname = cname
+        self.credits = credits
+        
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Returns a formatted summary of the course as a string. '''
+
+        # ID(credits): Name
+        return '{}({}): {}'.format(self.cid, self.credits, self.cname)
 
     __repr__ = __str__
 
     def __eq__(self, other):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Does an equality check based only on course id ''' 
+        
+        # Compare IDs
+        if self.cid == other.cid:
+            return True
+        else:
+            return False
 
-
+###########
 
 class Catalog:
     ''' 
@@ -75,10 +85,10 @@ class Semester:
     '''
         >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
         >>> cmpsc132 = Course('CMPSC132', 'Programming in Python II', 3)
-        >>> math230 = Course("MATH 230", 'Calculus', 4)
-        >>> phys213 = Course("PHYS 213", 'General Physics', 2)
-        >>> econ102 = Course("ECON 102", 'Intro to Economics', 3)
-        >>> phil119 = Course("PHIL 119", 'Ethical Leadership', 3)
+        >>> math230 = Course('MATH 230', 'Calculus', 4)
+        >>> phys213 = Course('PHYS 213', 'General Physics', 2)
+        >>> econ102 = Course('ECON 102', 'Intro to Economics', 3)
+        >>> phil119 = Course('PHIL 119', 'Ethical Leadership', 3)
         >>> semester = Semester(1)
         >>> semester
         No courses
@@ -98,12 +108,12 @@ class Semester:
         >>> semester.isFullTime
         True
         >>> semester.dropCourse(phil119)
-        >>> semester.addCourse(Course("JAPNS 001", 'Japanese I', 4))
+        >>> semester.addCourse(Course('JAPNS 001', 'Japanese I', 4))
         >>> semester.totalCredits
         16
         >>> semester.dropCourse(cmpsc131)
         'No such course'
-        >>> semester.addCourse(Course(42, 'name',"zero credits"))
+        >>> semester.addCourse(Course(42, 'name','zero credits'))
         'Invalid course'
         >>> semester.courses
         [CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]
@@ -466,10 +476,10 @@ class StudentAccount:
 
 
 def createStudent(person):
-    """
+    '''
         >>> p = Person('Jason Smith', '221-11-2629')
         >>> s = createStudent(p)
         >>> s
         Student(Jason Smith, js2629, Freshman)
-    """
+    '''
     pass
