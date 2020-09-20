@@ -47,12 +47,13 @@ class Course:
         ''' Does an equality check based only on course id ''' 
         
         # Compare IDs
-        if self.cid == other.cid:
-            return True
-        else:
+        try:
+            if self.cid == other.cid:
+                return True
+            else:
+                return False
+        except AttributeError:
             return False
-
-###########
 
 class Catalog:
     ''' 
@@ -69,16 +70,30 @@ class Catalog:
         {'CMPSC132': CMPSC132(3): Programming in Python II}
     '''
     def __init__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Initialize the dictionary catalog '''
+        
+        # 'ID' : 'ID(credits): Name'
+        self.courseOfferings = {}
 
     def addCourse(self, cid, cname, credits):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Creates a course with the parameters and stores that course in courseOfferings. '''
+        
+        # Check if the course is already in the dict
+        if cid not in self.courseOfferings:
+            # Add the course --> 'ID' : 'ID(credits): Name'
+            self.courseOfferings[cid] : '{}({}): {}'.format(cid, credits, cname)
+            return 'Course added successfully'
+        else:
+            return 'Course already added' 
 
     def removeCourse(self, cid):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Removes a course with the given id. '''
+                # Check if the course is already in the dict
+        if cid in self.courseOfferings:
+            # Add the course --> 'ID' : 'ID(credits): Name'
+            del self.courseOfferings[cid]
+        else:
+            return 'Course not found' 
 
 
 class Semester:

@@ -4,20 +4,9 @@ from HW2 import *
 class Test(unittest.TestCase):
     
     def test_course(self):
-        '''
-            >>> c2
-            CMPSC360(3): Discrete Mathematics
-            >>> c3
-            CMPSC132(3): Programming in Python II
-            >>> c1 == None
-            False
-            >>> print(c1)
-            CMPSC132(3): Programming in Python II
-        '''
-        ###
 
-        '>>> c1 = Course('CMPSC132', 'Programming in Python II', 3)'
-        '>>> c2 = Course('CMPSC360', 'Discrete Mathematics', 3)'
+        '>>> c1 = Course(''CMPSC132'', ''Programming in Python II'', 3)'
+        '>>> c2 = Course(''CMPSC360'', ''Discrete Mathematics'', 3)'
         c1 = Course('CMPSC132', 'Programming in Python II', 3)
         c2 = Course('CMPSC360', 'Discrete Mathematics', 3)
 
@@ -25,7 +14,7 @@ class Test(unittest.TestCase):
         'False'
         self.assertEqual( c1 == c2, False, 'Course Failed __eq__' )
 
-        '>>> c3 = Course('CMPSC132', 'Programming in Python II', 3)'
+        '>>> c3 = Course(''CMPSC132'', ''Programming in Python II'', 3)'
         c3 = Course('CMPSC132', 'Programming in Python II', 3)
 
         '>>> c1 == c3'
@@ -35,6 +24,22 @@ class Test(unittest.TestCase):
         '>>> c1'
         'CMPSC132(3): Programming in Python II'
         self.assertEqual( str(c1), 'CMPSC132(3): Programming in Python II', 'Course Failed __str__' )
+
+        '>>> c2'
+        'CMPSC360(3): Discrete Mathematics'
+        self.assertEqual( str(c2), 'CMPSC360(3): Discrete Mathematics', 'Course Failed __str__' )
+
+        '>>> c3'
+        'CMPSC132(3): Programming in Python II'
+        self.assertEqual( str(c3), 'CMPSC132(3): Programming in Python II', 'Course Failed __str__' )
+
+        '>>> c1 == None'
+        'False'
+        self.assertEqual( c1 == None, False, 'Course Failed __eq__' )
+
+        '>>> print(c1)'
+        'CMPSC132(3): Programming in Python II'
+        # ** Tested - Works
 
     def test_catalog(self):
         '''
