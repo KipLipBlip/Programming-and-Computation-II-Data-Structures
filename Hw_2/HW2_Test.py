@@ -42,20 +42,35 @@ class Test(unittest.TestCase):
         # ** Tested - Works
 
     def test_catalog(self):
-        '''
-            >>> C = Catalog()
-            >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
-            'Course added successfully'
-            >>> C.addCourse('CMPSC360', 'Discrete Mathematics', 3)
-            'Course added successfully'
-            >>> C.courseOfferings
-            {'CMPSC132': CMPSC132(3): Programming in Python II, 'CMPSC360': CMPSC360(3): Discrete Mathematics}
-            >>> C.removeCourse('CMPSC360')
-            'Course removed successfully'
-            >>> C.courseOfferings
-            {'CMPSC132': CMPSC132(3): Programming in Python II}
-        '''
 
+        '>>> C = Catalog()'
+        C = Catalog()
+
+        '>>> C.addCourse(''CMPSC132'', ''Programming in Python II'', 3)'
+        'Course added successfully'
+        self.assertEqual(C.addCourse('CMPSC132', 'Programming in Python II', 3), 'Course added successfully', 'Failed to add course')
+
+        '>>> C.addCourse(''CMPSC360'', ''Discrete Mathematics'', 3)'
+        'Course added successfully'
+        self.assertEqual(C.addCourse('CMPSC360', 'Discrete Mathematics', 3), 'Course added successfully', 'Failed to add course')
+
+        d = {'CMPSC132': 'CMPSC132(3): Programming in Python II', 'CMPSC360': 'CMPSC360(3): Discrete Mathematics'}
+
+        '>>> C.courseOfferings'
+        '{''CMPSC132'': CMPSC132(3): Programming in Python II, ''CMPSC360'': CMPSC360(3): Discrete Mathematics}'
+        self.assertEqual( C.courseOfferings, d, 'Failed to get attr courseOfferings' )
+
+        '>>> C.removeCourse(''CMPSC360'')'
+        'Course removed successfully'
+        self.assertEqual( C.removeCourse('CMPSC360'), 'Course removed successfully', 'Failed to delete course')
+
+        d = {'CMPSC132': 'CMPSC132(3): Programming in Python II'}
+
+        '>>> C.courseOfferings'
+        '{''CMPSC132'': CMPSC132(3): Programming in Python II}'
+
+        self.assertEqual( C.courseOfferings, d, 'Failed to get attr courseOfferings' )
+####
     def test_semester(self):
         '''
             >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)

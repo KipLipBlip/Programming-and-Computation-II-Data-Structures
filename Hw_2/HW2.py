@@ -81,20 +81,21 @@ class Catalog:
         # Check if the course is already in the dict
         if cid not in self.courseOfferings:
             # Add the course --> 'ID' : 'ID(credits): Name'
-            self.courseOfferings[cid] : '{}({}): {}'.format(cid, credits, cname)
+            self.courseOfferings[cid] = '{}({}): {}'.format(cid, credits, cname)
             return 'Course added successfully'
         else:
             return 'Course already added' 
 
     def removeCourse(self, cid):
         ''' Removes a course with the given id. '''
-                # Check if the course is already in the dict
+
+        # Check if the course is already in the dict
         if cid in self.courseOfferings:
             # Add the course --> 'ID' : 'ID(credits): Name'
             del self.courseOfferings[cid]
+            return 'Course removed successfully'
         else:
-            return 'Course not found' 
-
+            return 'Course not found'
 
 class Semester:
     '''
