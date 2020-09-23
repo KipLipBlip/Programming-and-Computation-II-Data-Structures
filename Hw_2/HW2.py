@@ -136,34 +136,63 @@ class Semester:
     '''
 
     def __init__(self, sem_num):
-        # --- YOUR CODE STARTS HERE
-        pass
-
-
+        
+        # Set the semester number
+        self.sem_num = sem_num
+        self.courses = []
 
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Return the formatted string of the semester's courses. '''
+
+        # If there are courses, return then as a joined str
+        if len(self.courses) != 0:
+            return ' '.join(self.courses)
+        else:
+            return 'No courses'
 
     __repr__ = __str__
 
     def addCourse(self, course):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Adds a course to courses if it is a valid course object. '''
+
+        # Check the attributes
+        if isinstance(course, Course):
+
+            # Check if the course is already under this semesters courses
+            if course.cid not in self.courses:
+                # Add the course [ {cid : [cname, credits]}, ... ]
+                self.courses.append(
+                    {
+                        course.cid : [course.cname, course.credits]
+                    }
+                )
+            else:
+                return 'Course already added'
+        else:
+            return 'Invalid course'
+
+        # Add credits to total
 
     def dropCourse(self, course):
-        # YOUR CODE STARTS HERE
+        ''' Removes a course from courses. '''
         pass
+        # Remove credits from total
 
     @property
     def totalCredits(self):
-        # YOUR CODE STARTS HERE
+        ''' A property method for the total number of credits. '''
         pass
 
     @property
     def isFullTime(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' A property method that returns True if this is full-time. '''
+        
+        # Check if there are 12 or more credits
+        if totalCredits >= 12:
+            return True
+        else: 
+            return False
+
 
     
 class Loan:

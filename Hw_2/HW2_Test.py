@@ -73,15 +73,6 @@ class Test(unittest.TestCase):
 ####
     def test_semester(self):
         '''
-            >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
-            >>> cmpsc132 = Course('CMPSC132', 'Programming in Python II', 3)
-            >>> math230 = Course('MATH 230', 'Calculus', 4)
-            >>> phys213 = Course('PHYS 213', 'General Physics', 2)
-            >>> econ102 = Course('ECON 102', 'Intro to Economics', 3)
-            >>> phil119 = Course('PHIL 119', 'Ethical Leadership', 3)
-            >>> semester = Semester(1)
-            >>> semester
-            No courses
             >>> semester.addCourse(cmpsc132)
             >>> semester.addCourse(math230)
             >>> semester
@@ -108,6 +99,30 @@ class Test(unittest.TestCase):
             >>> semester.courses
             [CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]
         '''
+
+        '''
+        >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
+        >>> cmpsc132 = Course('CMPSC132', 'Programming in Python II', 3)
+        >>> math230 = Course('MATH 230', 'Calculus', 4)
+        >>> phys213 = Course('PHYS 213', 'General Physics', 2)
+        >>> econ102 = Course('ECON 102', 'Intro to Economics', 3)
+        >>> phil119 = Course('PHIL 119', 'Ethical Leadership', 3)
+        '''
+        cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
+        cmpsc132 = Course('CMPSC132', 'Programming in Python II', 3)
+        math230 = Course('MATH 230', 'Calculus', 4)
+        phys213 = Course('PHYS 213', 'General Physics', 2)
+        econ102 = Course('ECON 102', 'Intro to Economics', 3)
+        phil119 = Course('PHIL 119', 'Ethical Leadership', 3)
+
+        '>>> semester = Semester(1)'
+        semester = Semester(1)
+
+        '>>> semester'
+        'No courses'
+        self.assertEqual( semester, 'No courses', 'Failed to distinguish between classes')
+
+
 
     def test_loan(self):
         '''
