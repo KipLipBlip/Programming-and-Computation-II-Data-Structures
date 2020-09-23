@@ -137,7 +137,6 @@ class Semester:
 
     def __init__(self, sem_num):
         
-        # Set the semester number
         self.sem_num = sem_num
         self.courses = []
 
@@ -164,24 +163,46 @@ class Semester:
                 self.courses.append(
                     {
                         course.cid : [course.cname, course.credits]
-                    }
-                )
+                    })
+                # Add credits to total
+                self.totalCredits += course.credits
             else:
                 return 'Course already added'
         else:
-            return 'Invalid course'
-
-        # Add credits to total
+            return 'Invalid course'        
 
     def dropCourse(self, course):
         ''' Removes a course from courses. '''
-        pass
-        # Remove credits from total
+
+        # Check the object
+        if isinstance(course, Course):
+
+            # Check if course is in this semester
+            if course.cid in self.courses:
+                
+                # Find the index the class is at and pop is
+                for i in range(len(self.courses)):
+                    if self.courses[i] == course.cid:
+                        break
+                    self.courses.pop(i)
+                # Remove credits from total
+                self.totalCredits -= course.credits
+
+            else:
+                return 'No such course'
+        else:
+            return 'Invalid course'
 
     @property
     def totalCredits(self):
         ''' A property method for the total number of credits. '''
-        pass
+        c = 0
+        for item in self.courses:
+            c += self.courses[item][1]
+
+        for i in range(len(self.courses)):
+            self.courses[i][self.courses[i].key()][1]
+        return c
 
     @property
     def isFullTime(self):

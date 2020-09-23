@@ -54,6 +54,7 @@ class Test(unittest.TestCase):
         'Course added successfully'
         self.assertEqual(C.addCourse('CMPSC360', 'Discrete Mathematics', 3), 'Course added successfully', 'Failed to add course')
 
+        # Variable
         d = {'CMPSC132': 'CMPSC132(3): Programming in Python II', 'CMPSC360': 'CMPSC360(3): Discrete Mathematics'}
 
         '>>> C.courseOfferings'
@@ -64,42 +65,15 @@ class Test(unittest.TestCase):
         'Course removed successfully'
         self.assertEqual( C.removeCourse('CMPSC360'), 'Course removed successfully', 'Failed to delete course')
 
+        # Variable
         d = {'CMPSC132': 'CMPSC132(3): Programming in Python II'}
 
         '>>> C.courseOfferings'
         '{''CMPSC132'': CMPSC132(3): Programming in Python II}'
-
         self.assertEqual( C.courseOfferings, d, 'Failed to get attr courseOfferings' )
-####
-    def test_semester(self):
-        '''
-            >>> semester.addCourse(cmpsc132)
-            >>> semester.addCourse(math230)
-            >>> semester
-            CMPSC132(3): Programming in Python II, MATH 230(4): Calculus
-            >>> semester.isFullTime
-            False
-            >>> semester.totalCredits
-            7
-            >>> semester.addCourse(phys213)
-            >>> semester.addCourse(econ102)
-            >>> semester.addCourse(econ102)
-            'Course already added'
-            >>> semester.addCourse(phil119)
-            >>> semester.isFullTime
-            True
-            >>> semester.dropCourse(phil119)
-            >>> semester.addCourse(Course('JAPNS 001', 'Japanese I', 4))
-            >>> semester.totalCredits
-            16
-            >>> semester.dropCourse(cmpsc131)
-            'No such course'
-            >>> semester.addCourse(Course(42, 'name','zero credits'))
-            'Invalid course'
-            >>> semester.courses
-            [CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]
-        '''
 
+    def test_semester(self):
+  
         '''
         >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
         >>> cmpsc132 = Course('CMPSC132', 'Programming in Python II', 3)
@@ -120,9 +94,66 @@ class Test(unittest.TestCase):
 
         '>>> semester'
         'No courses'
-        self.assertEqual( semester, 'No courses', 'Failed to distinguish between classes')
+        self.assertEqual( str(semester), 'No courses', 'Failed to distinguish between classes')
 
+        '>>> semester.addCourse(cmpsc132)'
+        '>>> semester.addCourse(math230)'
 
+        # Variable
+        c = 'CMPSC132(3): Programming in Python II, MATH 230(4): Calculus'
+
+        '>>> semester'
+        'CMPSC132(3): Programming in Python II, MATH 230(4): Calculus'
+        self.assertEqual( str(semester), c, 'Failed to get classes from semester')
+
+        '>>> semester.isFullTime'
+        'False'
+        self.assertEqual(semester.isFullTime, False, 'Failed to get False fulltime')
+  
+        '>>> semester.totalCredits'
+        '7'
+        self.asserEqual(semester.totalCredits, 7, 'Failed to get semesters credits')
+
+        '>>> semester.addCourse(phys213)'
+        '>>> semester.addCourse(econ102)'
+
+        semester.addCourse(phys213)
+        semester.addCourse(econ102)
+
+        '>>> semester.addCourse(econ102)'
+        'Course already added'
+        self.assertEqual( semester.addCourse(econ102), 'Course already added', 'Failed to find class already added')
+
+        '>>> semester.addCourse(phil119)'
+        semester.addCourse(phil119)
+
+        '>>> semester.isFullTime'
+        'True'
+        self.assertEqual( semester.isFullTime, True, 'Failed to get True fulltime')
+
+        '>>> semester.dropCourse(phil119)'
+        '>>> semester.addCourse(Course(''JAPNS 001'', ''Japanese I'', 4))'
+        semester.dropCourse(phil119)
+        semester.addCourse(Course('JAPNS 001', 'Japanese I', 4))
+
+        '>>> semester.totalCredits'
+        '16'
+        self.assertEqual(semester.totalCredits, 16, 'Failed to get total credits')
+
+        '>>> semester.dropCourse(cmpsc131)'
+        'No such course'
+        self.assertEqual(semester.dropCourse(cmpsc131), 'No such course', 'Failed to find nonexistant course')
+
+        '>>> semester.addCourse(Course(42, name, zero credits))'
+        'Invalid course'
+        self.assertEqual(semester.addCourse(Course(42, 'name','zero credits')), 'Failed to ')
+
+        # Varaiable
+        c = ['CMPSC132(3): Programming in Python II', 'MATH 230(4): Calculus', 'PHYS 213(2): General Physics', 'ECON 102(3): Intro to Economics', 'JAPNS 001(4): Japanese I']
+
+        '>>> semester.courses'
+        '''[CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]'''
+        self.assertEqual(semester.courses, c, 'Failed to get semesters courses')
 
     def test_loan(self):
         '''
