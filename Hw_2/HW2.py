@@ -144,8 +144,8 @@ class Semester:
         ''' Return the formatted string of the semester's courses. '''
 
         # If there are courses, return then as a joined str
-        if len(self.courses) != 0:
-            return ' '.join(self.courses)
+        if len(self.courses) > 0:
+            return ''.join(str(self.courses))
         else:
             return 'No courses'
 
@@ -158,14 +158,9 @@ class Semester:
         if isinstance(course, Course):
 
             # Check if the course is already under this semesters courses
-            if course.cid not in self.courses:
+            if course not in self.courses:
                 # Add the course [ {cid : [cname, credits]}, ... ]
-                self.courses.append(
-                    {
-                        course.cid : [course.cname, course.credits]
-                    })
-                # Add credits to total
-                self.totalCredits += course.credits
+                self.courses.append(course)
             else:
                 return 'Course already added'
         else:
@@ -178,15 +173,13 @@ class Semester:
         if isinstance(course, Course):
 
             # Check if course is in this semester
-            if course.cid in self.courses:
+            if course in self.courses:
                 
                 # Find the index the class is at and pop is
                 for i in range(len(self.courses)):
                     if self.courses[i] == course.cid:
                         break
                     self.courses.pop(i)
-                # Remove credits from total
-                self.totalCredits -= course.credits
 
             else:
                 return 'No such course'
@@ -198,10 +191,7 @@ class Semester:
         ''' A property method for the total number of credits. '''
         c = 0
         for item in self.courses:
-            c += self.courses[item][1]
-
-        for i in range(len(self.courses)):
-            self.courses[i][self.courses[i].key()][1]
+            c += item.credits
         return c
 
     @property

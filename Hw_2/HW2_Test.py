@@ -98,7 +98,9 @@ class Test(unittest.TestCase):
 
         '>>> semester.addCourse(cmpsc132)'
         '>>> semester.addCourse(math230)'
-
+        semester.addCourse(cmpsc132)
+        semester.addCourse(math230)
+        
         # Variable
         c = 'CMPSC132(3): Programming in Python II, MATH 230(4): Calculus'
 
