@@ -88,7 +88,7 @@ class Test(unittest.TestCase):
         phys213 = Course('PHYS 213', 'General Physics', 2)
         econ102 = Course('ECON 102', 'Intro to Economics', 3)
         phil119 = Course('PHIL 119', 'Ethical Leadership', 3)
-
+        japns001 = Course('JAPNS 001', 'Japanese I', 4)
         '>>> semester = Semester(1)'
         semester = Semester(1)
 
@@ -114,11 +114,10 @@ class Test(unittest.TestCase):
   
         '>>> semester.totalCredits'
         '7'
-        self.asserEqual(semester.totalCredits, 7, 'Failed to get semesters credits')
+        self.assertEqual(semester.totalCredits, 7, 'Failed to get semesters credits')
 
         '>>> semester.addCourse(phys213)'
         '>>> semester.addCourse(econ102)'
-
         semester.addCourse(phys213)
         semester.addCourse(econ102)
 
@@ -148,10 +147,11 @@ class Test(unittest.TestCase):
 
         '>>> semester.addCourse(Course(42, name, zero credits))'
         'Invalid course'
-        self.assertEqual(semester.addCourse(Course(42, 'name','zero credits')), 'Failed to ')
+        self.assertEqual(semester.addCourse(Course(42, 'name','zero credits')), 'Invalid course', 'Failed to find invalid course')
 
         # Varaiable
-        c = ['CMPSC132(3): Programming in Python II', 'MATH 230(4): Calculus', 'PHYS 213(2): General Physics', 'ECON 102(3): Intro to Economics', 'JAPNS 001(4): Japanese I']
+        # c = [CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]
+        c = [cmpsc132, math230, phys213, econ102, japns001]
 
         '>>> semester.courses'
         '''[CMPSC132(3): Programming in Python II, MATH 230(4): Calculus, PHYS 213(2): General Physics, ECON 102(3): Intro to Economics, JAPNS 001(4): Japanese I]'''

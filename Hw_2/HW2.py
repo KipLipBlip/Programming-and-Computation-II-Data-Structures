@@ -45,15 +45,15 @@ class Course:
 
     def __eq__(self, other):
         ''' Does an equality check based only on course id ''' 
-        
-        # Compare IDs
-        try:
+        if isinstance(other, Course):
+            # Compare IDs
             if self.cid == other.cid:
                 return True
             else:
                 return False
-        except AttributeError:
+        else:
             return False
+
 
 class Catalog:
     ''' 
@@ -145,7 +145,8 @@ class Semester:
 
         # If there are courses, return then as a joined str
         if len(self.courses) > 0:
-            return ''.join(str(self.courses))
+            s= ''.join(str(self.courses))
+            return s.replace('[', '').replace(']', '')
         else:
             return 'No courses'
 
@@ -156,13 +157,14 @@ class Semester:
 
         # Check the attributes
         if isinstance(course, Course):
-
-            # Check if the course is already under this semesters courses
-            if course not in self.courses:
-                # Add the course [ {cid : [cname, credits]}, ... ]
-                self.courses.append(course)
+            if isinstance(course.cid, str) and isinstance(course.cname, str) and isinstance(course.credits, int):
+                # Check if the course is already under this semesters courses
+                if course not in self.courses:
+                    self.courses.append(course)
+                else:
+                    return 'Course already added'
             else:
-                return 'Course already added'
+                return 'Invalid course'
         else:
             return 'Invalid course'        
 
@@ -175,11 +177,7 @@ class Semester:
             # Check if course is in this semester
             if course in self.courses:
                 
-                # Find the index the class is at and pop is
-                for i in range(len(self.courses)):
-                    if self.courses[i] == course.cid:
-                        break
-                    self.courses.pop(i)
+                self.courses.remove(course)
 
             else:
                 return 'No such course'
@@ -197,15 +195,14 @@ class Semester:
     @property
     def isFullTime(self):
         ''' A property method that returns True if this is full-time. '''
-        
+
         # Check if there are 12 or more credits
-        if totalCredits >= 12:
+        if self.totalCredits >= 12:
             return True
         else: 
             return False
 
 
-    
 class Loan:
     '''
         >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
