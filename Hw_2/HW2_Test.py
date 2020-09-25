@@ -191,21 +191,45 @@ class Test(unittest.TestCase):
         '''
 
     def test_person(self):
+
         '''
             >>> p1 = Person('Jason Lee', '204-99-2890')
             >>> p2 = Person('Karen Lee', '247-01-2670')
+            >>> p3 = Person('Karen Smith', '247-01-2670')
+        '''
+        p1 = Person('Jason Lee', '204-99-2890')
+        p2 = Person('Karen Lee', '247-01-2670')
+        p3 = Person('Karen Smith', '247-01-2670')
+
+        '''
             >>> p1
             Person(Jason Lee, ***-**-2890)
+        '''
+        self.assertEqual(str(p1), 'Person(Jason Lee, ***-**-2890)', 'Failed to get p1 __str__')
+
+        '''
             >>> p2
             Person(Karen Lee, ***-**-2670)
-            >>> p3 = Person('Karen Smith', '247-01-2670')
+        '''
+        self.assertEqual(str(p2), 'Person(Karen Lee, ***-**-2670)', 'Failed to get p2 __str__')
+
+        '''
             >>> p3
             Person(Karen Smith, ***-**-2670)
+        '''
+        self.assertEqual(str(p3), 'Person(Karen Smith, ***-**-2670)', 'Failed to get p3 __str__')
+
+        '''
             >>> p2 == p3
             True
+        '''
+        self.assertEqual(p2 == p3, True, 'Failed to check SSN')
+
+        '''
             >>> p1 == p2
             False
         '''
+        self.assertEqual(p1 == p2, False, 'Failed to check SSN')
 
     def test_staff(self):
         '''

@@ -157,6 +157,7 @@ class Semester:
 
         # Check the attributes
         if isinstance(course, Course):
+            # Check types b/c not asked to initially check in course class
             if isinstance(course.cid, str) and isinstance(course.cname, str) and isinstance(course.credits, int):
                 # Check if the course is already under this semesters courses
                 if course not in self.courses:
@@ -273,22 +274,33 @@ class Person:
     '''
 
     def __init__(self, name, ssn):
-        # YOUR CODE STARTS HERE
-        pass
+
+        # Set name and set private ssn
+        self.name = name
+        self.__ssn = ssn
 
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        # Put the last four digits in a string and format
+        t = self.get_ssn()
+        return 'Person({}, ***-**-{})'.format(self.name, t[-4]+t[-3]+t[-2]+t[-1])
 
     __repr__ = __str__
 
     def get_ssn(self):
-        # YOUR CODE STARTS HERE
-        pass
+        return self.__ssn
 
     def __eq__(self, other):
-        # YOUR CODE STARTS HERE
-        pass
+
+        # Check if other is a person object
+        if isinstance(other, Person):
+
+            # Check if the ssn's are the same via getter
+            if other.get_ssn() == self.get_ssn():
+                return True
+            else:
+                return False
+        else:
+            return False
 
 class Staff(Person):
     '''
@@ -363,8 +375,6 @@ class Staff(Person):
     def unenrollStudent(self, student):
         # YOUR CODE STARTS HERE
         pass
-
-
 
 
 class Student(Person):
