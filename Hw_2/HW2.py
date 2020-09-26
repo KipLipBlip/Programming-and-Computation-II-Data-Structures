@@ -80,8 +80,9 @@ class Catalog:
         # Check if the course is already in the dict
         if cid not in self.courseOfferings:
             # Add the course --> 'ID' : 'ID(credits): Name'
-            self.courseOfferings[cid] = '{}({}): {}'.format(cid, credits, cname)
+            self.courseOfferings[cid] = Course(cid, cname, credits)
             return 'Course added successfully'
+
         else:
             return 'Course already added' 
 
@@ -137,7 +138,7 @@ class Semester:
     def __init__(self, sem_num):
         
         self.sem_num = sem_num
-        self.courses = []
+        self.courses = ['No courses']
 
     def __str__(self):
         ''' Return the formatted string of the semester's courses. '''
@@ -146,6 +147,7 @@ class Semester:
         if len(self.courses) > 0:
             s= ''.join(str(self.courses))
             return s.replace('[', '').replace(']', '')
+            
         else:
             return 'No courses'
 
@@ -237,7 +239,7 @@ class Loan:
     
     def __init__(self, amount):
         self.amount = amount
-        self.loan_id = __loanID
+        self.loan_id = self.__loanID
 
     def __str__(self):
         return '${}'.format(self.amount)
@@ -480,6 +482,14 @@ class Student(Person):
         else:
             return 'Unsuccessful operation'
 
+    def courseInSemester(self, cid, semester):
+        # Find if the cid is in the semester
+
+        for i in range(len(self.semesters[semester])):
+            if cid in self.semesters[semester][i]:
+                return i
+        return False
+
     def enrollCourse(self, cid, catalog, semester):
         # Check if applicable
         if not self.hold and self.active:
@@ -488,7 +498,11 @@ class Student(Person):
             if cid in catalog.courseOfferings:
 
                 # Check if course in semester already
-                if cid not in self.semesters:
+                if catalog.courseOfferings[cid] not in self.semesters[semester].courses:
+
+                    # Check if there is 'No courses' in the semesters list
+                    if self.semesters[semester].courses[0] == 'No courses':
+                        self.semesters[semester].courses.pop(0)
 
                     # Add the course to the semester
                     self.semesters[semester].courses.append( catalog.courseOfferings[cid] ) 
@@ -508,10 +522,13 @@ class Student(Person):
         if not self.hold and self.active:
 
             # Check for course in semester
-            if cid in semester:
+            if self.courseInSemester(cid, semester):
                 
+                # Find the index the course is at 
+                i = self.courseInSemester(cid, semester)
+
                 # Remove the course
-                self.semesters.courses.remove(cid)
+                self.semesters[semester].pop(i)
                 return 'Course dropped successfully'
 
             else:
@@ -523,14 +540,29 @@ class Student(Person):
     def getLoan(self, amount):
         # Check if applicable
         if not self.hold:
-            if self.active:
-            
-                self.Loan(amount)
 
+            if self.active:
+
+                # If self.semesters is empty the student cannot be fulltime
+                if len(self.semesters.keys()) != 0:
+
+                    if self.semesters[ (len(self.semesters)-1) ].isFullTime:
+                        
+                    # Get the loan object and add it to the student's account, add the loan balance to the students account
+                        temp = Loan(amount)
+
+                    else:
+                        return 'Not full-time'
+                else:
+                    return 'Not full-time'
             else:
                 return 'Not full-time'
         else:
             return 'Unsuccessful operation'
+
+
+
+
 
 
 class StudentAccount:

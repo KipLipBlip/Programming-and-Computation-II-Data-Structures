@@ -94,7 +94,7 @@ class Test(unittest.TestCase):
 
         '>>> semester'
         'No courses'
-        self.assertEqual( str(semester), 'No courses', 'Failed to distinguish between classes')
+        self.assertEqual( semester, 'No courses', 'Failed to distinguish between classes')
 
         '>>> semester.addCourse(cmpsc132)'
         '>>> semester.addCourse(math230)'
@@ -399,7 +399,7 @@ class Test(unittest.TestCase):
             >>> s2.semesters
             {}
         '''
-        self.assertEqual( s1.semesters, {}, 'Failed to get semesters')
+        self.assertEqual( s2.semesters, {}, 'Failed to get semesters')
 
         '''
             >>> s1.enrollCourse('CMPSC132', C, 1)
@@ -453,9 +453,6 @@ class Test(unittest.TestCase):
             {1: [CMPSC132(3): Programming in Python II], 2: [CMPSC360(3): Discrete Mathematics]}
         '''
         self.assertEqual( s1.semesters, s, 'Failed to get semesters')
-
-####
-
 
     def test_studentAccount(self):
         '''
