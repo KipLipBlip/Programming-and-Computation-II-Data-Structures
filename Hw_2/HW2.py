@@ -54,7 +54,6 @@ class Course:
         else:
             return False
 
-
 class Catalog:
     ''' 
         >>> C = Catalog()
@@ -203,7 +202,6 @@ class Semester:
         else: 
             return False
 
-
 class Loan:
     '''
         >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
@@ -237,24 +235,18 @@ class Loan:
         {27611: Balance: $4000, 84606: Balance: $6000}
     '''
     
-
     def __init__(self, amount):
-        # YOUR CODE STARTS HERE
-        pass
-
+        self.amount = amount
+        self.loan_id = __loanID
 
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        return '${}'.format(self.amount)
 
     __repr__ = __str__
 
-
     @property
     def __loanID(self):
-        # YOUR CODE STARTS HERE
-        pass
-
+        return random.randint(10000, 99999)
 
 class Person:
     '''
@@ -337,6 +329,7 @@ class Staff(Person):
         >>> st1.semesters
         {1: [CMPSC132(3): Programming in Python II]}
     '''
+
     def __init__(self, name, ssn, supervisor=None):
         # YOUR CODE STARTS HERE
         pass
@@ -427,8 +420,14 @@ class Student(Person):
     '''
     def __init__(self, name, ssn, year):
         random.seed(1)
-        # YOUR CODE STARTS HERE
 
+        self.year = year        # A string indicating the student’s year (“Freshman”, etc.). 
+        self.name = name
+        self.ssn = ssn
+        self.semesters = {}     # A collection of Semester objects accessible by sem_num.
+        self.hold = False       # Indicates a hold on the student’s account, defaults to False.
+        self.active = True      # Indicates if the student is actively enrolled, defaults to True.
+        self.StudentAccount = 0 # The current balance of the student
 
     def __str__(self):
         # YOUR CODE STARTS HERE
@@ -443,12 +442,26 @@ class Student(Person):
 
     @property
     def id(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' 
+            Property method (behaves like an attribute) for 
+            generating student’s id.The format should be: initials+last 
+            four numbers of ssn(e.g.: abc6789). Ignore the security
+            flaws this generation method presents and assume ids are unique.
+        '''
+        # Get the lowercase initials and add the last four of the ssn
+        i = split(self.name)
+        t = self.ssn
+        return i[0][0].lower() + i[1][0].lower() + t[-4]+t[-3]+t[-2]+t[-1]
 
     def registerSemester(self):
-        # YOUR CODE STARTS HERE
-        pass
+        # If the student is active and doesnt have a hold
+        if self.active and not self.hold:
+            # Get the number for the semester
+            n = 0
+            # Create a semester object and add it to semesters
+            self.semesters[n] = self.Semester(n)
+        else:
+            return 'Unsuccessful operation'
 
 
 
@@ -545,4 +558,24 @@ def createStudent(person):
         >>> s
         Student(Jason Smith, js2629, Freshman)
     '''
-    pass
+    class Student(person):
+        def __init__(self, person):
+            
+            # Name, email, ssn, class standing
+            self.name = person.name
+            self.__ssn = person.get_ssn()
+            self.classYear = 'Freshman'
+            self.email = self.createEmail()
+
+        def __str__(self):
+            return 'Student({}, {}, {}'.format(self.name, self.email, self.classYear)
+
+        __repr__ = __str__
+
+        def get_ssn(self):
+            return self.__ssn
+
+        def createEmail(self):
+           
+    
+    return Student

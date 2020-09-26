@@ -158,10 +158,19 @@ class Test(unittest.TestCase):
         self.assertEqual(semester.courses, c, 'Failed to get semesters courses')
 
     def test_loan(self):
+
         '''
             >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
+        '''
+        s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
+
+        '''
             >>> s1.getLoan(4000)
             'Not full-time'
+        '''
+        self.assertEqual(s1.getLoan(4000), 'Not full-time', 'Not fulltime for loan')
+
+        '''
             >>> C = Catalog()
             >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
             'Course added successfully'
@@ -171,24 +180,63 @@ class Test(unittest.TestCase):
             'Course added successfully'
             >>> C.addCourse('PHYS 213', 'General Physics', 2)
             'Course added successfully'
+        '''
+        C = Catalog()
+        self.assertEqual( C.addCourse('CMPSC132', 'Programming in Python II', 3), 'Course added successfully', 'Failed to add course')
+        self.assertEqual( C.addCourse('CMPSC360', 'Discrete Mathematics', 3), 'Course added successfully', 'Failed to add course')
+        self.assertEqual( C.addCourse('MATH 230', 'Calculus', 4), 'Course added successfully', 'Failed to add course')
+        self.assertEqual( C.addCourse('PHYS 213', 'General Physics', 2), 'Course added successfully', 'Failed to add course')
+
+        '''
             >>> s1.registerSemester()
+        '''
+        s1.registerSemester()
+
+        '''
             >>> s1.enrollCourse('CMPSC132', C,1)
             'Course added successfully'
             >>> s1.enrollCourse('CMPSC360', C,1)
             'Course added successfully'
+        '''
+        self.assertEqual(s1.enrollCourse('CMPSC132', C,1), 'Course added successfully', 'Failed to add course')
+        self.assertEqual(s1.enrollCourse('CMPSC360', C,1), 'Course added successfully', 'Failed to add course')
+
+        '''
             >>> s1.getLoan(4000)
             'Not full-time'
+        '''
+        self.assertEqual(s1.getLoan(4000), 'Not full-time', 'Not fulltime for loan')
+
+        '''
             >>> s1.enrollCourse('MATH 230', C,1)
             'Course added successfully'
             >>> s1.enrollCourse('PHYS 213', C,1)
             'Course added successfully'
+        '''
+        self.assertEqual(s1.enrollCourse('MATH 230', C,1), 'Course added successfully', 'Failed to add course')
+        self.assertEqual(s1.enrollCourse('PHYS 213', C,1), 'Course added successfully', 'Failed to add course')
+
+        # Variable
+        t = {27611: 'Balance: $4000'}
+
+        '''
             >>> s1.getLoan(4000)
             >>> s1.account.loans
             {27611: Balance: $4000}
+        '''
+        s1.getLoan(4000)
+        self.assertEqual(s1.account.loans, t, 'Failed to get loan info' )
+
+        # Variable
+        t = {27611: 'Balance: $4000', 84606: 'Balance: $6000'}
+
+        '''
             >>> s1.getLoan(6000)
             >>> s1.account.loans
             {27611: Balance: $4000, 84606: Balance: $6000}
         '''
+        s1.getLoan(6000)
+        self.assertEqual(s1.account.loans, t, 'Failed to get loan info' )
 
     def test_person(self):
 
@@ -361,12 +409,19 @@ class Test(unittest.TestCase):
         '''
 
     def test_createStudent(self):
+
         '''
-            >>> p = Person('Jason Smith', '221-11-2629')
-            >>> s = createStudent(p)
+            >>> p = Person('Jason Smith', '221-11-2629')  
+            >>> s = createStudent(p)  
+        '''
+        p = Person('Jason Smith', '221-11-2629')
+        s = createStudent(p)  
+
+        '''
             >>> s
             Student(Jason Smith, js2629, Freshman)
         '''
+        self.assertEqual(s, 'Student(Jason Smith, js2629, Freshman)', 'Failed to get __str__')
 
 if __name__ == '__main__':
     
