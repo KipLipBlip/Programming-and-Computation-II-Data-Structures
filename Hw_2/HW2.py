@@ -7,6 +7,7 @@
 
 import random
 
+# ! DONE
 class Course:
     '''
         >>> c1 = Course('CMPSC132', 'Programming in Python II', 3)
@@ -54,6 +55,7 @@ class Course:
         else:
             return False
 
+# ! DONE
 class Catalog:
     ''' 
         >>> C = Catalog()
@@ -87,15 +89,17 @@ class Catalog:
             return 'Course already added' 
 
     def removeCourse(self, cid):
-        ''' Removes a course with the given id. '''
 
         # Check if the course is already in the dict
         if cid in self.courseOfferings:
-            # Add the course --> 'ID' : 'ID(credits): Name'
+            
             del self.courseOfferings[cid]
             return 'Course removed successfully'
+
         else:
             return 'Course not found'
+
+
 
 class Semester:
     '''
@@ -171,7 +175,6 @@ class Semester:
             return 'Invalid course'        
 
     def dropCourse(self, course):
-        ''' Removes a course from courses. '''
 
         # Check the object
         if isinstance(course, Course):
@@ -371,7 +374,6 @@ class Staff(Person):
         # YOUR CODE STARTS HERE
         pass
 
-
 class Student(Person):
     '''
         >>> C = Catalog()
@@ -560,11 +562,6 @@ class Student(Person):
         else:
             return 'Unsuccessful operation'
 
-
-
-
-
-
 class StudentAccount:
     '''
         >>> C = Catalog()
@@ -629,8 +626,6 @@ class StudentAccount:
     def chargeAccount(self, amount):
         # YOUR CODE STARTS HERE
         pass
-
-
 
 
 ######################################################################
