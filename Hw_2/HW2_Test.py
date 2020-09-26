@@ -316,34 +316,6 @@ class Test(unittest.TestCase):
         '''
 
     def test_student(self):
-        '''
-
-            >>> s1.semesters
-            {1: [CMPSC132(3): Programming in Python II]}
-            >>> s1.enrollCourse('CMPSC360', C, 1)
-            'Course added successfully'
-            >>> s1.enrollCourse('CMPSC311', C, 1)
-            'Course not found'
-            >>> s1.semesters
-            {1: [CMPSC132(3): Programming in Python II, CMPSC360(3): Discrete Mathematics]}
-            >>> s2.semesters
-            {}
-            >>> s1.enrollCourse('CMPSC132', C, 1)
-            'Course already enrolled'
-            >>> s1.dropCourse('CMPSC360', 1)
-            'Course dropped successfully'
-            >>> s1.dropCourse('CMPSC360', 1)
-            'Course not found'
-            >>> s1.semesters
-            {1: [CMPSC132(3): Programming in Python II]}
-            >>> s1.registerSemester()
-            >>> s1.semesters
-            {1: [CMPSC132(3): Programming in Python II], 2: [No courses]}
-            >>> s1.enrollCourse('CMPSC360', C, 2)
-            'Course added successfully'
-            >>> s1.semesters
-            {1: [CMPSC132(3): Programming in Python II], 2: [CMPSC360(3): Discrete Mathematics]}
-        '''
 
         '''
             >>> C = Catalog()
@@ -393,7 +365,97 @@ class Test(unittest.TestCase):
         s1.registerSemester()
         self.assertEqual( s1.enrollCourse('CMPSC132', C, 1), 'Course added successfully')
 
+        # Variable
+        s = {1: ['CMPSC132(3): Programming in Python II']}
+
+        '''
+            >>> s1.semesters
+            {1: [CMPSC132(3): Programming in Python II]}
+        '''
+        self.assertEqual( s1.semesters, s, 'Failed to get semesters')
+
+        '''
+            >>> s1.enrollCourse('CMPSC360', C, 1)
+            'Course added successfully'
+        '''
+        self.assertEqual(s1.enrollCourse('CMPSC360', C, 1), 'Course added successfully', 'Failed to enroll')
         
+        '''
+            >>> s1.enrollCourse('CMPSC311', C, 1)
+            'Course not found'
+        '''
+        self.assertEqual(s1.enrollCourse('CMPSC311', C, 1), 'Course not found', 'Failed to find nonexistant course')
+
+        # Variable
+        s = {1: ['CMPSC132(3): Programming in Python II', 'CMPSC360(3): Discrete Mathematics']}
+
+        '''
+            >>> s1.semesters
+            {1: [CMPSC132(3): Programming in Python II, CMPSC360(3): Discrete Mathematics]}
+        '''
+        self.assertEqual( s1.semesters, s, 'Failed to get semesters')
+
+        '''
+            >>> s2.semesters
+            {}
+        '''
+        self.assertEqual( s1.semesters, {}, 'Failed to get semesters')
+
+        '''
+            >>> s1.enrollCourse('CMPSC132', C, 1)
+            'Course already enrolled'
+        '''
+        self.assertEqual(s1.enrollCourse('CMPSC132', C, 1), 'Course already enrolled', 'Failed to find double enrolled course')
+
+        '''
+            >>> s1.dropCourse('CMPSC360', 1)
+            'Course dropped successfully'
+        '''
+        self.assertEqual(s1.dropCourse('CMPSC360', 1), 'Course dropped successfully', 'Failed drop course')
+
+        '''
+            >>> s1.dropCourse('CMPSC360', 1)
+            'Course not found'
+        '''
+        self.assertEqual(s1.dropCourse('CMPSC360', 1), 'Course not found', 'Failed drop nonexistant course')
+
+        # Variable
+        s = {1: ['CMPSC132(3): Programming in Python II']}
+
+        '''
+            >>> s1.semesters
+            {1: [CMPSC132(3): Programming in Python II]}
+        '''
+        self.assertEqual( s1.semesters, s, 'Failed to get semesters')
+
+        # Variable
+        s = {1: ['CMPSC132(3): Programming in Python II'], 2: ['No courses']}
+
+        '''
+            >>> s1.registerSemester()
+            >>> s1.semesters
+            {1: [CMPSC132(3): Programming in Python II], 2: [No courses]}
+        '''
+        s1.registerSemester()
+        self.assertEqual( s1.semesters, s, 'Failed to get semesters')
+
+        '''
+            >>> s1.enrollCourse('CMPSC360', C, 2)
+            'Course added successfully'
+        '''
+        self.assertEqual( s1.enrollCourse('CMPSC360', C, 2), 'Course added successfully', 'Failed to add course')
+
+        # Variable
+        s = {1: ['CMPSC132(3): Programming in Python II'], 2: ['CMPSC360(3): Discrete Mathematics']}
+
+        '''
+            >>> s1.semesters
+            {1: [CMPSC132(3): Programming in Python II], 2: [CMPSC360(3): Discrete Mathematics]}
+        '''
+        self.assertEqual( s1.semesters, s, 'Failed to get semesters')
+
+####
+
 
     def test_studentAccount(self):
         '''
@@ -453,6 +515,7 @@ class Test(unittest.TestCase):
             Student(Jason Smith, js2629, Freshman)
         '''
         self.assertEqual(str(s), 'Student(Jason Smith, js2629, Freshman)', 'Failed to get __str__')
+
 
 if __name__ == '__main__':
     
