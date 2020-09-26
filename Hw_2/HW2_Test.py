@@ -317,26 +317,7 @@ class Test(unittest.TestCase):
 
     def test_student(self):
         '''
-            >>> C = Catalog()
-            >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
-            'Course added successfully'
-            >>> C.addCourse('CMPSC360', 'Discrete Mathematics', 3)
-            'Course added successfully'
-            >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
-            >>> s1
-            Student(Jason Lee, jl2890, Freshman)
-            >>> s2 = Student('Karen Lee', '247-01-2670', 'Sophomore')
-            >>> s2
-            Student(Karen Lee, kl2670, Sophomore)
-            >>> s1 == s2
-            False
-            >>> s1.id
-            'jl2890'
-            >>> s2.id
-            'kl2670'
-            >>> s1.registerSemester()
-            >>> s1.enrollCourse('CMPSC132', C,1)
-            'Course added successfully'
+
             >>> s1.semesters
             {1: [CMPSC132(3): Programming in Python II]}
             >>> s1.enrollCourse('CMPSC360', C, 1)
@@ -363,6 +344,56 @@ class Test(unittest.TestCase):
             >>> s1.semesters
             {1: [CMPSC132(3): Programming in Python II], 2: [CMPSC360(3): Discrete Mathematics]}
         '''
+
+        '''
+            >>> C = Catalog()
+            >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
+            'Course added successfully'
+            >>> C.addCourse('CMPSC360', 'Discrete Mathematics', 3)
+            'Course added successfully'
+        '''
+        C = Catalog()
+        self.assertEqual( C.addCourse('CMPSC132', 'Programming in Python II', 3), 'Course added successfully', 'Failed to add course to catalog' )
+        self.assertEqual( C.addCourse('CMPSC360', 'Discrete Mathematics', 3), 'Course added successfully', 'Failed to add course to catalog' )
+
+        '''
+            >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
+            >>> s1
+            Student(Jason Lee, jl2890, Freshman)
+            >>> s2 = Student('Karen Lee', '247-01-2670', 'Sophomore')
+            >>> s2
+            Student(Karen Lee, kl2670, Sophomore)
+        '''
+        s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
+        s2 = Student('Karen Lee', '247-01-2670', 'Sophomore')
+        
+        self.assertEqual( str(s1), 'Student(Jason Lee, jl2890, Freshman)', 'Failed to s1 __str__' )
+        self.assertEqual( str(s2), 'Student(Karen Lee, kl2670, Sophomore)', 'Failed to s1 __str__' )
+
+        '''
+            >>> s1 == s2
+            False
+        '''
+        self.assertEqual(s1 == s2, False, 'Failed to distinguish students')
+    
+        '''
+            >>> s1.id
+            'jl2890'
+            >>> s2.id
+            'kl2670'
+        '''
+        self.assertEqual(s1.id, 'jl2890', 'Failed to get ID')
+        self.assertEqual(s2.id, 'kl2670', 'Failed to get ID')
+
+        '''
+            >>> s1.registerSemester()
+            >>> s1.enrollCourse('CMPSC132', C,1)
+            'Course added successfully'
+        '''
+        s1.registerSemester()
+        self.assertEqual( s1.enrollCourse('CMPSC132', C, 1), 'Course added successfully')
+
+        
 
     def test_studentAccount(self):
         '''
@@ -421,7 +452,7 @@ class Test(unittest.TestCase):
             >>> s
             Student(Jason Smith, js2629, Freshman)
         '''
-        self.assertEqual(s, 'Student(Jason Smith, js2629, Freshman)', 'Failed to get __str__')
+        self.assertEqual(str(s), 'Student(Jason Smith, js2629, Freshman)', 'Failed to get __str__')
 
 if __name__ == '__main__':
     

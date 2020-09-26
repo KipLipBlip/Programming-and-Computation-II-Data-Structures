@@ -418,27 +418,38 @@ class Student(Person):
         >>> s1.semesters
         {1: [CMPSC132(3): Programming in Python II], 2: [CMPSC360(3): Discrete Mathematics]}
     '''
+
     def __init__(self, name, ssn, year):
         random.seed(1)
 
-        self.year = year        # A string indicating the student’s year (“Freshman”, etc.). 
+        self.year = year            # A string indicating the student’s year ("Freshman", etc.). 
         self.name = name
         self.ssn = ssn
-        self.semesters = {}     # A collection of Semester objects accessible by sem_num.
-        self.hold = False       # Indicates a hold on the student’s account, defaults to False.
-        self.active = True      # Indicates if the student is actively enrolled, defaults to True.
-        self.StudentAccount = 0 # The current balance of the student
+        self.semesters = {}         # A collection of Semester objects accessible by sem_num.
+        self.hold = False           # Indicates a hold on the student’s account, defaults to False.
+        self.active = True          # Indicates if the student is actively enrolled, defaults to True.
+        self.StudentAccount = 0     # The current balance of the student
 
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        
+        return 'Student({}, {}, {})'.format(self.name, self.id, self.year)
 
     __repr__ = __str__
+
+    def __eq__(self, other):
+        # Check object
+        if isinstance(other, Student):
+            # They will be the same person if they have the same ssn
+            if other.ssn == self.ssn:
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def __createStudentAccount(self):
         # YOUR CODE STARTS HERE
         pass
-
 
     @property
     def id(self):
@@ -449,35 +460,77 @@ class Student(Person):
             flaws this generation method presents and assume ids are unique.
         '''
         # Get the lowercase initials and add the last four of the ssn
-        i = split(self.name)
+        i = self.name.split()
         t = self.ssn
         return i[0][0].lower() + i[1][0].lower() + t[-4]+t[-3]+t[-2]+t[-1]
 
     def registerSemester(self):
-        # If the student is active and doesnt have a hold
+        # Check if applicable
         if self.active and not self.hold:
-            # Get the number for the semester
+
+            # Find the largest semester number and add 1
             n = 0
+            for item in self.semesters:
+                if item > n:
+                    n = item
+            
             # Create a semester object and add it to semesters
-            self.semesters[n] = self.Semester(n)
+            self.semesters[n+1] = Semester(n+1)
+
         else:
             return 'Unsuccessful operation'
 
-
-
     def enrollCourse(self, cid, catalog, semester):
-        # YOUR CODE STARTS HERE
-        pass
+        # Check if applicable
+        if not self.hold and self.active:
+
+            # Check for course in catalog
+            if cid in catalog.courseOfferings:
+
+                # Check if course in semester already
+                if cid not in self.semesters:
+
+                    # Add the course to the semester
+                    self.semesters[semester].courses.append( catalog.courseOfferings[cid] ) 
+                    return 'Course added successfully'
+                    
+                else:
+                    return 'Course already enrolled'
+                
+            else:
+                return 'Course not found'
+
+        else:
+            return 'Unsuccessful operation'
 
     def dropCourse(self, cid, semester):
-        # YOUR CODE STARTS HERE
-        pass
+        # Check if applicable
+        if not self.hold and self.active:
+
+            # Check for course in semester
+            if cid in semester:
+                
+                # Remove the course
+                self.semesters.courses.remove(cid)
+                return 'Course dropped successfully'
+
+            else:
+                return 'Course not found'
+
+        else:
+            return 'Unsuccessful operation'
 
     def getLoan(self, amount):
-        # YOUR CODE STARTS HERE
-        pass
+        # Check if applicable
+        if not self.hold:
+            if self.active:
+            
+                self.Loan(amount)
 
-
+            else:
+                return 'Not full-time'
+        else:
+            return 'Unsuccessful operation'
 
 
 class StudentAccount:
@@ -550,7 +603,6 @@ class StudentAccount:
 
 ######################################################################
 
-
 def createStudent(person):
     '''
         >>> p = Person('Jason Smith', '221-11-2629')
@@ -558,24 +610,4 @@ def createStudent(person):
         >>> s
         Student(Jason Smith, js2629, Freshman)
     '''
-    class Student(person):
-        def __init__(self, person):
-            
-            # Name, email, ssn, class standing
-            self.name = person.name
-            self.__ssn = person.get_ssn()
-            self.classYear = 'Freshman'
-            self.email = self.createEmail()
-
-        def __str__(self):
-            return 'Student({}, {}, {}'.format(self.name, self.email, self.classYear)
-
-        __repr__ = __str__
-
-        def get_ssn(self):
-            return self.__ssn
-
-        def createEmail(self):
-           
-    
-    return Student
+    return Student(person.name, person.get_ssn(), 'Freshman')
