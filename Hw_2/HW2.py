@@ -148,8 +148,7 @@ class Semester:
 
         # If there are courses, return then as a joined str
         if len(self.courses) > 0:
-            s= ''.join(str(self.courses))
-            return s.replace('[', '').replace(']', '')
+            return ''.join(str(self.courses))
             
         else:
             return 'No courses'
@@ -213,6 +212,7 @@ class Semester:
         else: 
             return False
 
+# COme back after student 
 class Loan:
     '''
         >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
@@ -461,7 +461,8 @@ class Student(Person):
         self.semesters = {}         # A collection of Semester objects accessible by sem_num.
         self.hold = False           # Indicates a hold on the student’s account, defaults to False.
         self.active = True          # Indicates if the student is actively enrolled, defaults to True.
-        self.StudentAccount = 0     # The current balance of the student
+
+        self.account = self.__createStudentAccount()     # The current balance of the student
 
     def __str__(self):
         
@@ -481,8 +482,7 @@ class Student(Person):
             return False
 
     def __createStudentAccount(self):
-        # YOUR CODE STARTS HERE
-        pass
+        self.account = StudentAccount(self)
 
     @property
     def id(self):
@@ -516,10 +516,9 @@ class Student(Person):
     def courseInSemester(self, cid, semester):
         # Find if the cid is in the semester
 
-        for i in range(len(self.semesters[semester])):
-            if cid in self.semesters[semester][i]:
+        for i in range( len( self.semesters[semester].courses )):
+            if self.semesters[semester].courses[i].cid == cid:
                 return i
-        return False
 
     def enrollCourse(self, cid, catalog, semester):
         # Check if applicable
@@ -555,11 +554,8 @@ class Student(Person):
             # Check for course in semester
             if self.courseInSemester(cid, semester):
                 
-                # Find the index the course is at 
-                i = self.courseInSemester(cid, semester)
-
                 # Remove the course
-                self.semesters[semester].pop(i)
+                del self.semesters[semester].courses[ self.courseInSemester(cid, semester) ]
                 return 'Course dropped successfully'
 
             else:
@@ -577,7 +573,12 @@ class Student(Person):
                 # If self.semesters is empty the student cannot be fulltime
                 if len(self.semesters.keys()) != 0:
 
-                    if self.semesters[ (len(self.semesters)-1) ].isFullTime:
+                    # Get the current semester
+                    t = len(self.semesters.keys())
+                    if t > 1:
+                        t -= 1
+                    
+                    if self.semesters[ t ].isFullTime:
                         
                     # Get the loan object and add it to the student's account, add the loan balance to the students account
                         temp = Loan(amount)
@@ -634,11 +635,12 @@ class StudentAccount:
         >>> s1.account.loans
         {27611: Balance: $1000}
     '''
-    
-    def __init__(self, student):
-        # YOUR CODE STARTS HERE
-        pass
+    creditPrice = 1000
 
+    def __init__(self, student):
+        self.student = student
+        self.balance = 0
+        self.loans = {}
 
     def __str__(self):
         # YOUR CODE STARTS HERE
@@ -646,19 +648,35 @@ class StudentAccount:
 
     __repr__ = __str__
 
-
     def makePayment(self, amount, loan_id=None):
-        # YOUR CODE STARTS HERE
-        pass
+        # No loan ID
+        if loan_id == None:
+            self.balance -= amount
+            return f'${self.balance}'
+        
+        # Loan ID
+        else:
+            # Check for loan in self.loans
+            if loan_id in self.loans:
 
+                # Paying more then the value of the loan?
+                if amount >= self.loans[loan_id]:
+                    self.loans[loan_id] -= self.loans[loan_id]
+                    self.balance -= (amount - self.loans[loan_id])
+                    return f'Loan Balance: {self.loans[loan_id]}'
+
+                else:
+                    self.loans[loan_id] -= amount
+                    return 
+
+            else:
+                return None
 
     def chargeAccount(self, amount):
-        # YOUR CODE STARTS HERE
-        pass
+        self.balance += amount
+        return f'${self.balance}'
 
-
-######################################################################
-
+# Outside of classes
 
 # ! DONE
 def createStudent(person):

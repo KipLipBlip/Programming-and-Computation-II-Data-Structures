@@ -462,91 +462,91 @@ class Person:
 
 
 
-# class StudentAccount:
-#     '''
-#         >>> C = Catalog()
-#         >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
-#         'Course added successfully'
-#         >>> C.addCourse('CMPSC360', 'Discrete Mathematics', 3)
-#         'Course added successfully'
-#         >>> C.addCourse('MATH 230', 'Calculus', 4)
-#         'Course added successfully'
-#         >>> C.addCourse('PHYS 213', 'General Physics', 2)
-#         'Course added successfully'
-#         >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
-#         >>> s1.registerSemester()
-#         >>> s1.enrollCourse('CMPSC132', C,1)
-#         'Course added successfully'
-#         >>> s1.account.balance
-#         3000
-#         >>> s1.enrollCourse('CMPSC360', C, 1)
-#         'Course added successfully'
-#         >>> s1.account.balance
-#         6000
-#         >>> s1.enrollCourse('MATH 230', C,1)
-#         'Course added successfully'
-#         >>> s1.enrollCourse('PHYS 213', C,1)
-#         'Course added successfully'
-#         >>> print(s1.account)
-#         Name: Jason Lee
-#         ID: jl2890
-#         Balance: $12000
-#         >>> s1.account.chargeAccount(100)
-#         12100
-#         >>> s1.account.balance
-#         12100
-#         >>> s1.account.makePayment(200)
-#         11900
-#         >>> s1.getLoan(4000)
-#         >>> s1.account.makePayment(5000, 27611)
-#         'Loan Balance: 4000'
-#         >>> s1.account.makePayment(3000, 27611)
-#         8900
-#         >>> s1.account.loans
-#         {27611: Balance: $1000}
-#     '''
+class StudentAccount:
+    '''
+        >>> C = Catalog()
+        >>> C.addCourse('CMPSC132', 'Programming in Python II', 3)
+        'Course added successfully'
+        >>> C.addCourse('CMPSC360', 'Discrete Mathematics', 3)
+        'Course added successfully'
+        >>> C.addCourse('MATH 230', 'Calculus', 4)
+        'Course added successfully'
+        >>> C.addCourse('PHYS 213', 'General Physics', 2)
+        'Course added successfully'
+        >>> s1 = Student('Jason Lee', '204-99-2890', 'Freshman')
+        >>> s1.registerSemester()
+        >>> s1.enrollCourse('CMPSC132', C,1)
+        'Course added successfully'
+        >>> s1.account.balance
+        3000
+        >>> s1.enrollCourse('CMPSC360', C, 1)
+        'Course added successfully'
+        >>> s1.account.balance
+        6000
+        >>> s1.enrollCourse('MATH 230', C,1)
+        'Course added successfully'
+        >>> s1.enrollCourse('PHYS 213', C,1)
+        'Course added successfully'
+        >>> print(s1.account)
+        Name: Jason Lee
+        ID: jl2890
+        Balance: $12000
+        >>> s1.account.chargeAccount(100)
+        12100
+        >>> s1.account.balance
+        12100
+        >>> s1.account.makePayment(200)
+        11900
+        >>> s1.getLoan(4000)
+        >>> s1.account.makePayment(5000, 27611)
+        'Loan Balance: 4000'
+        >>> s1.account.makePayment(3000, 27611)
+        8900
+        >>> s1.account.loans
+        {27611: Balance: $1000}
+    '''
     
-#     def __init__(self, student):
-#         self.student = student
-#         self.balance = 0
-#         self.loans = {}
+    def __init__(self, student):
+        self.student = student
+        self.balance = 0
+        self.loans = {}
 
 
-#     def __str__(self):
-#         # YOUR CODE STARTS HERE
-#         pass
+    def __str__(self):
+        # YOUR CODE STARTS HERE
+        pass
 
-#     __repr__ = __str__
+    __repr__ = __str__
 
 
-#     def makePayment(self, amount, loan_id=None):
+    def makePayment(self, amount, loan_id=None):
 
-#         # No loan ID
-#         if loan_id == None:
-#             self.balance -= amount
-#             return f'${self.balance}'
+        # No loan ID
+        if loan_id == None:
+            self.balance -= amount
+            return f'${self.balance}'
         
-#         # Loan ID
-#         else:
-#             # Check for loan in self.loans
-#             if loan_id in self.loans:
+        # Loan ID
+        else:
+            # Check for loan in self.loans
+            if loan_id in self.loans:
 
-#                 # Paying more then the value of the loan?
-#                 if amount >= self.loans[loan_id]:
-#                     self.loans[loan_id] -= self.loans[loan_id]
-#                     self.balance -= (amount - self.loans[loan_id])
-#                     return f'Loan Balance: {self.loans[loan_id]}'
+                # Paying more then the value of the loan?
+                if amount >= self.loans[loan_id]:
+                    self.loans[loan_id] -= self.loans[loan_id]
+                    self.balance -= (amount - self.loans[loan_id])
+                    return f'Loan Balance: {self.loans[loan_id]}'
 
-#                 else:
-#                     self.loans[loan_id] -= amount
-#                     return 
+                else:
+                    self.loans[loan_id] -= amount
+                    return 
 
-#             else:
-#                 return None
+            else:
+                return None
 
-#     def chargeAccount(self, amount):
-#         self.balance += amount
-#         return f'${self.balance}'
+    def chargeAccount(self, amount):
+        self.balance += amount
+        return f'${self.balance}'
 
 
 
