@@ -99,8 +99,7 @@ class Catalog:
         else:
             return 'Course not found'
 
-
-
+# ! DONE
 class Semester:
     '''
         >>> cmpsc131 = Course('CMPSC131', 'Programming in Python I', 3)
@@ -162,10 +161,17 @@ class Semester:
 
         # Check the attributes
         if isinstance(course, Course):
+
             # Check types b/c not asked to initially check in course class
             if isinstance(course.cid, str) and isinstance(course.cname, str) and isinstance(course.credits, int):
+
                 # Check if the course is already under this semesters courses
                 if course not in self.courses:
+
+                    # Remove the 'No courses'
+                    if self.courses[0] == 'No courses':
+                        self.courses.pop(0)
+
                     self.courses.append(course)
                 else:
                     return 'Course already added'
@@ -253,6 +259,7 @@ class Loan:
     def __loanID(self):
         return random.randint(10000, 99999)
 
+# ! DONE
 class Person:
     '''
         >>> p1 = Person('Jason Lee', '204-99-2890')
@@ -299,6 +306,7 @@ class Person:
         else:
             return False
 
+# ! DONE
 class Staff(Person):
     '''
         >>> C = Catalog()
@@ -336,43 +344,64 @@ class Staff(Person):
     '''
 
     def __init__(self, name, ssn, supervisor=None):
-        # YOUR CODE STARTS HERE
-        pass
 
+        self.name = name
+        self.ssn = ssn
+        self.__supervisor = supervisor
 
     def __str__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        return f'Staff({self.name}, {self.id})'
 
     __repr__ = __str__
 
+    def __eq__(self, other):
+        if isinstance(other, Staff):
+            if self.ssn == other.ssn:
+                return True
+            else:
+                return False
+        else:
+            return False
 
     @property
     def id(self):
-        # YOUR CODE STARTS HERE
-        pass
+        # Returning the staff ID, 905+initials+last four of ssn
+        lastFour = self.ssn[-4] + self.ssn[-3] + self.ssn[-2] + self.ssn[-1]
+        initials = self.name.split()
+        initials = initials[0][0].lower() + initials[1][0].lower()
+        return f'905{initials}{lastFour}'
 
     @property   
     def getSupervisor(self):
-        # YOUR CODE STARTS HERE
-        pass
+        return self.__supervisor
 
     def setSupervisor(self, new_supervisor):
-        # YOUR CODE STARTS HERE
-        pass
-
+        if isinstance(new_supervisor, Staff):
+            self.__supervisor = new_supervisor
+            return 'Completed!'
+        else:
+            return None
 
     def applyHold(self, student):
-        # YOUR CODE STARTS HERE
-        pass
+        if isinstance( student, Student):
+            student.hold = True
+            return 'Completed!'
+        else:
+            return None
 
     def removeHold(self, student):
-        # YOUR CODE STARTS HERE
-        pass
+        if isinstance( student, Student):
+            student.hold = False
+            return 'Completed!'
+        else:
+            return None
 
     def unenrollStudent(self, student):
-        # YOUR CODE STARTS HERE
-        pass
+        if isinstance( student, Student):
+            student.active = False
+            return 'Completed!'
+        else:
+            return None
 
 class Student(Person):
     '''
@@ -630,6 +659,8 @@ class StudentAccount:
 
 ######################################################################
 
+
+# ! DONE
 def createStudent(person):
     '''
         >>> p = Person('Jason Smith', '221-11-2629')
