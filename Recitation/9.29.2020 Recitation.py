@@ -51,13 +51,15 @@ class Account:
 
     def deposit(self, amount):
         if isinstance(amount, Check):
-            if not amount.cashed and amount.payto == self.holdername:
-                self.balance += amount.checkAmount - account.DEPOSIT_FEE
+            if not amount.cashed and amount.payTo == self.holdername:
+                self.balance += amount.checkAmount
                 amount.cashed = True
+                return self.balance
             else:
                 return 'Invalid operation'
-        self.balance = self.balance + amount
-        return self.balance
+        elif isinstance(amount, (int, float)):
+            self.balance = self.balance + amount
+            return self.balance
 
     def withdraw(self, amount):
         if amount > self.balance:
@@ -104,12 +106,18 @@ class SavingsAccount(Account):
 
 class Check(Account):
 
-    def __init__(self, account_holder, amount, payto):
+    def __init__(self, account_holder, amount, payTo):
         super().__init__(account_holder)
         self.checkAmount = amount
         self.payTo = payTo
         self.cashed = False
+        self.fee = 0
 
+    def __str__(self):
+        return f'Pay to {self.payTo}: ${self.amount + self.fee}'
+
+    def __repr__(self):
+        return f'Cashed: {self.cashed}'
 
 class Bank:
     def __init__(self):
