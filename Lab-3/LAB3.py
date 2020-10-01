@@ -25,6 +25,7 @@ def skipping(n):
         return skipping(n-2) + n
 
 
+# ** Done
 def removing(aList):
     """
         >>> removing([7, 4, 0])
@@ -60,7 +61,7 @@ def removing(aList):
 
     # Check last index
     elif len(a) == 1 and a[0] < 0:
-        
+
         return removing(a[1:])
 
     # Temporarily remove the index and add it back later
@@ -72,8 +73,7 @@ def neighbor(n):
     """
         >>> neighbor(24680)
         24680
-        >>> neighbor(2222466666678)]
-        q
+        >>> neighbor(2222466666678)
         24678
         >>> neighbor(0)
         0
@@ -81,25 +81,27 @@ def neighbor(n):
         246782
         >>> neighbor(2222466666625)
         24625
+        >>> neighbor(57453454324436)
+        5745345432436
     """
 
+    # Convert to str
     a = str(n)
 
     # Not enough characters to compare two: Breaking condition
     if len(a) == 1:
-        return a[0]
+        return int(a[0])
 
     # Check if there are enough indicies to check
     if len(a) >= 2:
 
         # The neighbours are the same, remove cuurent and move on
         if a[0] == a[1]:
-            return neighbor( int(a[1:]) )
+            return int(neighbor( a[1:] ))
 
         # The neighbours are not the same, remove cuurent and move on, but add current back later
         elif a[0] != a[1]:
-            n = str(n)
-            return n[0] + neighbor( a[1:] )
+            return int(a[0] + str(neighbor( a[1:] )))
 
     
 def missedChar(txt1, txt2):
