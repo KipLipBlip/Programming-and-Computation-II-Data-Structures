@@ -49,20 +49,18 @@ def removing(aList):
 
     # If the list is empty: Breaking condition
     if len(aList) == 0:
+
         return aList
 
-    # If the current index is negative and the neighboring one, then just remove the first.. If there are enough indices
-    elif len(a) >= 2 and a[0] < 0 and a[1] < 0:
+    # General negative case, remove the abs -1 neighboring indices 
+    elif len(a) >=2 and a[0] < 0:
+        
+        i = abs(a[0])
+        return removing(a[i:])
 
-        return removing(a[1:])
-
-    # Remove the negative index and the one next to it.. If there are enough indices
-    elif len(a) >= 2 and a[0] < 0:
-
-        return removing(a[2:])
-
-    # Remove the negative index.. this is the last index
+    # Check last index
     elif len(a) == 1 and a[0] < 0:
+        
         return removing(a[1:])
 
     # Temporarily remove the index and add it back later
