@@ -9,6 +9,7 @@
     Use recursion, otherwise no credit will be given
 '''
 
+# ** Done
 def skipping(n):
     '''
         >>> skipping(4)
@@ -37,29 +38,36 @@ def removing(aList):
         [9]
         >>> removing([-3, -4, 5, -4, 1])  # Found(-3) Delete -2, -4 and 5. Found(-4) Delete -4 and 1
         []
+        >>> removing([-1,-2,-3,-4])
+        []
+        >>> removing([-1,5,-3,-4,5,8,9])
+        [5, 8, 9]
     """
   
     # Duplicate the list
     a = aList
 
     # If the list is empty: Breaking condition
-    if not a:
-        return
+    if len(aList) == 0:
+        return aList
+
+    # If the current index is negative and the neighboring one, then just remove the first.. If there are enough indices
+    elif len(a) >= 2 and a[0] < 0 and a[1] < 0:
+
+        return removing(a[1:])
 
     # Remove the negative index and the one next to it.. If there are enough indices
     elif len(a) >= 2 and a[0] < 0:
-        a.pop(0)
-        a.pop(0)
-        return removing(a)
+
+        return removing(a[2:])
 
     # Remove the negative index.. this is the last index
     elif len(a) == 1 and a[0] < 0:
-        a.pop(0)
-        return removing(a)
+        return removing(a[1:])
 
     # Temporarily remove the index and add it back later
     else:
-        return aList[0] + removing(a)
+        return [aList[0]] + removing(a[1:])
 
 
 def neighbor(n):
@@ -122,5 +130,4 @@ def missedChar(txt1, txt2):
     else:
         if len(txt2) > 0:
             return txt2
-
 
