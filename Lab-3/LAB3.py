@@ -69,6 +69,7 @@ def removing(aList):
         return [aList[0]] + removing(a[1:])
 
 
+# ** Done
 def neighbor(n):
     """
         >>> neighbor(24680)
@@ -103,7 +104,8 @@ def neighbor(n):
         elif a[0] != a[1]:
             return int(a[0] + str(neighbor( a[1:] )))
 
-    
+
+# ** Done    
 def missedChar(txt1, txt2):
     """
         >>> missedChar("owl", "howl")
@@ -114,20 +116,20 @@ def missedChar(txt1, txt2):
         'diae'
         >>> missedChar('at','treatise')
         'treise'
+        >>> missedChar('to','encapsulation')
+        'encapsulain'
+        >>> missedChar('an','encapsulation')
+        'encpsulatio'
     """
 
-    # Check if the first str is in the second str
-    if txt1 in txt2:    
+    # Breaking case, add back what is left of txt2
+    if len(txt1) == 0 or len(txt2) == 0:
+        return txt2
 
-        # If this character and the next are the same, we can remove the first one
-        if txt1[0] == txt2[0] and txt1[1] == txt2[1]:
-            txt1[1:]
-            txt2[1:]
-            return missedChar(txt1, txt2)
+    # If they dont match, this is a character that we need to keep, add it back
+    elif txt1[0] != txt2[0]:
+        return txt2[0] + missedChar(txt1, txt2[1:])
 
-
-    # The first str is no longer in the second str: Break condition
+    # Otherwise just iterate
     else:
-        if len(txt2) > 0:
-            return txt2
-
+        return missedChar(txt1[1:], txt2[1:])
