@@ -133,3 +133,4 @@ def missedChar(txt1, txt2):
     # Otherwise just iterate
     else:
         return missedChar(txt1[1:], txt2[1:])
+
