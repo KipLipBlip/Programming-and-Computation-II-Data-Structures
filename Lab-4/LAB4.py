@@ -4,7 +4,7 @@
 ### Collaboration Statement: I worked on this assignment alone, using only this semester's materials
 """
 
-# For lab 4: modify add with while loop.. ascending order || also implement pop, a subfunction of del ( last value )
+# For lab 4: modify add with while loop.. ascending order
 
 class Node:
     def __init__(self, value):
@@ -39,10 +39,12 @@ class SortedLinkedList:
         List:-7.5 -> 1 -> 1 -> 1 -> 3 -> 4 -> 4 -> 5 -> 9.78
     '''
 
+
     def __init__(self):   # You are not allowed to modify the constructor
         self.head=None
         self.tail=None
         self.count=0
+
 
     def __str__(self):   # You are not allowed to modify this method
         temp=self.head
@@ -53,11 +55,13 @@ class SortedLinkedList:
         out=' -> '.join(out) 
         return 'Head:{}\nTail:{}\nList:{}'.format(self.head,self.tail,out)
 
+
     __repr__=__str__
 
 
     def isEmpty(self):
         return self.head == None
+
 
     def __len__(self):
         return self.count
@@ -75,12 +79,50 @@ class SortedLinkedList:
         
         # There is already a head node, change the head value, and assign the previous head to next
         else:
-            newNode.next = self.head
-            self.head = newNode
+
+            previous = None
+            current = self.head
+
+            while current is not None and current.value <= value:
+
+                # Iterate
+                previous = current
+                current = current.next
+
+            # Havent gone anywhere
+            if current == self.head:
+
+                newNode.next = self.head
+                self.head = newNode
+
+            # End of the list
+            elif current is None:
+
+                # Just append the value
+                self.append(value)
+                self.count -= 1
+            
+            # Sanwiched between two values
+            else:
+                ''' [prev] -> [current] -> [curr.next] '''
+
+                # Check values
+                # if previous.value <= value and current.value >= value:
+
+                newNode.next = current
+                previous.next = newNode
 
 
     def pop(self):
         ''' Delete the last value '''
+
+        if self.isEmpty():
+            return None
+
+        # Only one node, going to be empty
+        if len(self) == 1:
+            self.head = None
+            self.tail = None
 
         # Starter values
         current = self.head
@@ -92,9 +134,6 @@ class SortedLinkedList:
             previous = current
             current = current.next
 
-        # Delete current tail
-        del current
-
         # Remove previous tail link
         previous.next = None
 
@@ -103,6 +142,9 @@ class SortedLinkedList:
 
         # Decrement the count
         self.count -= 1
+
+        return current.value
+
 
     def append(self, value):
         ''' Add to the end of the list '''
