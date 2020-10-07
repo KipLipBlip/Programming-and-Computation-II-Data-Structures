@@ -4,6 +4,8 @@
 ### Collaboration Statement: I worked on this assignment alone, using only this semester's materials
 """
 
+# For lab 4: modify add with while loop.. ascending order || also implement pop, a subfunction of del ( last value )
+
 class Node:
     def __init__(self, value):
         self.value = value  
@@ -62,10 +64,132 @@ class SortedLinkedList:
 
                 
     def add(self, value):
-        # --- YOUR CODE STARTS HERE
-        pass
+        ''' Put before the head, update the head '''
+        newNode = Node(value)
+        self.count += 1
+
+        # Head is None
+        if self.isEmpty():
+            self.head = newNode
+            self.tail = newNode
+        
+        # There is already a head node, change the head value, and assign the previous head to next
+        else:
+            newNode.next = self.head
+            self.head = newNode
 
 
     def pop(self):
-        # --- YOUR CODE STARTS HERE
-        pass
+        ''' Delete the last value '''
+
+        # Starter values
+        current = self.head
+        previous = None
+
+        # While not at end and searching value is not value found (don't messesarily need to go to end)
+        while current is not None and current != self.tail:
+            
+            previous = current
+            current = current.next
+
+        # Delete current tail
+        del current
+
+        # Remove previous tail link
+        previous.next = None
+
+        # Update tail
+        self.tail = previous
+
+        # Decrement the count
+        self.count -= 1
+
+    def append(self, value):
+        ''' Add to the end of the list '''
+        newNode = Node(value)
+        self.count += 1
+
+        # Check if the list is empty
+        if self.isEmpty():
+            self.head = newNode
+            self.tail = newNode
+        
+        # Change the last node's next from none to the newNode, add the newNode to tail
+        else:
+            self.tail.next = newNode
+            self.tail = newNode
+
+
+    def __contains__(self, value):
+        ''' Search for item inside '''
+
+        # Initialize starter value
+        current = self.head
+
+        # Move through all the elements in the list
+        while current:
+
+            # If the value matches, return True
+            if current.value == value:
+                return True
+
+            # Update to the next node
+            current = current.next
+
+        # Not found
+        return False
+
+
+    def __delitem__(self, value):
+        ''' Delete an item '''
+
+        # Empty case
+        if self.isEmpty():
+            print('List is empty')
+            return None
+
+        # Only one node, going to be empty
+        if len(self) == 1:
+            self.head = None
+            self.tail = None
+
+        # General case, more than one element
+        else:
+            # Get current and previous (nothing before the head)
+            current = self.head
+            previous = None
+
+            # While not at end and searching value is not value found (don't messesarily need to go to end)
+            while current is not None and current.value != value:
+                
+                previous = current
+                current = current.next
+
+            # Item is not in the list
+            if current is None:
+                print('Value not found')
+                return None
+
+            # The value is the head
+            elif previous is None:
+                self.head = current.next
+                # Break the link
+                current.next = None
+
+            # The node we del is the tail, next is the last item in the list
+            elif current.next is None:
+                # Remove tail, break the link
+                previous.next = None
+
+                # Reassign tail
+                self.tail = previous
+
+            # Most general: in the middle of the list
+            else:
+
+                previous.next = current.next
+                # Break current to next link
+                current.next = None
+
+        # Decrement the count
+        self.count -= 1
