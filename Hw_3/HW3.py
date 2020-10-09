@@ -46,7 +46,7 @@ class Stack:
         4
     '''
     def __init__(self):
-        self.top = None
+        self.top=None
         self.count=0
     
     def __str__(self):
