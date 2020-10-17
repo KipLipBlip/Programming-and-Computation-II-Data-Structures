@@ -1,8 +1,8 @@
 # HW3
-#Due Date: 10/24/2020, 11:59PM
+# Due Date: 10/24/2020, 11:59PM
 """                                   
-### Collaboration Statement:
-             
+### Collaboration Statement: 
+    I worked on this assignment alone using only this semester's course materials             
 """
 
 
@@ -19,6 +19,8 @@ class Node:
                           
 
 #=============================================== Part I ==============================================
+
+# ** DONE
 
 class Stack:
     '''
@@ -45,6 +47,7 @@ class Stack:
         >>> x.peek()
         4
     '''
+
     def __init__(self):
         self.top=None
         self.count=0
@@ -60,28 +63,33 @@ class Stack:
 
     __repr__=__str__
 
-
     def isEmpty(self):
-        # YOUR CODE STARTS HERE
-        pass
+        return self.top == None
 
-    def __len__(self): 
-        # YOUR CODE STARTS HERE
-        pass
+    def __len__(self):
+        return self.count
 
     def push(self,e):
-        # YOUR CODE STARTS HERE
-        pass
+        # Add a new node to the top of the stack
+        newNode = Node(e)           # Create node
+        newNode.next = self.top     # Create link
+        self.top = newNode          # New top
+        self.count += 1             # Increment count size
 
-     
     def pop(self):
-        # YOUR CODE STARTS HERE
-        pass
+        # Pop the top node, return the top node's value, not object
+        if self.isEmpty():          # Validation
+            return None
+        temp = self.top.value       # Temporarily store value to be returned
+        self.top = self.top.next    # Reassign top
+        self.count -= 1             # Decrement count size
+        return temp                 # Return temp value
 
     def peek(self):
-        # YOUR CODE STARTS HERE
-        pass
-
+        # Return the VALUE of the top node, not the object
+        if self.isEmpty():      # Validation
+            return None
+        return self.top.value   # Return the VALUE of the top node
 
 #=============================================== Part II ==============================================
 
