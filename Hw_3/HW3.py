@@ -160,7 +160,7 @@ class Calculator:
             >>> x._getPostfix('2 * 5% + 3 ^ + -2 + 1 + 4')
         '''
 
-        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 5, ')': 6}
+        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 5, ')': 5}
         PF = ''
 
         postOp = Stack()
@@ -169,9 +169,23 @@ class Calculator:
 
         for i in range(len(txt)):      
 
-            print('txt[i]: (top)', txt[i], '\n')
+            if txt[i] == ')':
 
-            if not postOp.isEmpty() and i+1 == len(txt):
+                while postOp.top.value != '(':
+                    print('here')
+                    print(postOp)
+                    PF += postOp.pop() + ' '
+
+                    if postOp.isEmpty():
+                        break
+
+                else:
+
+                    postOp.pop()
+
+            elif not postOp.isEmpty() and i+1 == len(txt):
+
+                # Add the last index
 
                 if txt[i] not in precedence:
                     
@@ -179,7 +193,7 @@ class Calculator:
 
                 else:
 
-                    postOp.push[txt[i]]
+                    postOp.push(txt[i])
 
                 # Empty the stack
 
@@ -190,15 +204,9 @@ class Calculator:
             elif txt[i] in precedence:
 
                 if txt[i] == '(':
+                    print('Here2')
                     postOp.push(txt[i])
-
-                elif txt[i] == ')':
-
-                    x = postOp.pop()
-
-                    while x != '(':
-
-                        PF += x + ' '
+                    print(postOp)
 
                 elif postOp.isEmpty():
 
@@ -212,8 +220,12 @@ class Calculator:
                         # Pop until we find lower precedence then txt[i]
 
                         while precedence[txt[i]] <= precedence[postOp.top.value]:
-                            
-                            PF += postOp.pop() + ' '
+
+                            if postOp.top.value == '(':
+                                postOp.pop()
+
+                            else:
+                                PF += postOp.pop() + ' '
 
                             if postOp.isEmpty():
                                 break
@@ -221,15 +233,13 @@ class Calculator:
                         postOp.push(txt[i])
 
                     elif precedence[txt[i]] > precedence[postOp.top.value]:
-
+                        print('here4')
                         postOp.push(txt[i])
 
                     elif precedence[txt[i]] == precedence[postOp.top.value]:
 
                         PF += postOp.pop() + ' '
                         postOp.push(txt[i])
-
-                print(postOp)
 
 
             elif self.isNumber(txt[i]):
