@@ -160,7 +160,7 @@ class Calculator:
             >>> x._getPostfix('2 * 5% + 3 ^ + -2 + 1 + 4')
         '''
 
-        precedence = { '-': 0, '+': 1, '/': 2, '*': 3, '^': 4, '(': 5, ')': 6}
+        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 5, ')': 6}
         PF = ''
 
         postOp = Stack()
@@ -171,70 +171,65 @@ class Calculator:
 
             print('txt[i]: (top)', txt[i], '\n')
 
-            if txt[i] in precedence:
+            if not postOp.isEmpty() and i+1 == len(txt):
 
-                if txt[i] == ')':
+                if txt[i] not in precedence:
+                    
+                    PF += str(float(txt[i])) + ' '
 
-                    x = txt[i]
-                    while x != '(' and not postOp.isEmpty:
-
-                        x = postOp.pop()
-                        PF += x + ' '
-
-                    # Mismatching parenthesis
-                    print('[ERROR]: Mismatching parenthesis')
-
-                # Push to stack if empty
-                elif postOp.isEmpty():
-
-                    print('ISEMPTY : txt[i] = ', txt[i], '\n')
-                    print('ISEMPTY : PF = ', PF, '\n')
-                    print('ISEMPTY : postOp = ', postOp, '\n')
-                    print('----------------')
-
-                    postOp.push(txt[i])
-
-                    print('ISEMPTY E : txt[i] = ', txt[i], '\n')
-                    print('ISEMPTY E : PF = ', PF, '\n')
-                    print('ISEMPTY E : postOp = ', postOp, '\n')
-                    print('----------------')
-
-
-                # Otherwise check for precedence pop until find lower precedence
                 else:
 
-                    print('ELSE : txt[i] = ', txt[i], '\n')
-                    print('ELSE : PF = ', PF, '\n')
-                    print('ELSE : postOp = ', postOp, '\n')
-                    print('----------------')
+                    postOp.push[txt[i]]
 
-                    o = 0
-                    z = postOp.pop()
+                # Empty the stack
 
-                    while precedence[z] > precedence[txt[i]]:
+                while not postOp.isEmpty():
 
-                        if not o:
-                            PF += z + ' '
-                        o += 1
+                    PF += postOp.pop() + ' '
 
-                        if not postOp.isEmpty():
-                            z = postOp.pop()
-                            PF += z + ' '
-                        else:
-                            break
+            elif txt[i] in precedence:
 
-                    print('ELSE E : txt[i] = ', txt[i], '\n')
-                    print('ELSE E : PF = ', PF, '\n')
-                    print('ELSE E : postOp = ', postOp, '\n')
-                    print('----------------')
-
-                    postOp.push(z)
+                if txt[i] == '(':
                     postOp.push(txt[i])
-                    
-                    print('IF E : txt[i] = ', txt[i], '\n')
-                    print('IF E : PF = ', PF, '\n')
-                    print('IF E : postOp = ', postOp, '\n')
-                    print('----------------')
+
+                elif txt[i] == ')':
+
+                    x = postOp.pop()
+
+                    while x != '(':
+
+                        PF += x + ' '
+
+                elif postOp.isEmpty():
+
+                    postOp.push(txt[i])
+
+                # Check for precendence
+                else:
+
+                    if precedence[txt[i]] < precedence[postOp.top.value]:
+
+                        # Pop until we find lower precedence then txt[i]
+
+                        while precedence[txt[i]] <= precedence[postOp.top.value]:
+                            
+                            PF += postOp.pop() + ' '
+
+                            if postOp.isEmpty():
+                                break
+
+                        postOp.push(txt[i])
+
+                    elif precedence[txt[i]] > precedence[postOp.top.value]:
+
+                        postOp.push(txt[i])
+
+                    elif precedence[txt[i]] == precedence[postOp.top.value]:
+
+                        PF += postOp.pop() + ' '
+                        postOp.push(txt[i])
+
+                print(postOp)
 
 
             elif self.isNumber(txt[i]):
@@ -252,8 +247,6 @@ class Calculator:
 
         # Remove the addistional space at the end
         return PF[:len(PF)-1]
-
-
 
 #     @property
 #     def calculate(self):
