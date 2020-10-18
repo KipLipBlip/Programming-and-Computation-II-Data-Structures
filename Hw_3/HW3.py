@@ -173,9 +173,6 @@ class Calculator:
 
             if txt[i] in precedence:
 
-                print(postOp, '\n')
-                print('PF (top):', PF, '\n')
-
                 if txt[i] == ')':
 
                     x = txt[i]
@@ -187,23 +184,29 @@ class Calculator:
                     # Mismatching parenthesis
                     print('[ERROR]: Mismatching parenthesis')
 
-
                 # Push to stack if empty
                 elif postOp.isEmpty():
 
-                    if txt[i] == '^':
-                        postOp.push('**')
-                    else:
-                        postOp.push(txt[i])
+                    print('ISEMPTY : txt[i] = ', txt[i], '\n')
+                    print('ISEMPTY : PF = ', PF, '\n')
+                    print('ISEMPTY : postOp = ', postOp, '\n')
+                    print('----------------')
 
-                    print(postOp)
-                    print('PF (empty);', PF, '\n')
+                    postOp.push(txt[i])
+
+                    print('ISEMPTY E : txt[i] = ', txt[i], '\n')
+                    print('ISEMPTY E : PF = ', PF, '\n')
+                    print('ISEMPTY E : postOp = ', postOp, '\n')
+                    print('----------------')
+
 
                 # Otherwise check for precedence pop until find lower precedence
                 else:
 
-                    print(postOp)
-                    print('PF (else);', PF, '\n')
+                    print('ELSE : txt[i] = ', txt[i], '\n')
+                    print('ELSE : PF = ', PF, '\n')
+                    print('ELSE : postOp = ', postOp, '\n')
+                    print('----------------')
 
                     o = 0
                     z = postOp.pop()
@@ -220,12 +223,19 @@ class Calculator:
                         else:
                             break
 
-                        print('PF (bottom);', PF, '\n')
-                        print(postOp)
-                        print('txt[i]: (bottom)', txt[i], '\n')
+                    print('ELSE E : txt[i] = ', txt[i], '\n')
+                    print('ELSE E : PF = ', PF, '\n')
+                    print('ELSE E : postOp = ', postOp, '\n')
+                    print('----------------')
 
-                    if txt[i+1] not in precedence:
-                        PF += txt[i] + ' '
+                    postOp.push(z)
+                    postOp.push(txt[i])
+                    
+                    print('IF E : txt[i] = ', txt[i], '\n')
+                    print('IF E : PF = ', PF, '\n')
+                    print('IF E : postOp = ', postOp, '\n')
+                    print('----------------')
+
 
             elif self.isNumber(txt[i]):
 
