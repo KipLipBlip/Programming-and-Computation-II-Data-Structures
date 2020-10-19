@@ -160,7 +160,7 @@ class Calculator:
             >>> x._getPostfix('2 * 5% + 3 ^ + -2 + 1 + 4')
         '''
 
-        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 5, ')': 5}
+        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 0, ')': 0}
         PF = ''
 
         postOp = Stack()
@@ -170,10 +170,13 @@ class Calculator:
         for i in range(len(txt)):      
 
             if txt[i] == ')':
+                
+                print('RHS', txt[i], postOp) ##
 
                 while postOp.top.value != '(':
-                    print('here')
-                    print(postOp)
+
+                    print('Find LHS', txt[i], postOp) ##
+
                     PF += postOp.pop() + ' '
 
                     if postOp.isEmpty():
@@ -182,6 +185,7 @@ class Calculator:
                 else:
 
                     postOp.pop()
+
 
             elif not postOp.isEmpty() and i+1 == len(txt):
 
@@ -198,15 +202,18 @@ class Calculator:
                 # Empty the stack
 
                 while not postOp.isEmpty():
-
+                    
+                    print('Empty the stack', txt[i], postOp) ##
+                    
                     PF += postOp.pop() + ' '
 
             elif txt[i] in precedence:
 
                 if txt[i] == '(':
-                    print('Here2')
+                    
+                    print('Here2', txt[i], postOp) ##
+
                     postOp.push(txt[i])
-                    print(postOp)
 
                 elif postOp.isEmpty():
 
@@ -233,7 +240,9 @@ class Calculator:
                         postOp.push(txt[i])
 
                     elif precedence[txt[i]] > precedence[postOp.top.value]:
-                        print('here4')
+                        
+                        print('here4', txt[i], postOp) ##
+
                         postOp.push(txt[i])
 
                     elif precedence[txt[i]] == precedence[postOp.top.value]:
@@ -253,7 +262,16 @@ class Calculator:
                 if not txt[i].isnumeric() and txt[i] not in precedence:
                     print('[ERROR]: Invalid operator')
 
-                # More cases to come
+
+        # Make sure stack is empty before return
+
+        if not postOp.isEmpty():
+
+            # Empty the stack
+
+            while not postOp.isEmpty():
+                PF += postOp.pop() + ' '
+
 
         # Remove the addistional space at the end
         return PF[:len(PF)-1]
