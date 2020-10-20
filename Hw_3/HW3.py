@@ -96,7 +96,7 @@ class Stack:
 class Calculator:
 
     # Infix: 4 + 3 - 2 * 4
-    # Postfix: 4324*-+
+    # Postfix: 4 3 2 4 * - +
 
     def __init__(self):
         self.__expr = None
@@ -140,8 +140,6 @@ class Calculator:
             [ERROR]: Incorrect parenthesis alignment
             >>> x.validation('2 * 5% + 3 ^ + -2 + 1 + 4')
             [ERROR]: Two consecutive operators, no operand [*, 5%]
-            [ERROR]: Unsupported operator [5%]
-            [ERROR]: Two consecutive operators, no operand [^, +]Fun
         '''
         operators = ['^', '(', ')', '+', '-', '*', '/']
 
@@ -163,9 +161,11 @@ class Calculator:
 
                     if L > R:
                         print('[ERROR]: Incorrect parenthesis alignment')
+                        return None
                 else:
 
                     print('[ERROR]: Mismatching parenthesis in expression')
+                    return None
 
             txt = txt.split()
 
@@ -177,9 +177,11 @@ class Calculator:
 
                     if txt[i] == '**':
                         print(f'[ERROR]: Use ^ for exponentiation')
+                        return None
 
                     else:
                         print(f'[ERROR]: Unsupported operator [{txt[i]}]')
+                        return None
 
                 else:
 
@@ -192,6 +194,7 @@ class Calculator:
                             # Two numbers next to eachother
 
                             print(f'[ERROR]: Two consecutive operands, no operator [{txt[i]}, {txt[i+1]}]')
+                            return None
 
                         elif not self.isNumber(txt[i]) and not self.isNumber(txt[i+1]):
 
@@ -202,21 +205,27 @@ class Calculator:
                                 # Incorrect implicit operators
 
                                 print(f'[ERROR]: Two consecutive operators, no operand [{txt[i]}, {txt[i+1]}]')
+                                return None
 
             if txt[0] in operators and txt[0] != '(':
 
                 # Starts with operator
 
                 print(f'[ERROR]: Expression starts with operator [{txt[0]}]')
+                return None
 
             elif txt[-1] in operators and txt[-1] != ')':
 
                 # Ends with operator
 
                 print(f'[ERROR]: Expression ends with operator [{txt[-1]}]')
-        
+                return None
+
         else:
             print('[Error]: Expression must be entered as a string')
+            return None
+
+        return True
 
     def _getPostfix(self, txt):
         '''
@@ -247,14 +256,6 @@ class Calculator:
 
             # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
             # If you are veryfing the expression in calculate before passing to postfix, this cases are not necessary
-
-            >>> x._getPostfix('2 * 5 + 3 ^ + -2 + 1 + 4')
-            >>> x._getPostfix('2 * 5 + 3 ^ - 2 + 1 + 4')
-            >>> x._getPostfix('2    5')
-            >>> x._getPostfix('25 +')
-            >>> x._getPostfix(' 2 * ( 5 + 3 ) ^ 2 + ( 1 + 4 ')
-            >>> x._getPostfix(' 2 * ( 5 + 3 ) ^ 2 + ) 1 + 4 (')
-            >>> x._getPostfix('2 * 5% + 3 ^ + -2 + 1 + 4')
         '''
 
         precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 0, ')': 0}
@@ -268,11 +269,7 @@ class Calculator:
 
             if txt[i] == ')':
                 
-                print('RHS', txt[i], postOp) ##
-
                 while postOp.top.value != '(':
-
-                    print('Find LHS', txt[i], postOp) ##
 
                     PF += postOp.pop() + ' '
 
@@ -299,17 +296,13 @@ class Calculator:
                 # Empty the stack
 
                 while not postOp.isEmpty():
-                    
-                    print('Empty the stack', txt[i], postOp) ##
-                    
+                                        
                     PF += postOp.pop() + ' '
 
             elif txt[i] in precedence:
 
                 if txt[i] == '(':
                     
-                    print('Here2', txt[i], postOp) ##
-
                     postOp.push(txt[i])
 
                 elif postOp.isEmpty():
@@ -338,8 +331,6 @@ class Calculator:
 
                     elif precedence[txt[i]] > precedence[postOp.top.value]:
                         
-                        print('here4', txt[i], postOp) ##
-
                         postOp.push(txt[i])
 
                     elif precedence[txt[i]] == precedence[postOp.top.value]:
@@ -358,6 +349,7 @@ class Calculator:
 
                 if not txt[i].isnumeric() and txt[i] not in precedence:
                     print('[ERROR]: Invalid operator')
+                    return None
 
 
         # Make sure stack is empty before return
@@ -373,62 +365,69 @@ class Calculator:
         # Remove the addistional space at the end
         return PF[:len(PF)-1]
 
-#     @property
-#     def calculate(self):
-#         '''
-#             Required: calculate must call postfix
-#                       calculate must create and use a Stack to compute the final result as shown in the video lecture
-#             >>> x=Calculator()
-#             >>> x.setExpr('4 + 3 - 2')
-#             >>> x.calculate
-#             5.0
-#             >>> x.setExpr('-2 + 3.5')
-#             >>> x.calculate
-#             1.5
-#             >>> x.setExpr('4 + 3.65 - 2 / 2')
-#             >>> x.calculate
-#             6.65
-#             >>> x.setExpr('23 / 12 - 223 + 5.25 * 4 * 3423')
-#             >>> x.calculate
-#             71661.91666666667
-#             >>> x.setExpr(' 2 - 3 * 4')
-#             >>> x.calculate
-#             -10.0
-#             >>> x.setExpr(' 3 * ( ( ( 10 - 2 * 3 ) ) )')
-#             >>> x.calculate
-#             12.0
-#             >>> x.setExpr('8 / 4 * ( 3 - 2.45 * ( 4 - 2 ^ 3 ) ) + 3')
-#             >>> x.calculate
-#             28.6
-#             >>> x.setExpr('2 * ( 4 + 2 * ( 5 - 3 ^ 2 ) + 1 ) + 4')
-#             >>> x.calculate
-#             -2.0
-#             >>> x.setExpr(' 2.5 + 3 * ( 2 + ( 3.0 ) * ( 5 ^ 2 - 2 * 3 ^ ( 2 ) ) * ( 4 ) ) * ( 2 / 8 + 2 * ( 3 - 1 / 3 ) ) - 2 / 3 ^ 2')
-#             >>> x.calculate
-#             1442.7777777777778
+    @property
+    def calculate(self):
+        '''
+            Required: calculate must call postfix
+                      calculate must create and use a Stack to compute the final result as shown in the video lecture
+            >>> x=Calculator()
+            >>> x.setExpr('4 + 3 - 2')
+            >>> x.calculate
+            5.0
+            >>> x.setExpr('-2 + 3.5')
+            >>> x.calculate
+            1.5
+            >>> x.setExpr('4 + 3.65 - 2 / 2')
+            >>> x.calculate
+            6.65
+            >>> x.setExpr('23 / 12 - 223 + 5.25 * 4 * 3423')
+            >>> x.calculate
+            71661.91666666667
+            >>> x.setExpr(' 2 - 3 * 4')
+            >>> x.calculate
+            -10.0
+            >>> x.setExpr(' 3 * ( ( ( 10 - 2 * 3 ) ) )')
+            >>> x.calculate
+            12.0
+            >>> x.setExpr('8 / 4 * ( 3 - 2.45 * ( 4 - 2 ^ 3 ) ) + 3')
+            >>> x.calculate
+            28.6
+            >>> x.setExpr('2 * ( 4 + 2 * ( 5 - 3 ^ 2 ) + 1 ) + 4')
+            >>> x.calculate
+            -2.0
+            >>> x.setExpr(' 2.5 + 3 * ( 2 + ( 3.0 ) * ( 5 ^ 2 - 2 * 3 ^ ( 2 ) ) * ( 4 ) ) * ( 2 / 8 + 2 * ( 3 - 1 / 3 ) ) - 2 / 3 ^ 2')
+            >>> x.calculate
+            1442.7777777777778
             
 
-#             # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
-#             >>> x.setExpr(" 4 + + 3 + 2") 
-#             >>> x.calculate
-#             >>> x.setExpr("4  3 + 2")
-#             >>> x.calculate
-#             >>> x.setExpr('( 2 ) * 10 - 3 * ( 2 - 3 * 2 ) )')
-#             >>> x.calculate
-#             >>> x.setExpr('( 2 ) * 10 - 3 * / ( 2 - 3 * 2 )')
-#             >>> x.calculate
-#             >>> x.setExpr(' ) 2 ( * 10 - 3 * ( 2 - 3 * 2 ) ')
-#             >>> x.calculate
-#         '''
+            # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
+            >>> x.setExpr(" 4 + + 3 + 2") 
+            >>> x.calculate
+            >>> x.setExpr("4  3 + 2")
+            >>> x.calculate
+            >>> x.setExpr('( 2 ) * 10 - 3 * ( 2 - 3 * 2 ) )')
+            >>> x.calculate
+            >>> x.setExpr('( 2 ) * 10 - 3 * / ( 2 - 3 * 2 )')
+            >>> x.calculate
+            >>> x.setExpr(' ) 2 ( * 10 - 3 * ( 2 - 3 * 2 ) ')
+            >>> x.calculate
+        '''
 
-#         if not isinstance(self.__expr,str) or len(self.__expr)<=0:
-#             print("Argument error in calculate")
-#             return None
+        if not isinstance(self.__expr, str) or len(self.__expr)<=0:
+            print("Argument error in calculate")
+            return None
 
-#         calculateStack=Stack()
+        calculateStack=Stack()
 
-#         # YOUR CODE STARTS HERE
-#         pass
+        if self.validation( self.__expr ):
+
+            PF = self._getPostfix(self.__expr)
+
+            PF = PF.split()
+
+
+
+
 
 # #=============================================== Part III ==============================================
 
