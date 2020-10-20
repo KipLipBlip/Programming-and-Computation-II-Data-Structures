@@ -120,6 +120,79 @@ class Calculator:
         except ValueError:
             return False
 
+    def validation(self, txt):
+        '''
+            # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
+            # If you are veryfing the expression in calculate before passing to postfix, this cases are not necessary        
+            
+            >>> x = Calculator()
+            >>> x.validation('2 * 5 + 3 ^ + -2 + 1 + 4')
+            [ERROR]: Two consecutive operators, no operand [^, +]
+            >>> x.validation('2 * 5 + 3 ^ - 2 + 1 + 4')
+            [ERROR]: Two consecutive operators, no operand [^, -]
+            >>> x.validation('2    5')
+            [ERROR]: Two consecutive operands, no operator [2, 5]
+            >>> x.validation('25 +')
+            >>> x.validation(' 2 * ( 5 + 3 ) ^ 2 + ( 1 + 4 ')
+            [ERROR]: Mismatching parenthesis in expression
+            >>> x.validation(' 2 * ( 5 + 3 ) ^ 2 + ) 1 + 4 (')
+            >>> x.validation('2 * 5% + 3 ^ + -2 + 1 + 4')
+        '''
+        operators = ['^', '(', ')', '+', '-', '*', '/']
+
+        if isinstance(txt, str):
+        
+            if '(' in txt or ')' in txt:
+                
+                # Match parenthesis
+
+                if txt.count('(') == txt.count(')'):
+                    
+                    for x in range(txt.count('(')):
+                        L = txt.index('(')
+                        txt = txt[:L] + txt[L+1:]
+
+                    for x in range(txt.count(')')):
+                        R = txt.index(')')
+                        txt = txt[:R] + txt[R+1:]
+
+                    if L > R:
+                        print('[ERROR]: Incorrect parenthesis alignment')
+                else:
+
+                    print('[ERROR]: Mismatching parenthesis in expression')
+
+            txt = txt.split()
+
+            for i in range(len(txt)):
+
+                if not self.isNumber(txt[i]) and txt[i] not in operators:
+
+                    # Unsupported operators
+
+                    if txt[i] == '**':
+                        print(f'[ERROR]: Use ^ for exponentiation')
+                    else:
+                        print(f'[ERROR]: Unsupported operator ({txt[i]})')
+
+                else:
+
+                    # Find missing operator
+
+                    if not len(txt) == i+1:
+
+                        if self.isNumber(txt[i]) and self.isNumber(txt[i+1]):
+
+                            print(f'[ERROR]: Two consecutive operands, no operator [{txt[i]}, {txt[i+1]}]')
+
+                        elif not self.isNumber(txt[i]) and not self.isNumber(txt[i+1]) and ( not txt[i+1] == '(' or not txt[i] == ')' ):
+
+                            print(f'[ERROR]: Two consecutive operators, no operand [{txt[i]}, {txt[i+1]}]')
+
+
+        else:
+            print('[Error]: Expression must be entered as a string')
+
 
     def _getPostfix(self, txt):
         '''
