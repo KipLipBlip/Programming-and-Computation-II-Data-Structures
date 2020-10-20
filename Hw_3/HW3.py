@@ -133,10 +133,15 @@ class Calculator:
             >>> x.validation('2    5')
             [ERROR]: Two consecutive operands, no operator [2, 5]
             >>> x.validation('25 +')
+            [ERROR]: Expression ends with operator [+]
             >>> x.validation(' 2 * ( 5 + 3 ) ^ 2 + ( 1 + 4 ')
             [ERROR]: Mismatching parenthesis in expression
             >>> x.validation(' 2 * ( 5 + 3 ) ^ 2 + ) 1 + 4 (')
+            [ERROR]: Incorrect parenthesis alignment
             >>> x.validation('2 * 5% + 3 ^ + -2 + 1 + 4')
+            [ERROR]: Two consecutive operators, no operand [*, 5%]
+            [ERROR]: Unsupported operator [5%]
+            [ERROR]: Two consecutive operators, no operand [^, +]Fun
         '''
         operators = ['^', '(', ')', '+', '-', '*', '/']
 
@@ -172,8 +177,9 @@ class Calculator:
 
                     if txt[i] == '**':
                         print(f'[ERROR]: Use ^ for exponentiation')
+
                     else:
-                        print(f'[ERROR]: Unsupported operator ({txt[i]})')
+                        print(f'[ERROR]: Unsupported operator [{txt[i]}]')
 
                 else:
 
@@ -183,16 +189,34 @@ class Calculator:
 
                         if self.isNumber(txt[i]) and self.isNumber(txt[i+1]):
 
+                            # Two numbers next to eachother
+
                             print(f'[ERROR]: Two consecutive operands, no operator [{txt[i]}, {txt[i+1]}]')
 
-                        elif not self.isNumber(txt[i]) and not self.isNumber(txt[i+1]) and ( not txt[i+1] == '(' or not txt[i] == ')' ):
+                        elif not self.isNumber(txt[i]) and not self.isNumber(txt[i+1]):
 
-                            print(f'[ERROR]: Two consecutive operators, no operand [{txt[i]}, {txt[i+1]}]')
+                            # Two operators next to eachother
 
+                            if not (( txt[i] in operators and txt[i+1] == '(' ) or ( txt[i] == ')' and txt[i+1] in operators )):
 
+                                # Incorrect implicit operators
+
+                                print(f'[ERROR]: Two consecutive operators, no operand [{txt[i]}, {txt[i+1]}]')
+
+            if txt[0] in operators and txt[0] != '(':
+
+                # Starts with operator
+
+                print(f'[ERROR]: Expression starts with operator [{txt[0]}]')
+
+            elif txt[-1] in operators and txt[-1] != ')':
+
+                # Ends with operator
+
+                print(f'[ERROR]: Expression ends with operator [{txt[-1]}]')
+        
         else:
             print('[Error]: Expression must be entered as a string')
-
 
     def _getPostfix(self, txt):
         '''
