@@ -156,7 +156,7 @@ class Calculator:
                 if txt.count('(') == txt.count(')'):
                     
                     for q in range(txt.count('(')):
-                        
+
                         L = txt.index('(')
                         R = txt.index(')')
 
@@ -268,7 +268,7 @@ class Calculator:
             # If you are veryfing the expression in calculate before passing to postfix, this cases are not necessary
         '''
 
-        precedence = { '-': 1, '+': 1, '/': 2, '*': 3, '^': 4, '(': 0, ')': 0}
+        precedence = { '-': 1, '+': 1, '/': 3, '*': 2, '^': 4, '(': 0, ')': 0}
         PF = ''
 
         postOp = Stack()
@@ -444,13 +444,11 @@ class Calculator:
                 if self.isNumber(PF[i]):
 
                     # This is an operand
-
                     calculateStack.push(PF[i])
 
                 else:
 
                     # This is an operator
-
                     n1 = float(calculateStack.pop())
                     n2 = float(calculateStack.pop())
 
@@ -458,24 +456,21 @@ class Calculator:
                         calculateStack.push(n1 + n2)
 
                     elif PF[i] == '-':
-                        calculateStack.push(n1 - n2)
+                        calculateStack.push(n2 - n1)
 
                     elif PF[i] == '/':
-                        calculateStack.push(n1 / n2)
+                        calculateStack.push(n2 / n1)
 
                     elif PF[i] == '^':
-                        calculateStack.push(n1 ** n2)
+                        calculateStack.push(n2 ** n1)
 
                     elif PF[i] == '*':
                         calculateStack.push(n1 * n2)
-            
+
             return calculateStack.top.value
 
         else:
             return None
-
-
-
 
 
 # #=============================================== Part III ==============================================
