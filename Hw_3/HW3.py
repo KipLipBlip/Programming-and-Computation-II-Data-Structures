@@ -7,6 +7,9 @@
 
 
 
+from typing import Text
+
+
 class Node:
     def __init__(self, value):
         self.value = value  
@@ -141,6 +144,7 @@ class Calculator:
             >>> x.validation('2 * 5% + 3 ^ + -2 + 1 + 4')
             [ERROR]: Two consecutive operators, no operand [*, 5%]
         '''
+
         operators = ['^', '(', ')', '+', '-', '*', '/']
 
         if isinstance(txt, str):
@@ -151,23 +155,29 @@ class Calculator:
 
                 if txt.count('(') == txt.count(')'):
                     
-                    for x in range(txt.count('(')):
+                    for q in range(txt.count('(')):
+                        
                         L = txt.index('(')
-                        txt = txt[:L] + txt[L+1:]
-
-                    for x in range(txt.count(')')):
                         R = txt.index(')')
-                        txt = txt[:R] + txt[R+1:]
 
-                    if L > R:
-                        print('[ERROR]: Incorrect parenthesis alignment')
-                        return None
+                        if L > R:
+                            print('[ERROR]: Incorrect parenthesis alignment')
+                            return None
+
+                        txt = txt[:L] + txt[L+1:]   # Reconstruct
+                        txt = txt[:R-1] + txt[R:]   # Reconstruct
+
                 else:
 
                     print('[ERROR]: Mismatching parenthesis in expression')
                     return None
 
             txt = txt.split()
+
+            if len(txt) <= 0:
+                
+                print('[ERROR]: Empty expression')
+                return None
 
             for i in range(len(txt)):
 
@@ -273,7 +283,7 @@ class Calculator:
 
                     PF += postOp.pop() + ' '
 
-                    if postOp.isEmpty():
+                    if postOp.isEmpty() or postOp.top == None:
                         break
 
                 else:
@@ -361,7 +371,6 @@ class Calculator:
             while not postOp.isEmpty():
                 PF += postOp.pop() + ' '
 
-
         # Remove the addistional space at the end
         return PF[:len(PF)-1]
 
@@ -401,16 +410,21 @@ class Calculator:
             
 
             # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
-            >>> x.setExpr(" 4 + + 3 + 2") 
+            >>> x.setExpr(" 4 + + 3 + 2")
             >>> x.calculate
+            [ERROR]: Two consecutive operators, no operand [+, +]
             >>> x.setExpr("4  3 + 2")
             >>> x.calculate
+            [ERROR]: Two consecutive operands, no operator [4, 3]
             >>> x.setExpr('( 2 ) * 10 - 3 * ( 2 - 3 * 2 ) )')
             >>> x.calculate
+            [ERROR]: Mismatching parenthesis in expression
             >>> x.setExpr('( 2 ) * 10 - 3 * / ( 2 - 3 * 2 )')
             >>> x.calculate
+            [ERROR]: Two consecutive operators, no operand [*, /]
             >>> x.setExpr(' ) 2 ( * 10 - 3 * ( 2 - 3 * 2 ) ')
             >>> x.calculate
+            [ERROR]: Incorrect parenthesis alignment
         '''
 
         if not isinstance(self.__expr, str) or len(self.__expr)<=0:
@@ -419,11 +433,46 @@ class Calculator:
 
         calculateStack=Stack()
 
-        if self.validation( self.__expr ):
+        if self.validation(self.getExpr):
 
             PF = self._getPostfix(self.__expr)
 
             PF = PF.split()
+
+            for i in range(len(PF)):
+
+                if self.isNumber(PF[i]):
+
+                    # This is an operand
+
+                    calculateStack.push(PF[i])
+
+                else:
+
+                    # This is an operator
+
+                    n1 = float(calculateStack.pop())
+                    n2 = float(calculateStack.pop())
+
+                    if PF[i] == '+':
+                        calculateStack.push(n1 + n2)
+
+                    elif PF[i] == '-':
+                        calculateStack.push(n1 - n2)
+
+                    elif PF[i] == '/':
+                        calculateStack.push(n1 / n2)
+
+                    elif PF[i] == '^':
+                        calculateStack.push(n1 ** n2)
+
+                    elif PF[i] == '*':
+                        calculateStack.push(n1 * n2)
+            
+            return calculateStack.top.value
+
+        else:
+            return None
 
 
 
