@@ -544,26 +544,48 @@ class AdvancedCalculator:
 
         # Find where to look for variables in states
 
+        p = expr.split()
+
+        for l in range(len(p)):
+
+            pass
+
+        # Splitting the expression to find the previous dictionary key
+
         e = self.expressions.split(';')
 
         for i in range(len(e)):
 
             if expr in e[i]:
 
-                key = e[i]
+                key = e[i-1]
 
         t = expr.split()
         
+        # Iterate over each part of the expression
+
         for i in range(len(t)):
 
-            if t[i] in self.states[key]:
+            if self.isVariable( t[i] ):
 
-                # Replace the variable
-                t[i] = str(self.states[key][t[i]])
+                # Check in general dict first
+
+                if t[i] in self.states:
+
+                    t[i] = str( self.states[t[i]] )
+
+                # Check sub dict
+
+                elif t[i] in self.states[key]:
+
+                    # Replace the variable
+
+                    t[i] = str( self.states[key][ t[i] ] )
 
         return ' '.join(t)
     
     def calculateExpressions(self):
+
         self.states = {} 
         calc = Calculator()
 
@@ -578,21 +600,28 @@ class AdvancedCalculator:
             # t is a list of all the parts in a single expression
       
             if t[0] == 'return':
-                print('if', i)
 
                 # This is the last expression, the value we will return
 
-                pass
+                self.states['_return_'] = self.states[s[-2]][t[-1]]
 
             elif len(t) == 3:
-                print('elif', i)
+
+                self.states[ s[i] ] = { } 
+
+                # Check if there are any more variables to be added
+
+                if i != 0:
+
+                    for keys in self.states[ s[i-1] ]:
+            
+                        self.states[ s[i] ][keys] = self.states[ s[i-1] ][keys]   
 
                 # This is a single variable assignment
 
-                self.states[ s[i] ] = { t[0] : t[2] }
+                self.states[ s[i] ][ t[0] ] =  float( t[2] ) 
 
             else:
-                print('else', i)
 
                 # This is a variable assigned to an expression
 
@@ -612,25 +641,22 @@ class AdvancedCalculator:
 
                 infix = self.replaceVariables( self.states[ s[i] ][ t[0] ] )
 
-                print('infix', infix)
-
                 # Give the calculator the expression
 
                 calc.setExpr( infix )
 
                 eqn = calc.calculate
 
-                print('eqn', eqn)
-
                 # Set the index to the new value
 
-                self.states[ s[i] ][ t[0] ] = str(eqn)
+                self.states[ s[i] ][ t[0] ] = eqn
 
-            print(self.states, '\n')
-
+        return self.states
 
 '''
 C = AdvancedCalculator()
-C.setExpression('x1 = 5;x2 = 7 * ( x1 - 1 );x1 = x2 - x1;return x2')
+C.setExpression('')
 C.calculateExpressions()
+
 '''
+
