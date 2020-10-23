@@ -541,17 +541,25 @@ class AdvancedCalculator:
             >>> C.replaceVariables('x2 - x1')
             '28.0 - 23.0'
         '''
+
+        # Find where to look for variables in states
+
+        e = self.expressions.split(';')
+
+        for i in range(len(e)):
+
+            if expr in e[i]:
+
+                key = e[i]
+
         t = expr.split()
-        print(self.states)
-        print('REPLACE', t)
-        print('checkin in', self.states[expr])
+        
         for i in range(len(t)):
 
-            print(t[i] in self.states)
-            if t[i] in self.states[expr]:
+            if t[i] in self.states[key]:
 
                 # Replace the variable
-                t[i] = str(self.states[t[i]])
+                t[i] = str(self.states[key][t[i]])
 
         return ' '.join(t)
     
@@ -561,62 +569,68 @@ class AdvancedCalculator:
 
         s = self.expressions.split(';')
 
-        # print('S', s)
+        # s is a list of all the expressions
 
         for i in range(len(s)):
 
-            # S
-            # ['x1 = 5', 'x2 = 7 * ( x1 - 1 )', 'x1 = x2 - x1']
+            t = s[i].split()
 
-            subs = s[i].split()
+            # t is a list of all the parts in a single expression
+      
+            if t[0] == 'return':
+                print('if', i)
 
-            # print('SUBS', subs)
-            print(self.states)
+                # This is the last expression, the value we will return
 
-            for j in range(len(subs)):
-                
-                # SUBS
-                # ['x1', '=', '5']
-                # ['x2', '=', '7', '*', '(', 'x1', '-', '1', ')']
+                pass
 
-                if subs[0] == 'return':
-                    pass
+            elif len(t) == 3:
+                print('elif', i)
+
+                # This is a single variable assignment
+
+                self.states[ s[i] ] = { t[0] : t[2] }
+
+            else:
+                print('else', i)
+
+                # This is a variable assigned to an expression
+
+                # Add the previous variable states
+
+                self.states[ s[i] ] = { }
+
+                keys = self.states[ s[i-1] ].keys()
+
+                for keys in self.states[ s[i-1] ]:
+        
+                    self.states[ s[i] ][keys] = self.states[ s[i-1] ][keys]
+
+                self.states[ s[i] ][ t[0] ] = ' '.join( t[2:] ) 
+
+                # Replace the variables
+
+                infix = self.replaceVariables( self.states[ s[i] ][ t[0] ] )
+
+                print('infix', infix)
+
+                # Give the calculator the expression
+
+                calc.setExpr( infix )
+
+                eqn = calc.calculate
+
+                print('eqn', eqn)
+
+                # Set the index to the new value
+
+                self.states[ s[i] ][ t[0] ] = str(eqn)
+
+            print(self.states, '\n')
 
 
-                elif subs[2] == subs[-1]:
-
-                    # This is just the initial variable assignment
-
-                    self.states[s[i]] = { subs[0] : subs[2] }
-                    break
-
-                elif i!=0:
-
-                    #         s[0]    :  subs[0] : subs[2]
-                    # WANT  { 'x1 = 5': {'x1': 5.0}, 
-                    #           s[1]    :  self.states[s[0]], subs[0] : subs[2:]
-                    #         'x2 = 7 * ( x1 - 1 )': {'x1': 5.0, 'x2': 28.0}, 'x1 = x2 - x1': {'x1': 23.0, 'x2': 28.0}, '_return_': 28.0}
-
-                    self.states[ s[i] ] = self.states[s[i-1]] 
-                    self.states[ s[i] ][ subs[0] ] = ' '.join(subs[2:])
-
-                    # self.states[s[i]][subs[i-1]] = ' '.join(subs[2:])
-
-
-                    eqn = self.replaceVariables( self.states[s[i]][subs[0]] ) 
-
-
-                    calc.setExpr(eqn)
-                    value = calc.calculate
-
-                    # Replace the value
-
-                    self.states[s[i]] = { subs[0] : value }
-
-                    break
-
-        print(self.states)
-
-
-
-        # self.states['_return_']
+'''
+C = AdvancedCalculator()
+C.setExpression('x1 = 5;x2 = 7 * ( x1 - 1 );x1 = x2 - x1;return x2')
+C.calculateExpressions()
+'''
