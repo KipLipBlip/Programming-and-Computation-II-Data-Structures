@@ -542,13 +542,16 @@ class AdvancedCalculator:
             '28.0 - 23.0'
         '''
         t = expr.split()
-
+        print(self.states)
+        print('REPLACE', t)
+        print('checkin in', self.states[expr])
         for i in range(len(t)):
 
-            if t[i] in self.states:
+            print(t[i] in self.states)
+            if t[i] in self.states[expr]:
 
                 # Replace the variable
-                t[i] = self.states[t[i]]
+                t[i] = str(self.states[t[i]])
 
         return ' '.join(t)
     
@@ -556,11 +559,64 @@ class AdvancedCalculator:
         self.states = {} 
         calc = Calculator()
 
-        # Replace the variables
-        eqn = self.replaceVariables(self.expressions)
+        s = self.expressions.split(';')
 
-        # Set expression in calculator
-        calc.setExpr(eqn)
+        # print('S', s)
 
-        # Calculate and return
-        return calc.calculate
+        for i in range(len(s)):
+
+            # S
+            # ['x1 = 5', 'x2 = 7 * ( x1 - 1 )', 'x1 = x2 - x1']
+
+            subs = s[i].split()
+
+            # print('SUBS', subs)
+            print(self.states)
+
+            for j in range(len(subs)):
+                
+                # SUBS
+                # ['x1', '=', '5']
+                # ['x2', '=', '7', '*', '(', 'x1', '-', '1', ')']
+
+                if subs[0] == 'return':
+                    pass
+
+
+                elif subs[2] == subs[-1]:
+
+                    # This is just the initial variable assignment
+
+                    self.states[s[i]] = { subs[0] : subs[2] }
+                    break
+
+                elif i!=0:
+
+                    #         s[0]    :  subs[0] : subs[2]
+                    # WANT  { 'x1 = 5': {'x1': 5.0}, 
+                    #           s[1]    :  self.states[s[0]], subs[0] : subs[2:]
+                    #         'x2 = 7 * ( x1 - 1 )': {'x1': 5.0, 'x2': 28.0}, 'x1 = x2 - x1': {'x1': 23.0, 'x2': 28.0}, '_return_': 28.0}
+
+                    self.states[ s[i] ] = self.states[s[i-1]] 
+                    self.states[ s[i] ][ subs[0] ] = ' '.join(subs[2:])
+
+                    # self.states[s[i]][subs[i-1]] = ' '.join(subs[2:])
+
+
+                    eqn = self.replaceVariables( self.states[s[i]][subs[0]] ) 
+
+
+                    calc.setExpr(eqn)
+                    value = calc.calculate
+
+                    # Replace the value
+
+                    self.states[s[i]] = { subs[0] : value }
+
+                    break
+
+        print(self.states)
+
+
+
+        # self.states['_return_']
