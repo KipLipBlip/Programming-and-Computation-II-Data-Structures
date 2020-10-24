@@ -257,21 +257,27 @@ class Calculator:
             '2.0 5.0 3.0 + 2.0 ^ 1.0 4.0 + + *'
             >>> x._getPostfix('2 * ( -5 + 3 ) ^ 2 + ( 1 + 4 )')
             '2.0 -5.0 3.0 + 2.0 ^ * 1.0 4.0 + +'
+            >>> x._getPostfix('2.5 + 3 ^ 2 ^ 4')
+            '2.5 3.0 2.0 4.0 ^ ^ +'
 
             # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
             # If you are veryfing the expression in calculate before passing to postfix, this cases are not necessary
         '''
 
-        precedence = { '-': 1, '+': 1, '/': 3, '*': 2, '^': 4, '(': 0, ')': 0}
+        precedence = { '-': 1, '+': 1, '/': 3, '*': 2, '^': 4, '(': 0, ')': 0 }
         PF = ''
 
         postOp = Stack()
         
         txt = txt.split()   
 
-        for i in range(len(txt)):      
+        for i in range(len(txt)):
+
+            # Check for right parenthesis
 
             if txt[i] == ')':
+
+                # Pop and add until left parenthesis
                 
                 while postOp.top.value != '(':
 
@@ -305,9 +311,13 @@ class Calculator:
 
             elif txt[i] in precedence:
 
+                # This is an operator
+
                 if txt[i] == '(':
                     
                     postOp.push(txt[i])
+
+                # If its empty, just add, there is nothing to check against
 
                 elif postOp.isEmpty():
 
@@ -401,6 +411,24 @@ class Calculator:
             >>> x.setExpr(' 2.5 + 3 * ( 2 + ( 3.0 ) * ( 5 ^ 2 - 2 * 3 ^ ( 2 ) ) * ( 4 ) ) * ( 2 / 8 + 2 * ( 3 - 1 / 3 ) ) - 2 / 3 ^ 2')
             >>> x.calculate
             1442.7777777777778
+
+            >>> x.setExpr('2.5 + 3 ^ 2 ^ 4')
+            >>> x._getPostfix('2.5 + 3 ^ 2 ^ 4')
+            '2.5 3.0 2.0 4.0 ^ ^ +'
+            >>> x.calculate
+            43046723.5
+
+            >>> x.setExpr('3.54 * 424.5324 - ( ( ( ( 7 + ( 7 / 2 - 67 ) * 45 ) - 32 ) * 1.23 ) + -5.56 ) + .5')
+            >>> x._getPostfix('3.54 * 424.5324 - ( ( ( ( 7 + ( 7 / 2 - 67 ) * 45 ) - 32 ) * 1.23 ) + -5.56 ) + .5')
+            '3.54 424.5324 * 7.0 7.0 2.0 / 67.0 - 45.0 * + 32.0 - 1.23 * -5.56 + - 0.5 +'
+            >>> x.calculate
+            5054.379696
+
+            >>> x.setExpr('( -2.5 + 3 * ( 2 + ( 3.0 ) * ( 5 ^ 2 - 2 * 3 ^ ( 2 ) ) * ( 4 ) ) * ( 2 / 8 + 2 * ( 3.5324 - 1 / 3 ) ) - 2 / 3 ^ 2 )')
+            >>> x._getPostfix('( -2.5 + 3 * ( 2 + ( 3.0 ) * ( 5 ^ 2 - 2 * 3 ^ ( 2 ) ) * ( 4 ) ) * ( 2 / 8 + 2 * ( 3.5324 - 1 / 3 ) ) - 2 / 3 ^ 2 )')
+            '-2.5 3.0 2.0 3.0 5.0 2.0 ^ 2.0 3.0 2.0 ^ * - * 4.0 * + * 2.0 8.0 / 2.0 3.5324 1.0 3.0 / - * + * + 2.0 3.0 2.0 ^ / -'
+            >>> x.calculate
+            1712.4961777777778
 
             # In invalid expressions, you might print an error message, but code must return None, adjust doctest accordingly
             >>> x.setExpr(" 4 + + 3 + 2")
