@@ -546,10 +546,6 @@ class AdvancedCalculator:
 
         p = expr.split()
 
-        for l in range(len(p)):
-
-            pass
-
         # Splitting the expression to find the previous dictionary key
 
         e = self.expressions.split(';')
@@ -559,11 +555,12 @@ class AdvancedCalculator:
             if expr in e[i]:
 
                 key = e[i-1]
+                break
 
         t = expr.split()
         
         # Iterate over each part of the expression
-
+        
         for i in range(len(t)):
 
             if self.isVariable( t[i] ):
@@ -598,9 +595,9 @@ class AdvancedCalculator:
             t = s[i].split()
 
             # t is a list of all the parts in a single expression
-      
-            if t[0] == 'return':
 
+            if t[0] == 'return':
+                
                 # This is the last expression, the value we will return
 
                 self.states['_return_'] = self.states[s[-2]][t[-1]]
@@ -613,13 +610,31 @@ class AdvancedCalculator:
 
                 if i != 0:
 
+                    # Add all the keys back, then add the new one
+
                     for keys in self.states[ s[i-1] ]:
             
                         self.states[ s[i] ][keys] = self.states[ s[i-1] ][keys]   
 
-                # This is a single variable assignment
+                    self.states[ s[i] ][ t[0] ] = float( t[2] ) 
 
-                self.states[ s[i] ][ t[0] ] =  float( t[2] ) 
+                else:
+
+                    # This is a single variable assignment
+
+                    self.states[ s[i] ][ t[0] ] = float( t[2] ) 
+
+            elif len(t) != 3 and i == 0:
+
+                # The first assignment is an expression
+
+                self.states[ s[i] ] = { } 
+
+                calc.setExpr( ' '.join( t[2:] ) )
+
+                n = calc.calculate
+
+                self.states[ s[i] ][ t[0] ] = n
 
             else:
 
@@ -651,12 +666,11 @@ class AdvancedCalculator:
 
                 self.states[ s[i] ][ t[0] ] = eqn
 
-        return self.states
+        # Make self.states variables only, then return
 
-'''
-C = AdvancedCalculator()
-C.setExpression('')
-C.calculateExpressions()
+        Rvalue = self.states
 
-'''
+        self.states = self.states[ s[-2] ]      # The last expression before return holds all the vars
+
+        return Rvalue
 
