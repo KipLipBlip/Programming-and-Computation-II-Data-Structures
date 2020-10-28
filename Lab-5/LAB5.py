@@ -1,8 +1,8 @@
 #Lab #5
 #Due Date: 10/31/2020, 11:59PM 
 '''                                  
-# Collaboration Statement: 
-
+# Collaboration Statement:
+    I worked on this assignment alone using only this semester's material
 '''
 
 class Node:
@@ -15,7 +15,6 @@ class Node:
         return ("Node({})".format(self.value)) 
 
     __repr__ = __str__
-
 
 class BinarySearchTree:
     '''
