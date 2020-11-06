@@ -57,44 +57,85 @@ class MinPriorityQueue:
         self.heap=[]
         
     def __str__(self):
+        ''' String representation of this object '''
+
         return f'{self.heap}'
 
     __repr__=__str__
 
     def __len__(self):
+        ''' The number of elements in the heap '''
 
-        # The length of the heap is 
-
-        # YOUR CODE STARTS HERE
-        pass
+        # Retunr the length of the heap attribute, subtract 1 because we don't use list index 0
+        return len(self.heap)-1
 
     @property
     def getMin(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Gets the minimum value in the heap '''
+        
+        # A min heap will always have the root as the minimum value
+        if self.len(self.heap) != 0:
+            return self.heap[1]
+            
+        # Return None if the heap is empty
+        else:
+            return None
     
-
     def leftChild(self,index):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Gets the value of the left child of the node at an index '''
+        
+        # The left child is located at the 2k index, return this
+        try:
+            return self.heap[2*index]
 
+        # If there is no index, we will get an index error, return None as specified
+        except IndexError:
+            return None
 
     def rightChild(self,index):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Gets the value of the right child of the node at an index '''
 
+        # The right child is located at the 2k+1 index, return this
+        try:
+            return self.heap[(2*index)+1]
+
+        # If there is no index, we will get an index error, return None as specified
+        except IndexError:
+            return None
+
+    def parent(self,index):
+        ''' Gets the value of the parent of the node at an index '''
+
+        # The parent node is located at the k/2 index, return this
+        try:
+            return self.heap[index/2]
+
+        # If there is no index, we will get an index error, return None as specified
+        except IndexError:
+            return None
 
     def insert(self,item):
-        # YOUR CODE STARTS HERE
-        pass
-            
+        ''' Inserts an item to the minimum heap '''
+
+        # Insert by appending to the self.heap list
+        self.heap.append(item)
+
+        # Check to see if the min-heap property is still valid, otherwise fix
+
 
     def deleteMin(self):
+        ''' Removes the minimum element of the heap '''
+
         if len(self)==0:
             return None        
         elif len(self)==1:
             x=self.heap[0]
             self.heap=[]
-            return x 
+            return x
 
         # YOUR CODE STARTS HERE
+
+    def validateMinHeap(self):
+        ''' Determines whether the heap is a valid min-heap '''
+
+        
