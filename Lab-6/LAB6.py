@@ -2,9 +2,8 @@
 #Due Date: 11/07/2020, 11:59PM 
 '''                                 
 # Collaboration Statement:   
-
+        I worked on this assignment alone, using only this semester's materials
 '''
-
 
 class MinPriorityQueue:
     '''
@@ -63,6 +62,9 @@ class MinPriorityQueue:
     __repr__=__str__
 
     def __len__(self):
+
+        # The length of the heap is 
+
         # YOUR CODE STARTS HERE
         pass
 
