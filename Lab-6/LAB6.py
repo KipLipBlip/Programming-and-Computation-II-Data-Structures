@@ -103,25 +103,19 @@ class MinPriorityQueue:
         except IndexError:
             return None
 
-    def parent(self,index):
-        ''' Gets the value of the parent of the node at an index '''
-
-        # The parent node is located at the k/2 index, return this
-        try:
-            return self.heap[index/2]
-
-        # If there is no index, we will get an index error, return None as specified
-        except IndexError:
-            return None
-
     def insert(self,item):
         ''' Inserts an item to the minimum heap '''
+
+        # len() will initially return len(self.heap-1), so if the list is empty it will return -1, we need to fill index 0 before inserting
+        if self.len() < 0:
+            self.heap.append(0)
 
         # Insert by appending to the self.heap list
         self.heap.append(item)
 
         # Check to see if the min-heap property is still valid, otherwise fix
-
+        while not self.validateMinHeap():
+            pass
 
     def deleteMin(self):
         ''' Removes the minimum element of the heap '''
@@ -138,4 +132,35 @@ class MinPriorityQueue:
     def validateMinHeap(self):
         ''' Determines whether the heap is a valid min-heap '''
 
-        
+        # If the heap is empty, return True, this case will rarely be used
+        if len(self.heap) == 0:
+            return True
+
+        # Compare all children to their roots
+        else:
+            
+            # Iterate through all the indices
+            for k in range(len(self.heap)):
+            
+                # Avoid index errors
+                if k < len(self.heap):
+
+                    # The left child is less than the parent, not valid min-heap
+                    if self.heap[ self.leftChild(k) ] < self.heap[ self.leftChild(k)-1 ]:
+
+                        # Swap the parent with the child
+                        temp = self.heap[ self.leftChild(k) ]
+
+                        self.heap[ self.leftChild(k) ] = self.heap[ self.leftChild(k)-1 ]
+
+                        self.heap[ self.leftChild(k)-1 ] = temp
+
+                    # The right child is less than the parent, not valid min-heap
+                    elif self.rightChild(self.heap[k]) < self.heap[self.rightChild(k)-2]:
+
+                        # Swap the parent with the child
+                        temp = self.heap[ self.rightChild(k) ]
+
+                        self.heap[ self.rightChild(k) ] = self.heap[ self.rightChild(k)-1 ]
+
+                        self.heap[ self.rightChild(k)-1 ] = temp
