@@ -143,49 +143,61 @@ class MinPriorityQueue:
     def validateMinHeap(self):
         ''' Determines whether the heap is a valid min-heap, corrects by swapping if not '''
 
-        print(len(self.heap))
-
         # If the heap is empty, return True, this case will rarely be used
-        if len(self.heap) == 0:
+        if len(self.heap)-1 == 0:
             return True
 
         # Compare all children to their roots
         else:
 
-            count = 1
-
             # Continue swapping until everything is in proper order
-            while count != 0:
-            
+            while True:
+                
+                print('[In while Loop]')
+
                 count = 0
 
                 # Iterate through all the indices
-                for k in range(len(self.heap)):
-            
+                for k in range(1, len(self.heap)-1):
+
+                    print('[In for Loop]\n')
+
+                    # Value of left and right child
+                    L = self.leftChild(k)
+                    R = self.rightChild(k)
+
+                    print(f'[Left Child] {L}\n')
+                    print(f'[Right Child] {R}\n')
+
+                    # Avoid index error
+                    if L == None:
+                        break
+
                     # The left child is less than the parent, not valid min-heap
-                    if self.heap[ self.leftChild(k) ] < self.heap[ self.parent(k) ]:
+                    if L < self.heap[k]:
 
-                        # Swap the parent with the child
-                        temp = self.heap[ self.leftChild(k) ]
-
-                        self.heap[ self.leftChild(k) ] = self.heap[ self.parent(k) ]
-
-                        self.heap[ self.parent(k) ] = temp
+                        # Swap the parent with the child, Index 2k
+                        self.heap[2*k] = self.heap[k]
+                        self.heap[k] = L
 
                         count += 1
+
+                    # Avoid index error
+                    if R == None:
+                        break
 
                     # The right child is less than the parent, not valid min-heap
-                    elif self.rightChild(self.heap[k]) < self.heap[ self.parent(k) ]:
+                    if R < self.heap[k]:
 
-                        # Swap the parent with the child
-                        temp = self.heap[ self.rightChild(k) ]
-
-                        self.heap[ self.rightChild(k) ] = self.heap[ self.parent(k) ]
-
-                        self.heap[ self.parent(k) ] = temp
+                        # Swap the parent with the child, Index 2k+1
+                        self.heap[(2*k)+1] = self.heap[k]
+                        self.heap[k] = R
 
                         count += 1
 
+                # Break condition
+                if count == 0:
+                    break
 
             # Return True once the while loop has finished
             return True
