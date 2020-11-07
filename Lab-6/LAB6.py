@@ -59,7 +59,8 @@ class MinPriorityQueue:
     def __str__(self):
         ''' String representation of this object '''
 
-        return f'{self.heap}'
+        # Don't include the first index
+        return f'{self.heap[1:]}'
 
     __repr__=__str__
 
@@ -103,34 +104,46 @@ class MinPriorityQueue:
         except IndexError:
             return None
 
+    def parent(self,index):
+        ''' Gets the value of the parent of the node at an index '''
+
+        # The parent node is located at the k/2 index, return this
+        if index/2 <= 1:
+            return 1
+        else:
+            return self.heap[int(index/2)]
+
+
     def insert(self,item):
         ''' Inserts an item to the minimum heap '''
 
         # len() will initially return len(self.heap-1), so if the list is empty it will return -1, we need to fill index 0 before inserting
-        if self.len() < 0:
+        if len(self.heap) <= 0:
             self.heap.append(0)
 
         # Insert by appending to the self.heap list
         self.heap.append(item)
 
-        # Check to see if the min-heap property is still valid, otherwise fix
-        while not self.validateMinHeap():
-            pass
+        # Check to see if the min-heap property is still valid
+        self.validateMinHeap()
 
     def deleteMin(self):
         ''' Removes the minimum element of the heap '''
 
-        if len(self)==0:
-            return None        
-        elif len(self)==1:
-            x=self.heap[0]
-            self.heap=[]
+        if len(self) == 0:
+            return None    
+
+        elif len(self) == 1:
+            x = self.heap[0]
+            self.heap = []
             return x
 
         # YOUR CODE STARTS HERE
 
     def validateMinHeap(self):
-        ''' Determines whether the heap is a valid min-heap '''
+        ''' Determines whether the heap is a valid min-heap, corrects by swapping if not '''
+
+        print(len(self.heap))
 
         # If the heap is empty, return True, this case will rarely be used
         if len(self.heap) == 0:
@@ -138,29 +151,41 @@ class MinPriorityQueue:
 
         # Compare all children to their roots
         else:
-            
-            # Iterate through all the indices
-            for k in range(len(self.heap)):
-            
-                # Avoid index errors
-                if k < len(self.heap):
 
+            count = 1
+
+            # Continue swapping until everything is in proper order
+            while count != 0:
+            
+                count = 0
+
+                # Iterate through all the indices
+                for k in range(len(self.heap)):
+            
                     # The left child is less than the parent, not valid min-heap
-                    if self.heap[ self.leftChild(k) ] < self.heap[ self.leftChild(k)-1 ]:
+                    if self.heap[ self.leftChild(k) ] < self.heap[ self.parent(k) ]:
 
                         # Swap the parent with the child
                         temp = self.heap[ self.leftChild(k) ]
 
-                        self.heap[ self.leftChild(k) ] = self.heap[ self.leftChild(k)-1 ]
+                        self.heap[ self.leftChild(k) ] = self.heap[ self.parent(k) ]
 
-                        self.heap[ self.leftChild(k)-1 ] = temp
+                        self.heap[ self.parent(k) ] = temp
+
+                        count += 1
 
                     # The right child is less than the parent, not valid min-heap
-                    elif self.rightChild(self.heap[k]) < self.heap[self.rightChild(k)-2]:
+                    elif self.rightChild(self.heap[k]) < self.heap[ self.parent(k) ]:
 
                         # Swap the parent with the child
                         temp = self.heap[ self.rightChild(k) ]
 
-                        self.heap[ self.rightChild(k) ] = self.heap[ self.rightChild(k)-1 ]
+                        self.heap[ self.rightChild(k) ] = self.heap[ self.parent(k) ]
 
-                        self.heap[ self.rightChild(k)-1 ] = temp
+                        self.heap[ self.parent(k) ] = temp
+
+                        count += 1
+
+
+            # Return True once the while loop has finished
+            return True
