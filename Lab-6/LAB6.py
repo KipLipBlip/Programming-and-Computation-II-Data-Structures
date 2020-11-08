@@ -141,18 +141,18 @@ class MinPriorityQueue:
             # Check if both children have the same value
             if L == R:
                 
-                self.heap[1] = L
-                self.heap.pop(2)
+                self.heap[1] = self.heap[-1]
+                self.heap.pop()
             
             elif L < R:
 
-                self.heap[1] = L
-                self.heap.pop(2)
+                self.heap[1] = self.heap[-1]
+                self.heap.pop()
 
             elif R < L:
 
-                self.heap[1] = R
-                self.heap.pop(3)
+                self.heap[1] = self.heap[-1]
+                self.heap.pop()
                 
             # Run check
             self.validateMinHeap()
@@ -182,30 +182,74 @@ class MinPriorityQueue:
                     R = self.rightChild(k)
 
                     # Avoid index error
-                    if L == None:
+                    if L == None and R == None:
+
+                        # No children
                         break
 
-                    # The left child is less than the parent, not valid min-heap
-                    if L < self.heap[k]:
+                    elif L != None and R == None:
 
-                        # Swap the parent with the child, Index 2k
-                        self.heap[2*k] = self.heap[k]
-                        self.heap[k] = L
+                        # Only a left child
 
-                        count += 1
+                        if L < self.heap[k]:
+                            # Swap the parent with the child, Index 2k
+                            self.heap[2*k] = self.heap[k]
+                            self.heap[k] = L
 
-                    # Avoid index error
-                    if R == None:
-                        break
+                            count += 1
 
-                    # The right child is less than the parent, not valid min-heap
-                    if R < self.heap[k]:
+                    elif R != None and L == None:
 
-                        # Swap the parent with the child, Index 2k+1
-                        self.heap[(2*k)+1] = self.heap[k]
-                        self.heap[k] = R
+                        if R < self.heap[k]:
 
-                        count += 1
+                            # Swap the parent with the child, Index 2k+1
+                            self.heap[(2*k)+1] = self.heap[k]
+                            self.heap[k] = R
+
+                            count += 1
+
+                    else:
+
+                        # Two Children
+
+                        if L < self.heap[k] and R < self.heap[k]:
+
+                            # Both less than parent, choose smaller
+                            if L < R:
+
+                                # Swap the parent with the child, Index 2k
+                                self.heap[2*k] = self.heap[k]
+                                self.heap[k] = L
+
+                                count += 1
+
+                            elif R < L:
+
+                                # Swap the parent with the child, Index 2k+1
+                                self.heap[(2*k)+1] = self.heap[k]
+                                self.heap[k] = R
+
+                                count += 1
+
+                        else:
+
+                            # The left child is less than the parent, not valid min-heap
+                            if L < self.heap[k]:
+
+                                # Swap the parent with the child, Index 2k
+                                self.heap[2*k] = self.heap[k]
+                                self.heap[k] = L
+
+                                count += 1
+
+                            # The right child is less than the parent, not valid min-heap
+                            if R < self.heap[k]:
+
+                                # Swap the parent with the child, Index 2k+1
+                                self.heap[(2*k)+1] = self.heap[k]
+                                self.heap[k] = R
+
+                                count += 1
 
                 # Break condition
                 if count == 0:
