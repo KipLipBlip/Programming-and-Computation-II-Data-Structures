@@ -75,7 +75,7 @@ class MinPriorityQueue:
         ''' Gets the minimum value in the heap '''
         
         # A min heap will always have the root as the minimum value
-        if self.len(self.heap) != 0:
+        if len(self.heap)-1 >= 1:
             return self.heap[1]
             
         # Return None if the heap is empty
@@ -104,16 +104,6 @@ class MinPriorityQueue:
         except IndexError:
             return None
 
-    def parent(self,index):
-        ''' Gets the value of the parent of the node at an index '''
-
-        # The parent node is located at the k/2 index, return this
-        if index/2 <= 1:
-            return 1
-        else:
-            return self.heap[int(index/2)]
-
-
     def insert(self,item):
         ''' Inserts an item to the minimum heap '''
 
@@ -138,7 +128,36 @@ class MinPriorityQueue:
             self.heap = []
             return x
 
-        # YOUR CODE STARTS HERE
+        # General Case (If children have the same value, go left)
+        else:
+            
+            # Min value will be the root, index 1
+            L = self.leftChild(1)
+            R = self.rightChild(1)
+
+            # Save value to return later
+            value = self.getMin
+
+            # Check if both children have the same value
+            if L == R:
+                
+                self.heap[1] = L
+                self.heap.pop(2)
+            
+            elif L < R:
+
+                self.heap[1] = L
+                self.heap.pop(2)
+
+            elif R < L:
+
+                self.heap[1] = R
+                self.heap.pop(3)
+                
+            # Run check
+            self.validateMinHeap()
+
+            return value
 
     def validateMinHeap(self):
         ''' Determines whether the heap is a valid min-heap, corrects by swapping if not '''
@@ -153,21 +172,14 @@ class MinPriorityQueue:
             # Continue swapping until everything is in proper order
             while True:
                 
-                print('[In while Loop]')
-
                 count = 0
 
                 # Iterate through all the indices
                 for k in range(1, len(self.heap)-1):
 
-                    print('[In for Loop]\n')
-
                     # Value of left and right child
                     L = self.leftChild(k)
                     R = self.rightChild(k)
-
-                    print(f'[Left Child] {L}\n')
-                    print(f'[Right Child] {R}\n')
 
                     # Avoid index error
                     if L == None:
