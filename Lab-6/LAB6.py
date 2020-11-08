@@ -67,7 +67,7 @@ class MinPriorityQueue:
     def __len__(self):
         ''' The number of elements in the heap '''
 
-        # Retunr the length of the heap attribute, subtract 1 because we don't use list index 0
+        # Return the length of the heap attribute, subtract 1 because we don't use list index 0
         return len(self.heap)-1
 
     @property
