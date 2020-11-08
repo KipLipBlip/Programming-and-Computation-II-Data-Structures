@@ -51,6 +51,54 @@ class MinPriorityQueue:
         [9, 10, 11, 20, 20, 14, 14]
         >>> h.getMin
         9
+
+        >>> h = MinPriorityQueue()
+        >>> h.insert(10)
+        >>> h.insert(5)
+        >>> h.insert(14)
+        >>> h.insert(9)
+        >>> h.insert(2)
+        >>> h.insert(11)
+        >>> h.insert(14)
+        >>> h.insert(20)
+        >>> h.insert(20)
+        >>> h.insert(1)
+        >>> h.insert(1)
+        >>> h.insert(-1)
+        >>> h.insert(0)
+        >>> h.insert(0)
+        
+        >>> items = [6, 76.8, 0, 34, -15, 0, 34, 1, -2, -5, 1, 1, 22, 7, 9, 105.7]
+        >>> h = MinPriorityQueue()
+        >>> for number in items:
+        ...     h.insert(number)
+        >>> h
+        [-15, -5, 0, 0, -2, 1, 7, 76.8, 1, 34, 1, 6, 22, 34, 9, 105.7]
+        >>> h.deleteMin()
+        -15
+        >>> h.deleteMin()
+        -5
+        >>> h.deleteMin()
+        -2
+        >>> h
+        [0, 1, 0, 9, 1, 1, 7, 76.8, 34, 34, 105.7, 6, 22]
+        >>> h.insert(22.5)
+        >>> h
+        [0, 1, 0, 9, 1, 1, 7, 76.8, 34, 34, 105.7, 6, 22, 22.5]
+        >>> h.deleteMin()
+        0
+        >>> h.deleteMin()
+        0
+        >>> h.deleteMin()
+        1
+        >>> h.deleteMin()
+        1
+        >>> h.deleteMin()
+        1
+        >>> h.deleteMin()
+        6
+        >>> h
+        [7, 9, 34, 22.5, 22, 105.7, 34, 76.8]
     '''
 
     def __init__(self):   # YOU ARE NOT ALLOWED TO MODIFY THE CONSTRUCTOR
