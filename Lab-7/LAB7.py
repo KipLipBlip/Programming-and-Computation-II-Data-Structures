@@ -7,10 +7,12 @@
 
 class Node:
     def __init__(self, value):
+        ''' Constructor '''
         self.value = value  
         self.next = None 
     
     def __str__(self):
+        ''' String representation of this object '''
         return "Node({})".format(self.value) 
 
     __repr__ = __str__
@@ -30,11 +32,13 @@ class Queue:
         2
     '''
     def __init__(self):
+        ''' Constructor '''
         self.head=None
         self.tail=None
         self.count=0
 
     def __str__(self):
+        ''' String representation of this object '''
         temp=self.head
         out=[]
         while temp:
@@ -46,24 +50,70 @@ class Queue:
     __repr__=__str__
 
     def isEmpty(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Tests to see whether the queue is empty '''
+        # If there no length the queue is empty
+        return self.count == 0
         
-
     def enqueue(self, value):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Adds a new item to the back of the queue '''
         
+        # Create the Node
+        i = Node(value)
+
+        if self.isEmpty():
+            # This is the first node in the queue: Head and Tail
+
+            self.head = i
+            self.tail = i
+
+        else:
+            # This becomes the new tail, update previous next pointer
+            
+            self.tail = i
+
+            if len(self) == 1:
+                # There is only a head node
+                
+                self.head.next = i
+
+            else:
+                # Most general case
+
+                j = self.head.next
+
+                # Go to the second to last node and update that .next pointer
+                for k in range(len(self)-2):
+                    j = j.next
+
+                j.next = i
+
+        # Increment the size
+        self.count += 1
 
 
     def dequeue(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Removes an item from the front of the queue '''
         
+        # Check for empty queue
+        if self.isEmpty():
+            return None
+
+        else:
+            # Remove current head next reference, then make new head reference
+            temp = self.head
+            self.head = self.head.next
+            temp.next = None
+
+            # Decrement the size
+            self.count -= 1 
+
+            return temp.value
+  
 
     def __len__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' The number of elements in the queue '''
+        # Use size attribute
+        return self.count
 
 
 
