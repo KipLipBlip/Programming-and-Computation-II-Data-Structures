@@ -30,7 +30,56 @@ class Queue:
         1
         >>> len(x)
         2
+
+        >>> x=Queue()
+        >>> x.isEmpty()
+        True
+        >>> x.dequeue()
+        >>> x.enqueue(1)
+        >>> x.enqueue(2)
+        >>> x.enqueue(3)
+        >>> x.enqueue(4)
+        >>> print(x)
+        Head:Node(1)
+        Tail:Node(4)
+        Queue:1 -> 2 -> 3 -> 4
+        >>> x.isEmpty()
+        False
+        >>> len(x)
+        4
+        >>> x.dequeue()
+        1
+        >>> x.dequeue()
+        2
+        >>> x.dequeue()
+        3
+        >>> x.dequeue()
+        4
+        >>> x.dequeue()
+        >>> print(x)
+        Head:None
+        Tail:None
+        Queue:
+        >>> x.enqueue(3)
+        >>> x.enqueue(2)
+        >>> print(x)
+        Head:Node(3)
+        Tail:Node(2)
+        Queue:3 -> 2
+        >>> x.dequeue()
+        3
+        >>> print(x)
+        Head:Node(2)
+        Tail:Node(2)
+        Queue:2
+        >>> x.dequeue()
+        2
+        >>> print(x)
+        Head:None
+        Tail:None
+        Queue:
     '''
+
     def __init__(self):
         ''' Constructor '''
         self.head=None
@@ -90,7 +139,6 @@ class Queue:
         # Increment the size
         self.count += 1
 
-
     def dequeue(self):
         ''' Removes an item from the front of the queue '''
         
@@ -107,20 +155,21 @@ class Queue:
             # Decrement the size
             self.count -= 1 
 
+            # Remove head and tail pointers if empty
+            if self.count == 0:
+                self.tail = None
+                self.head = None
+
             return temp.value
-  
 
     def __len__(self):
         ''' The number of elements in the queue '''
         # Use size attribute
         return self.count
 
-
-
-
-
 class Graph:
     def __init__(self, graph_repr):
+        ''' Constructor '''
         self.vertList = graph_repr
 
 
