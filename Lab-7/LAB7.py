@@ -2,10 +2,8 @@
 #Due Date: 11/14/2020, 11:59PM 
 '''                                 
 # Collaboration Statement:   
-
+        I worked on this assignment alone, using only this semester's materials.
 '''
-
-
 
 class Node:
     def __init__(self, value):
@@ -16,8 +14,7 @@ class Node:
         return "Node({})".format(self.value) 
 
     __repr__ = __str__
-                        
-                          
+                                   
 class Queue:
     '''
         >>> x=Queue()
