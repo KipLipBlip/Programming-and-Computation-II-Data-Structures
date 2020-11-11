@@ -283,14 +283,48 @@ class Graph:
         return visited
 
 # ---------------- EXTRA CREDIT -------------- #
-# def bubbleSort(numList):
-#     '''
-#         >>> bubbleSort([9,3,5,4,1,67,78])
-#         ({1: [3, 5, 4, 1, 9, 67, 78], 2: [3, 4, 1, 5, 9, 67, 78], 3: [3, 1, 4, 5, 9, 67, 78], 4: [1, 3, 4, 5, 9, 67, 78], 5: [1, 3, 4, 5, 9, 67, 78]}, [1, 3, 4, 5, 9, 67, 78])
-#         >>> bubbleSort([3,6,8,9])
-#         ({1: [3, 6, 8, 9]}, [3, 6, 8, 9])
-#         >>> bubbleSort([3,6,-1,9,12])
-#         ({1: [3, -1, 6, 9, 12], 2: [-1, 3, 6, 9, 12], 3: [-1, 3, 6, 9, 12]}, [-1, 3, 6, 9, 12])
-#     '''
-#     # YOUR CODE STARTS HERE
-#     pass
+
+def bubbleSort(numList):
+    '''
+        >>> bubbleSort([9,3,5,4,1,67,78])
+        ({1: [3, 5, 4, 1, 9, 67, 78], 2: [3, 4, 1, 5, 9, 67, 78], 3: [3, 1, 4, 5, 9, 67, 78], 4: [1, 3, 4, 5, 9, 67, 78], 5: [1, 3, 4, 5, 9, 67, 78]}, [1, 3, 4, 5, 9, 67, 78])
+        >>> bubbleSort([3,6,8,9])
+        ({1: [3, 6, 8, 9]}, [3, 6, 8, 9])
+        >>> bubbleSort([3,6,-1,9,12])
+        ({1: [3, -1, 6, 9, 12], 2: [-1, 3, 6, 9, 12], 3: [-1, 3, 6, 9, 12]}, [-1, 3, 6, 9, 12])
+    '''
+    # Initialize, define swaps
+    d = {}
+    count, swaps = 0, 1
+
+    # Process is done when there have not been any swaps
+    while swaps != 0:
+
+        # Correct value of swaps
+        swaps = 0
+
+        # Iterate through the list
+        for i in range(len(numList)):
+            
+            if i != len(numList)-1:
+
+                # Avoid index errors
+
+                while numList[i] > numList[i+1]:
+
+                    # Continue looping until statement is true
+
+                    # Swap
+                    temp = numList[i]
+                    numList[i] = numList[i+1]
+                    numList[i+1] = temp
+
+                    swaps += 1
+
+        print(f'\n{numList}\n')
+        # Add entry, increment count
+        count += 1
+        d[count] = numList
+    
+    # Return enteries and final list
+    return (d, numList)
