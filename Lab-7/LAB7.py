@@ -189,6 +189,45 @@ class Graph:
             >>> g=Graph(g1)
             >>> g.bfs('A')
             ['A', 'B', 'D', 'G', 'E', 'F', 'C']
+
+            >>> g1 = {'A': ['B', 'D', 'G'],
+            ...       'B': ['A', 'E', 'F'],
+            ...       'C': ['F'],
+            ...       'D': ['A', 'F'],
+            ...       'E': ['B', 'G'],
+            ...       'F': ['B', 'C', 'D'],
+            ...       'G': ['A', 'E']}
+            >>> g = Graph(g1)
+            >>> g.bfs('A')
+            ['A', 'B', 'D', 'G', 'E', 'F', 'C']
+            >>> g2 = {'F': ['D', 'C', 'B'],
+            ...       'A': ['G', 'D', 'B'],
+            ...       'B': ['F', 'A', 'E'],
+            ...       'E': ['G', 'B'],
+            ...       'C': ['F'],
+            ...       'D': ['F', 'A'],
+            ...       'G': ['A', 'E']}
+            >>> g = Graph(g2)
+            >>> g.bfs('A')
+            ['A', 'B', 'D', 'G', 'E', 'F', 'C']
+            >>> g3 = {'B': [('E', 3), ('C', 5)],
+            ...       'F': [],
+            ...       'C': [('F', 2)],
+            ...       'A': [('D', 3), ('B', 2)],
+            ...       'D': [('C', 1)],
+            ...       'E': [('F', 4)]}
+            >>> g =Graph(g3)
+            >>> g.bfs('A')
+            ['A', 'B', 'D', 'C', 'E', 'F']
+            >>> g4 = {'Bran': ['East', 'Cap'],
+            ...       'Flor': [],
+            ...       'Cap':  ['Flor'],
+            ...       'Apr':  ['Dec', 'Bran'],
+            ...       'Dec':  ['Cap'],
+            ...       'East': ['Flor']}
+            >>> g = Graph(g4)
+            >>> g.bfs('Apr')
+            ['Apr', 'Bran', 'Dec', 'Cap', 'East', 'Flor']
         '''
         
         # Create a visited list
@@ -199,17 +238,34 @@ class Graph:
         Q.enqueue(start)
         visited.append(start)
 
-        # ! Delete
-        # print(f'Initial visited {visited}\nQueue {Q}\n')
-
         # Continue process until there are no more unvisited nodes
         while not Q.isEmpty():
 
             # Initially dequeue the start
             parent = Q.dequeue()
 
-            # ! Delete
-            # print(f'Parent {parent}\nQueue {Q}\n')
+            if len(self.vertList[parent]) == 0:
+                
+                break
+            
+            elif isinstance(self.vertList[parent][0], tuple):
+                # Check for weighted graph ('node', weight)
+                temp = []
+
+                # Sort the weighted values
+                self.vertList[parent].sort( key=self.priority )
+
+                # Add the values based on weight to temp
+                for i in range(len(self.vertList[parent])):
+                   
+                    temp.append(self.vertList[parent][i][0])
+
+                # Set children to sorted by priority
+                self.vertList[parent] = temp
+
+            else:
+                # Alphabetically sort neighbours
+                self.vertList[parent].sort()
 
             # Loop through neighbours
             for neighbour in self.vertList[parent]:
@@ -218,6 +274,7 @@ class Graph:
                 if neighbour not in visited:
 
                     Q.enqueue(neighbour)
+                    visited.append(neighbour)
 
             # Add this neighbour to visited list
             if parent not in visited:
@@ -227,16 +284,20 @@ class Graph:
         # Return the BFS traversal
         return visited
 
+    def priority(self, tple):
+        ''' Return the weight of the node to place as a key for sorting '''
+
+        return tple[1]
 
 # ---------------- EXTRA CREDIT -------------- #
-def bubbleSort(numList):
-    '''
-        >>> bubbleSort([9,3,5,4,1,67,78])
-        ({1: [3, 5, 4, 1, 9, 67, 78], 2: [3, 4, 1, 5, 9, 67, 78], 3: [3, 1, 4, 5, 9, 67, 78], 4: [1, 3, 4, 5, 9, 67, 78], 5: [1, 3, 4, 5, 9, 67, 78]}, [1, 3, 4, 5, 9, 67, 78])
-        >>> bubbleSort([3,6,8,9])
-        ({1: [3, 6, 8, 9]}, [3, 6, 8, 9])
-        >>> bubbleSort([3,6,-1,9,12])
-        ({1: [3, -1, 6, 9, 12], 2: [-1, 3, 6, 9, 12], 3: [-1, 3, 6, 9, 12]}, [-1, 3, 6, 9, 12])
-    '''
-    # YOUR CODE STARTS HERE
-    pass
+# def bubbleSort(numList):
+#     '''
+#         >>> bubbleSort([9,3,5,4,1,67,78])
+#         ({1: [3, 5, 4, 1, 9, 67, 78], 2: [3, 4, 1, 5, 9, 67, 78], 3: [3, 1, 4, 5, 9, 67, 78], 4: [1, 3, 4, 5, 9, 67, 78], 5: [1, 3, 4, 5, 9, 67, 78]}, [1, 3, 4, 5, 9, 67, 78])
+#         >>> bubbleSort([3,6,8,9])
+#         ({1: [3, 6, 8, 9]}, [3, 6, 8, 9])
+#         >>> bubbleSort([3,6,-1,9,12])
+#         ({1: [3, -1, 6, 9, 12], 2: [-1, 3, 6, 9, 12], 3: [-1, 3, 6, 9, 12]}, [-1, 3, 6, 9, 12])
+#     '''
+#     # YOUR CODE STARTS HERE
+#     pass
