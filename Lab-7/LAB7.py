@@ -252,15 +252,13 @@ class Graph:
                 # Check for weighted graph ('node', weight)
                 temp = []
 
-                # Sort the weighted values
-                self.vertList[parent].sort( key=self.priority )
-
                 # Add the values based on weight to temp
                 for i in range(len(self.vertList[parent])):
                    
                     temp.append(self.vertList[parent][i][0])
 
-                # Set children to sorted by priority
+                temp.sort()
+
                 self.vertList[parent] = temp
 
             else:
@@ -283,11 +281,6 @@ class Graph:
                 
         # Return the BFS traversal
         return visited
-
-    def priority(self, tple):
-        ''' Return the weight of the node to place as a key for sorting '''
-
-        return tple[1]
 
 # ---------------- EXTRA CREDIT -------------- #
 # def bubbleSort(numList):
