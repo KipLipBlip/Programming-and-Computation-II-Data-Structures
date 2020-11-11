@@ -168,14 +168,16 @@ class Queue:
         return self.count
 
 class Graph:
+
     def __init__(self, graph_repr):
         ''' Constructor '''
         self.vertList = graph_repr
 
-
     def bfs(self, start):
         '''
-            Method uses an instance of the Queue class to process nodes
+            Returns the breadth-first search traversal of this graph
+
+            This method uses an instance of the Queue class to process nodes
             
             >>> g1 = {'A': ['B','D','G'],
             ... 'B': ['A','E','F'],
@@ -188,14 +190,42 @@ class Graph:
             >>> g.bfs('A')
             ['A', 'B', 'D', 'G', 'E', 'F', 'C']
         '''
-        # YOUR CODE STARTS HERE
-        pass
+        
+        # Create a visited list
+        visited = []
 
+        # Instantiate a Queue, Enqueue the starter Node, Mark start as visited 
+        Q = Queue()
+        Q.enqueue(start)
+        visited.append(start)
 
+        # ! Delete
+        # print(f'Initial visited {visited}\nQueue {Q}\n')
 
+        # Continue process until there are no more unvisited nodes
+        while not Q.isEmpty():
 
+            # Initially dequeue the start
+            parent = Q.dequeue()
 
+            # ! Delete
+            # print(f'Parent {parent}\nQueue {Q}\n')
 
+            # Loop through neighbours
+            for neighbour in self.vertList[parent]:
+
+                # If neighbour hasn't been visited, add to queue
+                if neighbour not in visited:
+
+                    Q.enqueue(neighbour)
+
+            # Add this neighbour to visited list
+            if parent not in visited:
+
+                visited.append(parent)
+                
+        # Return the BFS traversal
+        return visited
 
 
 # ---------------- EXTRA CREDIT -------------- #
