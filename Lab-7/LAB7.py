@@ -303,18 +303,22 @@ def bubbleSort(numList):
     # Process is done when there have not been any swaps
     while swaps != 0:
 
+        # Reinitialize swaps
         swaps = 0
 
+        # Each pass through only requires len-1 iterations
         for i in range(n-count):
 
-            if i != len(numList)-1 and numList[i] > numList[i+1]:
+            # Swap if adj index is greater
+            if i != n-1 and numList[i] > numList[i+1]:
 
+                # Assign and increment swaps
                 numList[i], numList[i+1] = numList[i+1], numList[i]
                 swaps += 1
 
+        # Assign copy of state to dict, and increment count
         count += 1
-        d[count] = numList
-        
-       
-
+        d[count] = numList[:]
+    
+    # Return the dict and final list in a tuple
     return (d, numList)
