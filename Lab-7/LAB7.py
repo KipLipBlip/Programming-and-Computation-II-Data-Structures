@@ -293,38 +293,28 @@ def bubbleSort(numList):
         >>> bubbleSort([3,6,-1,9,12])
         ({1: [3, -1, 6, 9, 12], 2: [-1, 3, 6, 9, 12], 3: [-1, 3, 6, 9, 12]}, [-1, 3, 6, 9, 12])
     '''
-    # Initialize, define swaps
+
+    # Initialize
     d = {}
-    count, swaps = 0, 1
+    count = 0
+    swaps = 1
+    n = len(numList)
 
     # Process is done when there have not been any swaps
     while swaps != 0:
 
-        # Correct value of swaps
         swaps = 0
 
-        # Iterate through the list
-        for i in range(len(numList)):
-            
-            if i != len(numList)-1:
+        for i in range(n-count):
 
-                # Avoid index errors
+            if i != len(numList)-1 and numList[i] > numList[i+1]:
 
-                while numList[i] > numList[i+1]:
+                numList[i], numList[i+1] = numList[i+1], numList[i]
+                swaps += 1
 
-                    # Continue looping until statement is true
-
-                    # Swap
-                    temp = numList[i]
-                    numList[i] = numList[i+1]
-                    numList[i+1] = temp
-
-                    swaps += 1
-
-        print(f'\n{numList}\n')
-        # Add entry, increment count
         count += 1
         d[count] = numList
-    
-    # Return enteries and final list
+        
+       
+
     return (d, numList)
