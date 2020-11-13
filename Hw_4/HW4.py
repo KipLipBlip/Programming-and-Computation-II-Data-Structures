@@ -183,14 +183,50 @@ class CacheList:
     def put(self, content, evictionPolicy):
         ''' Adds Nodes at the beginning of the list. '''
 
+        ''' Node has value and next attr '''
+
         # If the content is larger than the maximum size, do not evict anything.
-        # Otherwise, if there is currently not enough space for the content, evict items according to the eviction policy.
-        # If the content id exists in the list prior  the  insertion,  content  is  not  added  into  the  list  and  the  current  content  is  moved  to  the beginning of the list.
-        
+        if content.size < self.maxSize:
+            
+            if content.size <= self.remainingSize:
+                # If there is enough remaining space, just add the obj, no need to evict
+                
+                # Check for matching ID 
 
-        
-        pass
+                if self.find(content.cid):
+                    # Remove from position found and and place at the beginning of the list
 
+                    pass
+
+                    return 'Insertion of content item idnot allowed. Content already in cache.'
+
+                else:
+                    # Add the content
+
+                    pass
+
+            else:
+                # If there is currently not enough space for the content, evict items according to the eviction policy.
+
+                if evictionPolicy.lower() == 'lru':
+
+                    # Implement lruevict
+                    pass
+
+                elif evictionPolicy.lower() == 'mru':
+                    # Implement mruevict
+                    pass
+        
+        else:
+            return 'Insertion not allowed. Content size is too large.'
+
+        # If the content id exists in the list prior the insertion,
+        # content is not added into the list and the current content is moved to the beginning of the list.
+        
+        # Successful insertion
+        return f'INSERTED: {content}'
+
+    
     
     def find(self, cid):
         ''' Search for content in the list. '''
