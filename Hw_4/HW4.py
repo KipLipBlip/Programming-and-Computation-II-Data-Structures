@@ -1,20 +1,26 @@
 # HW4
-#Due Date: 11/21/2020, 11:59PM
-"""                                   
+# Due Date: 11/21/2020, 11:59PM
+'''                                   
 ### Collaboration Statement:
+        I worked on this assignment alone, using only this semeseter's materials
 
-"""
+### Description:
+        The overall cache structure will be implemented as a hash table using separate chaining for collision resolution,
+        with each individual level implemented as a linked list.
+'''
 
 class Node:
+
     def __init__(self, content):
+        ''' Constructor '''
         self.value = content
         self.next = None
 
     def __str__(self):
+        ''' Object's string representation '''
         return ('CONTENT:{}\n'.format(self.value))
 
     __repr__=__str__
-
 
 class ContentItem:
     '''
@@ -31,27 +37,39 @@ class ContentItem:
         >>> hash(content4)
         1
     '''
+
     def __init__(self, cid, size, header, content):
-        self.cid = cid
-        self.size = size
-        self.header = header
-        self.content = content
+        ''' Constructor '''
+        self.cid = cid              # Stores the content id.
+        self.size = size            # Stores the size of the content as a nonnegative integer.
+        self.header = header        # Information stored by the ContentItem (used for hash function later).
+        self.content = content      # Information stored by the ContentItem.
 
     def __str__(self):
+        ''' Object's string representation '''
         return f'CONTENT ID: {self.cid} SIZE: {self.size} HEADER: {self.header} CONTENT: {self.content}'
 
     __repr__=__str__
 
     def __eq__(self, other):
+        ''' Equality operator '''
         if isinstance(other, ContentItem):
             return self.cid == other.cid and self.size == other.size and self.header == other.header and self.content == other.content
         return False
 
     def __hash__(self):
-        # YOUR CODE STARTS HERE
-        pass
+        ''' Returns the hash value for this ContentItem. '''
+        # Let the hash value be equal to the sum of every ASCII value in the header, modulo 3
+        
+        h = 0
 
-
+        # Iterate through each letter of the header
+        for i in range(len(self.header)):
+            
+            # Add ascii's value to sum
+            h += ord(self.header[i])
+        
+        return h
 
 class CacheList:
     '''
@@ -141,12 +159,14 @@ class CacheList:
         <BLANKLINE>
     '''
     def __init__(self, size):
-        self.head = None
-        self.maxSize = size
-        self.remainingSize = size
-        self.numItems = 0
+        ''' Constructor '''
+        self.head = None                # Points to the first node in the linked list (defaults to None)
+        self.maxSize = size             # Maximum size that the CacheList can store
+        self.remainingSize = size       # Remaining size that the CacheList can store
+        self.numItems = 0               # The number of items currently in the CacheList
 
     def __str__(self):
+        ''' Object's string representation '''
         listString = ""
         current = self.head
         while current is not None:
@@ -157,35 +177,43 @@ class CacheList:
     __repr__=__str__
 
     def __len__(self):
+        ''' Length operator '''
         return self.numItems
     
     def put(self, content, evictionPolicy):
-        # YOUR CODE STARTS HERE
+        ''' Adds Nodes at the beginning of the list. '''
+
+        # If the content is larger than the maximum size, do not evict anything.
+        # Otherwise, if there is currently not enough space for the content, evict items according to the eviction policy.
+        # If the content id exists in the list prior  the  insertion,  content  is  not  added  into  the  list  and  the  current  content  is  moved  to  the beginning of the list.
+        
+        
+        
         pass
 
     
     def find(self, cid):
-        # YOUR CODE STARTS HERE
+        ''' Search for content in the list. '''
         pass
 
 
     def update(self, cid, content):
-        # YOUR CODE STARTS HERE
+        ''' Updates the content in the list. '''
         pass
 
 
     def mruEvict(self):
-        # YOUR CODE STARTS HERE
+        ''' Removes the first item of the list. '''
         pass
 
     
     def lruEvict(self):
-        # YOUR CODE STARTS HERE
+        ''' Removes the last item of the list. '''
         pass
 
     
     def clear(self):
-        # YOUR CODE STARTS HERE
+        ''' Removes all items from the list. '''
         pass
 
 
