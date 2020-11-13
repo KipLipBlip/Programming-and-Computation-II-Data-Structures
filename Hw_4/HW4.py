@@ -69,7 +69,7 @@ class ContentItem:
             # Add ascii's value to sum
             h += ord(self.header[i])
         
-        return h
+        return h % 3
 
 class CacheList:
     '''
@@ -187,7 +187,7 @@ class CacheList:
         # Otherwise, if there is currently not enough space for the content, evict items according to the eviction policy.
         # If the content id exists in the list prior  the  insertion,  content  is  not  added  into  the  list  and  the  current  content  is  moved  to  the beginning of the list.
         
-        
+
         
         pass
 
