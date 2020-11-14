@@ -274,6 +274,12 @@ class CacheList:
 
             # If the cid matches, return the matching object
             if h.value.cid == cid:
+
+                # Move to the front
+                h.next, self.head = self.head, h
+
+                # Remove old value
+
                 return h
             else:
                 h = h.next
@@ -296,8 +302,7 @@ class CacheList:
         if c:
             # Move to the beginning of the list
 
-            # Use PUT
-            pass
+
 
         else:
             return None
@@ -305,13 +310,11 @@ class CacheList:
     def mruEvict(self):
         ''' Removes the first item of the list. '''
 
-        # Make the head the head's next value, remove the heads next pointer
-        temp = self.head
-        self.head = temp.next
-        temp.next = None
-
-        self.remainingSize += temp.value.size   # Increase the remaining size
+        self.remainingSize += self.head.value.size   # Increase the remaining size
         self.numItems -= 1                      # Decrement the number of items
+
+        # Make the head the head's next value
+        self.head.next = self.head
     
     def lruEvict(self):
         ''' Removes the last item of the list. '''
@@ -319,13 +322,14 @@ class CacheList:
         h = self.head
 
         # Get the next to last node, h
-        for i in range(self.numItems-1):
+        for i in range(self.numItems-2):
 
             h = h.next
 
-        h.next = None                       # Remove next pointer
-        self.remainingSize += h.value.size  # Increase the reamining size
-        self.numItems -= 1                  # Decrement the number of items
+        self.remainingSize += h.next.value.size # Increase the reamining size
+        self.numItems -= 1                      # Decrement the number of items
+
+        h.next = None                           # Remove next pointer
     
     def clear(self):
         ''' Removes all items from the list. '''
@@ -337,6 +341,29 @@ class CacheList:
         self.remainingSize = self.maxSize
     
         return 'Cleared cache!'
+
+    def remove(self, cid):
+        ''' Removes item by cid '''
+
+        h = self.head
+
+        for i in range(self.numItems):
+
+            if h.value.cid == cid:
+
+                # This is the node
+
+                if h == self.head:
+
+                    # Remove the head
+                    self.remainingSize += self.head.value.size      # Increase the remaining size
+                    self.numItems -= 1                              # Decrement the number of items
+
+                    # Make the head the head's next value
+                    self.head.next = self.head
+
+                else:
+                    
 
 
 class Cache:
