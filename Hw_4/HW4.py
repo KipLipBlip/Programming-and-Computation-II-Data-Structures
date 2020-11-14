@@ -24,10 +24,10 @@ class Node:
 
 class ContentItem:
     '''
-        >>> content1 = ContentItem(1000, 10, "Content-Type: 0", "0xA")
-        >>> content2 = ContentItem(1004, 50, "Content-Type: 1", "110010")
-        >>> content3 = ContentItem(1005, 18, "Content-Type: 2", "<html><p>'CMPSC132'</p></html>")
-        >>> content4 = ContentItem(1005, 18, "another header", "111110")
+        >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
+        >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
+        >>> content3 = ContentItem(1005, 18, 'Content-Type: 2', '<html><p>'CMPSC132'</p></html>')
+        >>> content4 = ContentItem(1005, 18, 'another header', '111110')
         >>> hash(content1)
         0
         >>> hash(content2)
@@ -73,11 +73,11 @@ class ContentItem:
 
 class CacheList:
     '''
-        >>> content1 = ContentItem(1000, 10, "Content-Type: 0", "0xA")
-        >>> content2 = ContentItem(1004, 50, "Content-Type: 1", "110010")
-        >>> content3 = ContentItem(1005, 180, "Content-Type: 2", "<html><p>'CMPSC132'</p></html>")
-        >>> content4 = ContentItem(1006, 18, "another header", "111110")
-        >>> content5 = ContentItem(1008, 2, "items", "11x1110")
+        >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
+        >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
+        >>> content3 = ContentItem(1005, 180, 'Content-Type: 2', '<html><p>'CMPSC132'</p></html>')
+        >>> content4 = ContentItem(1006, 18, 'another header', '111110')
+        >>> content5 = ContentItem(1008, 2, 'items', '11x1110')
         >>> lst=CacheList(200)
         >>> lst
         REMAINING SPACE:200
@@ -113,7 +113,7 @@ class CacheList:
         <BLANKLINE>
 
         >>> lst.put(content3, 'lru')
-        "INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>"
+        'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>'
         >>> lst
         REMAINING SPACE:0
         ITEMS:3
@@ -145,7 +145,7 @@ class CacheList:
         [CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110]
         <BLANKLINE>
 
-        >>> contentExtra = ContentItem(1034, 2, "items", "other content")
+        >>> contentExtra = ContentItem(1034, 2, 'items', 'other content')
         >>> lst.update(1008, contentExtra)
         'UPDATED: CONTENT ID: 1034 SIZE: 2 HEADER: items CONTENT: other content'
         >>> lst
@@ -173,10 +173,10 @@ class CacheList:
 
     def __str__(self):
         ''' Object's string representation '''
-        listString = ""
+        listString = ''
         current = self.head
         while current is not None:
-            listString += "[" + str(current.value) + "]\n"
+            listString += '[' + str(current.value) + ']\n'
             current = current.next
         return 'REMAINING SPACE:{}\nITEMS:{}\nLIST:\n{}'.format(self.remainingSize, self.numItems, listString)  
 
@@ -302,7 +302,7 @@ class CacheList:
         if c:
             # Move to the beginning of the list
 
-
+            pass
 
         else:
             return None
@@ -360,26 +360,60 @@ class CacheList:
                     self.numItems -= 1                              # Decrement the number of items
 
                     # Make the head the head's next value
-                    self.head.next = self.head
+                    self.head = self.head.next
+
+                elif h.next == None:
+
+                    # This is the last node
+
+                    j = self.head
+
+                    for i in range(self.numItems-2):
+
+                        j = j.next
+
+                    j.next = None
 
                 else:
-                    
+
+                    # Most general case
+
+                    j = self.head
+
+                    for i in range(self.numItems):
+
+                        # Avoid attr error
+                        if j.next != None:
+
+                            if j.next.value.cid == cid:
+                            
+                                # Reassign left node's next to right node
+
+                                j.next = j.next.next
+
+                                self.remainingSize += j.next.value.size         # Increase the remaining size
+                                self.numItems -= 1                              # Decrement the number of items
+
+                                
+                        j = j.next
+
+            h = h.next      
 
 
 class Cache:
-    """
+    '''
         >>> cache = Cache()
-        >>> content1 = ContentItem(1000, 10, "Content-Type: 0", "0xA")
-        >>> content2 = ContentItem(1003, 13, "Content-Type: 0", "0xD")
-        >>> content3 = ContentItem(1008, 242, "Content-Type: 0", "0xF2")
+        >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
+        >>> content2 = ContentItem(1003, 13, 'Content-Type: 0', '0xD')
+        >>> content3 = ContentItem(1008, 242, 'Content-Type: 0', '0xF2')
 
-        >>> content4 = ContentItem(1004, 50, "Content-Type: 1", "110010")
-        >>> content5 = ContentItem(1001, 51, "Content-Type: 1", "110011")
-        >>> content6 = ContentItem(1007, 155, "Content-Type: 1", "10011011")
+        >>> content4 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
+        >>> content5 = ContentItem(1001, 51, 'Content-Type: 1', '110011')
+        >>> content6 = ContentItem(1007, 155, 'Content-Type: 1', '10011011')
 
-        >>> content7 = ContentItem(1005, 18, "Content-Type: 2", "<html><p>'CMPSC132'</p></html>")
-        >>> content8 = ContentItem(1002, 14, "Content-Type: 2", "<html><h2>'PSU'</h2></html>")
-        >>> content9 = ContentItem(1006, 170, "Content-Type: 2", "<html><button>'Click Me'</button></html>")
+        >>> content7 = ContentItem(1005, 18, 'Content-Type: 2', '<html><p>'CMPSC132'</p></html>')
+        >>> content8 = ContentItem(1002, 14, 'Content-Type: 2', '<html><h2>'PSU'</h2></html>')
+        >>> content9 = ContentItem(1006, 170, 'Content-Type: 2', '<html><button>'Click Me'</button></html>')
 
         >>> cache.insert(content1, 'lru')
         'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
@@ -396,11 +430,11 @@ class Cache:
         'INSERTED: CONTENT ID: 1007 SIZE: 155 HEADER: Content-Type: 1 CONTENT: 10011011'
 
         >>> cache.insert(content7, 'lru')
-        "INSERTED: CONTENT ID: 1005 SIZE: 18 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>"
+        'INSERTED: CONTENT ID: 1005 SIZE: 18 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>'
         >>> cache.insert(content8, 'lru')
-        "INSERTED: CONTENT ID: 1002 SIZE: 14 HEADER: Content-Type: 2 CONTENT: <html><h2>'PSU'</h2></html>"
+        'INSERTED: CONTENT ID: 1002 SIZE: 14 HEADER: Content-Type: 2 CONTENT: <html><h2>'PSU'</h2></html>'
         >>> cache.insert(content9, 'lru')
-        "INSERTED: CONTENT ID: 1006 SIZE: 170 HEADER: Content-Type: 2 CONTENT: <html><button>'Click Me'</button></html>"
+        'INSERTED: CONTENT ID: 1006 SIZE: 170 HEADER: Content-Type: 2 CONTENT: <html><button>'Click Me'</button></html>'
         >>> cache
         L1 CACHE:
         REMAINING SPACE:177
@@ -466,11 +500,11 @@ class Cache:
 
 
         >>> cache.insert(content7, 'mru')
-        "INSERTED: CONTENT ID: 1005 SIZE: 18 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>"
+        'INSERTED: CONTENT ID: 1005 SIZE: 18 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>'
         >>> cache.insert(content8, 'mru')
-        "INSERTED: CONTENT ID: 1002 SIZE: 14 HEADER: Content-Type: 2 CONTENT: <html><h2>'PSU'</h2></html>"
+        'INSERTED: CONTENT ID: 1002 SIZE: 14 HEADER: Content-Type: 2 CONTENT: <html><h2>'PSU'</h2></html>'
         >>> cache.insert(content9, 'mru')
-        "INSERTED: CONTENT ID: 1006 SIZE: 170 HEADER: Content-Type: 2 CONTENT: <html><button>'Click Me'</button></html>"
+        'INSERTED: CONTENT ID: 1006 SIZE: 170 HEADER: Content-Type: 2 CONTENT: <html><button>'Click Me'</button></html>'
         >>> cache
         L1 CACHE:
         REMAINING SPACE:177
@@ -496,9 +530,9 @@ class Cache:
 
         >>> cache.clear()
         'Cache cleared!'
-        >>> contentA = ContentItem(2000, 52, "Content-Type: 2", "GET https://www.pro-football-reference.com/boxscores/201802040nwe.htm HTTP/1.1")
-        >>> contentB = ContentItem(2001, 76, "Content-Type: 2", "GET https://giphy.com/gifs/93lCI4D0murAszeyA6/html5 HTTP/1.1")
-        >>> contentC = ContentItem(2002, 11, "Content-Type: 2", "GET https://media.giphy.com/media/YN7akkfUNQvT1zEBhO/giphy-downsized.gif HTTP/1.1")
+        >>> contentA = ContentItem(2000, 52, 'Content-Type: 2', 'GET https://www.pro-football-reference.com/boxscores/201802040nwe.htm HTTP/1.1')
+        >>> contentB = ContentItem(2001, 76, 'Content-Type: 2', 'GET https://giphy.com/gifs/93lCI4D0murAszeyA6/html5 HTTP/1.1')
+        >>> contentC = ContentItem(2002, 11, 'Content-Type: 2', 'GET https://media.giphy.com/media/YN7akkfUNQvT1zEBhO/giphy-downsized.gif HTTP/1.1')
         >>> cache.insert(contentA, 'lru')
         'INSERTED: CONTENT ID: 2000 SIZE: 52 HEADER: Content-Type: 2 CONTENT: GET https://www.pro-football-reference.com/boxscores/201802040nwe.htm HTTP/1.1'
         >>> cache.insert(contentB, 'lru')
@@ -543,10 +577,10 @@ class Cache:
         [CONTENT ID: 2000 SIZE: 52 HEADER: Content-Type: 2 CONTENT: GET https://www.pro-football-reference.com/boxscores/201802040nwe.htm HTTP/1.1]
         [CONTENT ID: 2001 SIZE: 76 HEADER: Content-Type: 2 CONTENT: GET https://giphy.com/gifs/93lCI4D0murAszeyA6/html5 HTTP/1.1]
         <BLANKLINE>
-        >>> contentD = ContentItem(2002, 11, "Content-Type: 2", "GET https://media.giphy.com/media/YN7akkfUNQvT1zEBhO/giphy-downsized.gif HTTP/1.1")
+        >>> contentD = ContentItem(2002, 11, 'Content-Type: 2', 'GET https://media.giphy.com/media/YN7akkfUNQvT1zEBhO/giphy-downsized.gif HTTP/1.1')
         >>> cache.insert(contentD, 'lru')
         'Insertion of content item 2002 not allowed. Content already in cache.'
-        >>> contentE = ContentItem(2000, 52, "Content-Type: 2", "GET https://www.pro-football-reference.com/boxscores/201801210phi.htm HTTP/1.1")
+        >>> contentE = ContentItem(2000, 52, 'Content-Type: 2', 'GET https://www.pro-football-reference.com/boxscores/201801210phi.htm HTTP/1.1')
         >>> cache.updateContent(contentE)
         'UPDATED: CONTENT ID: 2000 SIZE: 52 HEADER: Content-Type: 2 CONTENT: GET https://www.pro-football-reference.com/boxscores/201801210phi.htm HTTP/1.1'
         >>> cache.hierarchy[2]
@@ -557,7 +591,7 @@ class Cache:
         [CONTENT ID: 2002 SIZE: 11 HEADER: Content-Type: 2 CONTENT: GET https://media.giphy.com/media/YN7akkfUNQvT1zEBhO/giphy-downsized.gif HTTP/1.1]
         [CONTENT ID: 2001 SIZE: 76 HEADER: Content-Type: 2 CONTENT: GET https://giphy.com/gifs/93lCI4D0murAszeyA6/html5 HTTP/1.1]
         <BLANKLINE>        
-    """
+    '''
 
     def __init__(self):
         self.hierarchy = [CacheList(200), CacheList(200), CacheList(200)]
