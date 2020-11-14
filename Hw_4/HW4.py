@@ -84,6 +84,7 @@ class CacheList:
         ITEMS:0
         LIST:
         <BLANKLINE>
+
         >>> lst.put(content1, 'mru')
         'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
         >>> lst.put(content2, 'lru')
@@ -98,6 +99,7 @@ class CacheList:
         [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
         [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
         <BLANKLINE>
+        
         >>> lst.put(content5, 'mru')
         'INSERTED: CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110'
         >>> lst
@@ -109,6 +111,7 @@ class CacheList:
         [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
         [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
         <BLANKLINE>
+
         >>> lst.put(content3, 'lru')
         "INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>"
         >>> lst
@@ -119,6 +122,7 @@ class CacheList:
         [CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110]
         [CONTENT ID: 1006 SIZE: 18 HEADER: another header CONTENT: 111110]
         <BLANKLINE>
+
         >>> lst.put(content1, 'mru')
         'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
         >>> lst
@@ -129,6 +133,7 @@ class CacheList:
         [CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110]
         [CONTENT ID: 1006 SIZE: 18 HEADER: another header CONTENT: 111110]
         <BLANKLINE>
+
         >>> lst.find(1006)
         CONTENT ID: 1006 SIZE: 18 HEADER: another header CONTENT: 111110
         >>> lst
@@ -139,6 +144,7 @@ class CacheList:
         [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
         [CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110]
         <BLANKLINE>
+
         >>> contentExtra = ContentItem(1034, 2, "items", "other content")
         >>> lst.update(1008, contentExtra)
         'UPDATED: CONTENT ID: 1034 SIZE: 2 HEADER: items CONTENT: other content'
@@ -206,32 +212,46 @@ class CacheList:
                     return 'Insertion of content item id not allowed. Content already in cache.'
 
                 else:
-                    # Add the content
+                    # Add the content to the beginning of the linked list
 
-                    # Get the last node
                     h = self.head
-                    for i in range(len(self.numItems)):
-                        h = h.next
-                    
+                    nn = Node(content)
 
-                    # Set next pointer to content
+                    # Check for None head
+                    if h:
 
-                    # Increment numItems and remaningSize
-                    self.numItems += 1
-                    self.remainingSize -= content.size
+                        # There is a head, shift everything down
+                        nn.next, self.head = self.head, nn
 
+                        # Increment numItems and decrement remaningSize
+                        self.numItems += 1
+                        self.remainingSize -= nn.value.size
+
+                    else:
+                        # There is no head, this node is the head
+                        self.head = nn
+
+                        # Increment numItems and decrement remaningSize
+                        self.numItems += 1
+                        self.remainingSize -= nn.value.size
             else:
-                # If there is currently not enough space for the content, evict items according to the eviction policy.
+                # There is currently not enough space for the content, evict items according to the eviction policy.
 
                 if evictionPolicy.lower() == 'lru':
 
-                    # Implement lruevict
-                    pass
+                    # Continue eviction until enough size
+                    while self.remainingSize < content.size:
+
+                        self.lruEvict()     # Removes last item in linked list
+                        self.put(content)
 
                 elif evictionPolicy.lower() == 'mru':
-                    # Implement mruevict
-                    pass
-        
+
+                    # Continue eviction until enough size
+                    while self.remainingSize < content.size:
+
+                        self.mruEvict()     # Removes first item in linked list
+                        self.put(content)
         else:
             return 'Insertion not allowed. Content size is too large.'
         
@@ -250,10 +270,10 @@ class CacheList:
         h = self.head
 
         # Iterate through the length of the linked list
-        for i in range(len(self.numItems)):
+        for i in range(self.numItems):
 
             # If the cid matches, return the matching object
-            if h.cid == cid:
+            if h.value.cid == cid:
                 return h
             else:
                 h = h.next
@@ -290,8 +310,8 @@ class CacheList:
         self.head = temp.next
         temp.next = None
 
-        self.remainingSize += temp.size     # Increase the remaining size
-        self.numItems -= 1                  # Decrement the number of items
+        self.remainingSize += temp.value.size   # Increase the remaining size
+        self.numItems -= 1                      # Decrement the number of items
     
     def lruEvict(self):
         ''' Removes the last item of the list. '''
@@ -299,7 +319,7 @@ class CacheList:
         h = self.head
 
         # Get the next to last node, h
-        for i in range(len(self.size)-1):
+        for i in range(self.numItems-1):
 
             h = h.next
 
@@ -316,14 +336,7 @@ class CacheList:
         # Not cleared until there are 0 items and the max size left
         while self.numItems != 0 and self.remainingSize != self.maxSize:
 
-            # Iterate through the lenght, decrement as it proceeds
-            for i in range(len(self.numItems)-count):
-
-                h = h.next
-            
-            h.next = None
-            self.remainingSize += h.size    # Increase the remaining size
-            self.numItems -= 1              # Decrement the number of items
+            self.mruEvict()
     
         return 'Cleared cache!'
 
