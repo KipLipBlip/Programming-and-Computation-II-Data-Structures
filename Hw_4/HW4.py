@@ -181,29 +181,44 @@ class CacheList:
         return self.numItems
     
     def put(self, content, evictionPolicy):
-        ''' Adds Nodes at the beginning of the list. '''
-
-        ''' Node has value and next attr '''
+        ''' Adds Nodes at the beginning of the list. 
+        
+            Adds nodes at the beginning of the list and evicts items as necessary to free up 
+            space. If the content is larger than the maximum size, do not evict anything. 
+            Otherwise, if there is currently not enough space for the content, evict items 
+            according to the eviction policy.If the content id exists in the list prior the
+            insertion, content is not added into the list and the current content is moved
+            to the beginning of the list
+        '''
 
         # If the content is larger than the maximum size, do not evict anything.
+
         if content.size < self.maxSize:
-            
+
+            # If there is enough remaining space, just add the obj, no need to evict
+
             if content.size <= self.remainingSize:
-                # If there is enough remaining space, just add the obj, no need to evict
                 
                 # Check for matching ID 
 
                 if self.find(content.cid):
-                    # Remove from position found and and place at the beginning of the list
 
-                    pass
-
-                    return 'Insertion of content item idnot allowed. Content already in cache.'
+                    return 'Insertion of content item id not allowed. Content already in cache.'
 
                 else:
                     # Add the content
 
-                    pass
+                    # Get the last node
+                    h = self.head
+                    for i in range(len(self.numItems)):
+                        h = h.next
+                    
+
+                    # Set next pointer to content
+
+                    # Increment numItems and remaningSize
+                    self.numItems += 1
+                    self.remainingSize -= content.size
 
             else:
                 # If there is currently not enough space for the content, evict items according to the eviction policy.
@@ -219,9 +234,6 @@ class CacheList:
         
         else:
             return 'Insertion not allowed. Content size is too large.'
-
-        # If the content id exists in the list prior the insertion,
-        # content is not added into the list and the current content is moved to the beginning of the list.
         
         # Successful insertion
         return f'INSERTED: {content}'
@@ -229,28 +241,91 @@ class CacheList:
     
     
     def find(self, cid):
-        ''' Search for content in the list. '''
-        pass
+        ''' Search for content in the list. 
+        
+            Finds a ContentItem from the list by id, moving the ContentItem to 
+            the front of the list if found.
+        '''
+        
+        h = self.head
 
+        # Iterate through the length of the linked list
+        for i in range(len(self.numItems)):
+
+            # If the cid matches, return the matching object
+            if h.cid == cid:
+                return h
+            else:
+                h = h.next
+
+        # Default to None after process complete
+        return None
 
     def update(self, cid, content):
-        ''' Updates the content in the list. '''
-        pass
+        ''' Updates the content in the list. 
+        
+            Updates a ContentItem with a given id in the list. If a match is found, 
+            it is moved to the beginning of the list and the old ContentItem is entirely 
+            replaced with the new ContentItem. You can assume the size of the content 
+            will not change while updating it
+        '''
 
+        # Search for the given CID
+        c = self.find(cid)
+
+        if c:
+            # Move to the beginning of the list
+
+            # Use PUT
+            pass
+
+        else:
+            return None
 
     def mruEvict(self):
         ''' Removes the first item of the list. '''
-        pass
 
+        # Make the head the head's next value, remove the heads next pointer
+        temp = self.head
+        self.head = temp.next
+        temp.next = None
+
+        self.remainingSize += temp.size     # Increase the remaining size
+        self.numItems -= 1                  # Decrement the number of items
     
     def lruEvict(self):
         ''' Removes the last item of the list. '''
-        pass
+        
+        h = self.head
 
+        # Get the next to last node, h
+        for i in range(len(self.size)-1):
+
+            h = h.next
+
+        h.next = None                   # Remove next pointer
+        self.remainingSize += h.size    # Increase the reamining size
+        self.numItems -= 1              # Decrement the number of items
     
     def clear(self):
         ''' Removes all items from the list. '''
-        pass
+
+        h = self.head
+        count = 0   
+
+        # Not cleared until there are 0 items and the max size left
+        while self.numItems != 0 and self.remainingSize != self.maxSize:
+
+            # Iterate through the lenght, decrement as it proceeds
+            for i in range(len(self.numItems)-count):
+
+                h = h.next
+            
+            h.next = None
+            self.remainingSize += h.size    # Increase the remaining size
+            self.numItems -= 1              # Decrement the number of items
+    
+        return 'Cleared cache!'
 
 
 class Cache:
