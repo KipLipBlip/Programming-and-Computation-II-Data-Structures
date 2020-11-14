@@ -242,24 +242,24 @@ class CacheList:
                     # Continue eviction until enough size
                     while self.remainingSize < content.size:
 
-                        self.lruEvict()     # Removes last item in linked list
-                        self.put(content)
+                        self.lruEvict()             # Removes last item in linked list
+
+                    self.put(content, 'lru')
 
                 elif evictionPolicy.lower() == 'mru':
 
                     # Continue eviction until enough size
                     while self.remainingSize < content.size:
 
-                        self.mruEvict()     # Removes first item in linked list
-                        self.put(content)
+                        self.mruEvict()             # Removes first item in linked list
+
+                    self.put(content, 'mru')
         else:
             return 'Insertion not allowed. Content size is too large.'
         
         # Successful insertion
         return f'INSERTED: {content}'
 
-    
-    
     def find(self, cid):
         ''' Search for content in the list. 
         
@@ -323,20 +323,18 @@ class CacheList:
 
             h = h.next
 
-        h.next = None                   # Remove next pointer
-        self.remainingSize += h.size    # Increase the reamining size
-        self.numItems -= 1              # Decrement the number of items
+        h.next = None                       # Remove next pointer
+        self.remainingSize += h.value.size  # Increase the reamining size
+        self.numItems -= 1                  # Decrement the number of items
     
     def clear(self):
         ''' Removes all items from the list. '''
 
-        h = self.head
-        count = 0   
+        # Remove the head and reset original values
+        self.head = None
 
-        # Not cleared until there are 0 items and the max size left
-        while self.numItems != 0 and self.remainingSize != self.maxSize:
-
-            self.mruEvict()
+        self.numItems = 0
+        self.remainingSize = self.maxSize
     
         return 'Cleared cache!'
 
