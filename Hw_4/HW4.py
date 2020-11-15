@@ -123,9 +123,6 @@ class CacheList:
         [CONTENT ID: 1006 SIZE: 18 HEADER: another header CONTENT: 111110]
         <BLANKLINE>
 
-
-        ### HERE
-
         >>> lst.put(content1, 'mru')
         'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
         >>> lst
@@ -258,6 +255,7 @@ class CacheList:
                         self.mruEvict()             # Removes first item in linked list
 
                     self.put(content, 'mru')
+
         else:
             return 'Insertion not allowed. Content size is too large.'
         
@@ -273,23 +271,22 @@ class CacheList:
         
         h = self.head
 
-        # Iterate through the length of the linked list
-        for i in range(self.numItems):
+        # Continue while there is a neighbour
+        while h != None:
 
-            while h.next != None:
+            if h.value.cid == cid:
 
-                # If the cid matches, return the matching object
-                if h.value.cid == cid:
+                # Move node to front
+                self.remove(h.value.cid)
+                h.next, self.head = self.head, h
 
-                    # Move to the front
-                    h.next, self.head = self.head, h
+                # Return head
+                return self.head
 
-                    return h.value
-
-                else:
-                    h = h.next
-
-        # Default to None after process complete
+            # Iterate
+            h = h.next
+        
+        # Default
         return None
 
     def update(self, cid, content):
@@ -315,11 +312,11 @@ class CacheList:
     def mruEvict(self):
         ''' Removes the first item of the list. '''
 
-        self.remainingSize += self.head.value.size   # Increase the remaining size
-        self.numItems -= 1                      # Decrement the number of items
+        self.remainingSize += self.head.value.size  # Increase the remaining size
+        self.numItems -= 1                          # Decrement the number of items
 
         # Make the head the head's next value
-        self.head.next = self.head
+        self.head.next, self.head = None, self.head.next
     
     def lruEvict(self):
         ''' Removes the last item of the list. '''
