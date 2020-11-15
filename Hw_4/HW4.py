@@ -26,7 +26,7 @@ class ContentItem:
     '''
         >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
         >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
-        >>> content3 = ContentItem(1005, 18, 'Content-Type: 2', '<html><p>'CMPSC132'</p></html>')
+        >>> content3 = ContentItem(1005, 18, 'Content-Type: 2', '<html><p>"CMPSC132"</p></html>')
         >>> content4 = ContentItem(1005, 18, 'another header', '111110')
         >>> hash(content1)
         0
@@ -75,7 +75,7 @@ class CacheList:
     '''
         >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
         >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
-        >>> content3 = ContentItem(1005, 180, 'Content-Type: 2', '<html><p>'CMPSC132'</p></html>')
+        >>> content3 = ContentItem(1005, 180, 'Content-Type: 2', '<html><p>"CMPSC132"</p></html>')
         >>> content4 = ContentItem(1006, 18, 'another header', '111110')
         >>> content5 = ContentItem(1008, 2, 'items', '11x1110')
         >>> lst=CacheList(200)
@@ -113,12 +113,12 @@ class CacheList:
         <BLANKLINE>
 
         >>> lst.put(content3, 'lru')
-        'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>'
+        'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>'
         >>> lst
         REMAINING SPACE:0
         ITEMS:3
         LIST:
-        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>'CMPSC132'</p></html>]
+        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>]
         [CONTENT ID: 1008 SIZE: 2 HEADER: items CONTENT: 11x1110]
         [CONTENT ID: 1006 SIZE: 18 HEADER: another header CONTENT: 111110]
         <BLANKLINE>
@@ -280,8 +280,12 @@ class CacheList:
                 self.remove(h.value.cid)
                 h.next, self.head = self.head, h
 
+                # Adjust stats
+                self.remainingSize -= h.value.size
+                self.numItems += 1
+
                 # Return head
-                return self.head
+                return self.head.value
 
             # Iterate
             h = h.next
@@ -298,13 +302,16 @@ class CacheList:
             will not change while updating it
         '''
 
-        # Search for the given CID
+        # Search for the given cid
         c = self.find(cid)
 
         if c:
-            # Move to the beginning of the list
 
-            pass
+            # Remove given cid, add new content to front
+            self.remove(cid)
+            self.put(content, 'mru')
+
+            return f'UPDATED: {content}'
 
         else:
             return None
@@ -332,7 +339,7 @@ class CacheList:
         self.numItems -= 1                      # Decrement the number of items
 
         h.next = None                           # Remove next pointer
-    
+     
     def clear(self):
         ''' Removes all items from the list. '''
 
@@ -346,78 +353,79 @@ class CacheList:
 
     def remove(self, cid):
         ''' Removes item by cid 
-        
-        >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
-        >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
-        >>> content3 = ContentItem(1005, 180, 'Content-Type: 2', '<html><p>CMPSC132</p></html>')
-        >>> lst = CacheList(300)
+            
+            >>> content1 = ContentItem(1000, 10, 'Content-Type: 0', '0xA')
+            >>> content2 = ContentItem(1004, 50, 'Content-Type: 1', '110010')
+            >>> content3 = ContentItem(1005, 180, 'Content-Type: 2', '<html><p>"CMPSC132"</p></html>')
+            >>> lst = CacheList(300)
 
-        >>> lst.put(content1, 'mru')
-        'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
-        >>> lst.put(content2, 'mru')
-        'INSERTED: CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010'
-        >>> lst.put(content3, 'mru')
-        'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>'
+            >>> lst.put(content1, 'mru')
+            'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
+            >>> lst.put(content2, 'mru')
+            'INSERTED: CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010'
+            >>> lst.put(content3, 'mru')
+            'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>'
 
-        >>> lst
-        REMAINING SPACE:60
-        ITEMS:3
-        LIST:
-        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>]
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
-        [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
-        <BLANKLINE>
+            >>> lst
+            REMAINING SPACE:60
+            ITEMS:3
+            LIST:
+            [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>]
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            <BLANKLINE>
 
-        # Remove head
-        >>> lst.remove(1005)
-        >>> lst
-        REMAINING SPACE:240
-        ITEMS:2
-        LIST:
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
-        [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            # Remove head
+            >>> lst.remove(1005)
+            >>> lst
+            REMAINING SPACE:240
+            ITEMS:2
+            LIST:
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            <BLANKLINE>
 
-        >>> lst.put(content3, 'mru')
-        'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>'
-        >>> lst
-        REMAINING SPACE:60
-        ITEMS:3
-        LIST:
-        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>]
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
-        [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
-        <BLANKLINE>
+            >>> lst.put(content3, 'mru')
+            'INSERTED: CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>'
+            >>> lst
+            REMAINING SPACE:60
+            ITEMS:3
+            LIST:
+            [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>]
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            <BLANKLINE>
 
-        # Remove last
-        >>> lst.remove(1000)
-        >>> lst
-        REMAINING SPACE:70
-        ITEMS:2
-        LIST:
-        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>]
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
-        <BLANKLINE>
+            # Remove last
+            >>> lst.remove(1000)
+            >>> lst
+            REMAINING SPACE:70
+            ITEMS:2
+            LIST:
+            [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>]
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            <BLANKLINE>
 
-        >>> lst.put(content1, 'mru')
-        'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
-        >>> lst
-        REMAINING SPACE:60
-        ITEMS:3
-        LIST:
-        [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
-        [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>CMPSC132</p></html>]
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            >>> lst.put(content1, 'mru')
+            'INSERTED: CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA'
+            >>> lst
+            REMAINING SPACE:60
+            ITEMS:3
+            LIST:
+            [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            [CONTENT ID: 1005 SIZE: 180 HEADER: Content-Type: 2 CONTENT: <html><p>"CMPSC132"</p></html>]
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            <BLANKLINE>
 
-        # Remove middle
-        >>> lst.remove(1005)
-        >>> lst
-        REMAINING SPACE:110
-        ITEMS:2
-        LIST:
-        [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
-        [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
-        <BLANKLINE>
-
+            # Remove middle
+            >>> lst.remove(1005)
+            >>> lst
+            REMAINING SPACE:110
+            ITEMS:2
+            LIST:
+            [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
+            [CONTENT ID: 1004 SIZE: 50 HEADER: Content-Type: 1 CONTENT: 110010]
+            <BLANKLINE>
         '''
 
         h = self.head
@@ -701,3 +709,7 @@ class CacheList:
 #     def updateContent(self, content):
 #         # YOUR CODE STARTS HERE
 #         pass        
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
