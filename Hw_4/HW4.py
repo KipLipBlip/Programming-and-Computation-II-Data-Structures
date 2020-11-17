@@ -278,7 +278,11 @@ class CacheList:
 
                 # Remove value and move node to front
                 self.remove(h.value.cid)
+
                 h.next, self.head = self.head, h
+
+                self.remainingSize += self.head.value.size      # Increase the remaining size
+                self.numItems -= 1                              # Decrement the number of items
 
                 # Return head
                 return self.head.value
@@ -440,10 +444,6 @@ class CacheList:
 
                 if h == self.head:
 
-                    # Remove the head
-                    self.remainingSize += self.head.value.size      # Increase the remaining size
-                    self.numItems -= 1                              # Decrement the number of items
-
                     # Make the head the head's next value
                     self.head = self.head.next
 
@@ -456,9 +456,6 @@ class CacheList:
                     for i in range(self.numItems-2):
 
                         j = j.next
-
-                    self.remainingSize += j.next.value.size         # Increase the remaining size
-                    self.numItems -= 1                              # Decrement the number of items
 
                     j.next = None
 
@@ -479,8 +476,6 @@ class CacheList:
 
                                 j.next = j.next.next
 
-                                self.remainingSize += j.next.value.size         # Increase the remaining size
-                                self.numItems -= 1                              # Decrement the number of items
                         else:
                             break
 
