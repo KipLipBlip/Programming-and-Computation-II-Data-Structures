@@ -279,10 +279,12 @@ class CacheList:
                 # Remove value and move node to front
                 self.remove(h.value.cid)
 
+                # Place at the front
                 h.next, self.head = self.head, h
 
-                self.remainingSize += self.head.value.size      # Increase the remaining size
-                self.numItems -= 1                              # Decrement the number of items
+                # Adjust size and # of items
+                self.remainingSize -= self.head.value.size
+                self.numItems += 1
 
                 # Return head
                 return self.head.value
@@ -426,7 +428,7 @@ class CacheList:
             # Remove middle
             >>> lst.remove(1005)
             >>> lst
-            REMAINING SPACE:110
+            REMAINING SPACE:240
             ITEMS:2
             LIST:
             [CONTENT ID: 1000 SIZE: 10 HEADER: Content-Type: 0 CONTENT: 0xA]
@@ -436,46 +438,64 @@ class CacheList:
 
         h = self.head
 
+        # Iterate through all items to find cid
         for i in range(self.numItems):
 
+            # This is the node to be removed
             if h.value.cid == cid:
 
-                # This is the node
-
+                # Remove the head
                 if h == self.head:
+
+                    # Adjust size and # of items
+                    self.remainingSize += self.head.value.size
+                    self.numItems -= 1
 
                     # Make the head the head's next value
                     self.head = self.head.next
 
+                # Remove the tail
                 elif h.next == None:
 
                     # This is the last node
 
+                    # Get the second to last node to remove its reference to the tail node
                     j = self.head
 
                     for i in range(self.numItems-2):
 
                         j = j.next
 
+                    # Adjust size and # of items
+                    self.remainingSize += j.next.value.size
+                    self.numItems -= 1
+
+                    # Remove pointer
                     j.next = None
 
+                # Remove node between two other nodes
                 else:
 
                     # Most general case
 
                     j = self.head
 
+                    # Iterate through the items to find the correct cid
                     for i in range(self.numItems):
 
-                        # Avoid attr error
+                        # Avoid attr error, no None value
                         if j.next:
 
                             if j.next.value.cid == cid:
-                            
-                                # Reassign left node's next to right node
 
+                                # Adjust size and # of items
+                                self.remainingSize += j.next.value.size
+                                self.numItems -= 1
+
+                                # Reassign left node's next to right node (remove pointer to node that were removing.. j.next)
                                 j.next = j.next.next
 
+                        # Reached the end
                         else:
                             break
 
