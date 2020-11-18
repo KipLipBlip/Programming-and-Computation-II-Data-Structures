@@ -1,0 +1,397 @@
+# HW4
+# Due Date: 11/21/2020, 11:59PM
+'''                                   
+### Collaboration Statement:
+        I worked on this assignment alone, using only this semeseter's materials
+
+### Description:
+        The overall cache structure will be implemented as a hash table using separate chaining for collision resolution,
+        with each individual level implemented as a linked list.
+'''
+
+class Node:
+
+    def __init__(self, content):
+        ''' Constructor '''
+        self.value = content
+        self.next = None
+
+    def __str__(self):
+        ''' Object's string representation '''
+        return ('CONTENT:{}\n'.format(self.value))
+
+    __repr__=__str__
+
+class ContentItem:
+
+    def __init__(self, cid, size, header, content):
+        ''' Constructor '''
+        self.cid = cid              # Stores the content id.
+        self.size = size            # Stores the size of the content as a nonnegative integer.
+        self.header = header        # Information stored by the ContentItem (used for hash function later).
+        self.content = content      # Information stored by the ContentItem.
+
+    def __str__(self):
+        ''' Object's string representation '''
+        return f'CONTENT ID: {self.cid} SIZE: {self.size} HEADER: {self.header} CONTENT: {self.content}'
+
+    __repr__=__str__
+
+    def __eq__(self, other):
+        ''' Equality operator '''
+        if isinstance(other, ContentItem):
+            return self.cid == other.cid and self.size == other.size and self.header == other.header and self.content == other.content
+        return False
+
+    def __hash__(self):
+        ''' Returns the hash value for this ContentItem. '''
+        # Let the hash value be equal to the sum of every ASCII value in the header, modulo 3
+        
+        h = 0
+
+        # Iterate through each letter of the header
+        for i in range(len(self.header)):
+            
+            # Add ascii's value to sum
+            h += ord(self.header[i])
+        
+        return h % 3
+
+class CacheList:
+    
+    def __init__(self, size):
+        ''' Constructor '''
+        self.head = None                # Points to the first node in the linked list (defaults to None)
+        self.maxSize = size             # Maximum size that the CacheList can store
+        self.remainingSize = size       # Remaining size that the CacheList can store
+        self.numItems = 0               # The number of items currently in the CacheList
+
+    def __str__(self):
+        ''' Object's string representation '''
+        listString = ''
+        current = self.head
+        while current is not None:
+            listString += '[' + str(current.value) + ']\n'
+            current = current.next
+        return 'REMAINING SPACE:{}\nITEMS:{}\nLIST:\n{}'.format(self.remainingSize, self.numItems, listString)  
+
+    __repr__=__str__
+
+    def __len__(self):
+        ''' Length operator '''
+        return self.numItems
+    
+    def put(self, content, evictionPolicy):
+        ''' Adds Nodes at the beginning of the list. 
+        
+            Adds nodes at the beginning of the list and evicts items as necessary to free up 
+            space. If the content is larger than the maximum size, do not evict anything. 
+            Otherwise, if there is currently not enough space for the content, evict items 
+            according to the eviction policy.If the content id exists in the list prior the
+            insertion, content is not added into the list and the current content is moved
+            to the beginning of the list
+        '''
+
+        # If the content is larger than the maximum size, do not evict anything.
+
+        if content.size < self.maxSize:
+
+            # If there is enough remaining space, just add the obj, no need to evict
+
+            if content.size <= self.remainingSize:
+                
+                # Check for matching ID 
+
+                if self.find(content.cid):
+
+                    return f'Insertion of content item {content.cid} not allowed. Content already in cache.'
+
+                else:
+                    # Add the content to the beginning of the linked list
+
+                    h = self.head
+                    nn = Node(content)
+
+                    # Check for None head
+                    if h:
+
+                        # There is a head, shift everything down
+                        nn.next, self.head = self.head, nn
+
+                        # Increment numItems and decrement remaningSize
+                        self.numItems += 1
+                        self.remainingSize -= nn.value.size
+
+                    else:
+                        # There is no head, this node is the head
+                        self.head = nn
+
+                        # Increment numItems and decrement remaningSize
+                        self.numItems += 1
+                        self.remainingSize -= nn.value.size
+
+            else:
+                # There is currently not enough space for the content, evict items according to the eviction policy.
+
+                if evictionPolicy.lower() == 'lru':
+
+                    # Continue eviction until enough size
+                    while self.remainingSize < content.size:
+
+                        self.lruEvict()             # Removes last item in linked list
+
+                    self.put(content, 'lru')
+
+                elif evictionPolicy.lower() == 'mru':
+
+                    # Continue eviction until enough size
+                    while self.remainingSize < content.size:
+
+                        self.mruEvict()             # Removes first item in linked list
+
+                    self.put(content, 'mru')
+
+        else:
+            return 'Insertion not allowed. Content size is too large.'
+        
+        # Successful insertion
+        return f'INSERTED: {content}'
+
+    def find(self, cid):
+        ''' Search for content in the list. 
+        
+            Finds a ContentItem from the list by id, moving the ContentItem to 
+            the front of the list if found.
+        '''
+        
+        h = self.head
+
+        # Continue while there is a neighbour
+        while h != None:
+
+            if h.value.cid == cid:
+
+                # Remove value and move node to front
+                self.remove(h.value.cid)
+
+                # Place at the front
+                h.next, self.head = self.head, h
+
+                # Adjust size and # of items
+                self.remainingSize -= self.head.value.size
+                self.numItems += 1
+
+                # Return head
+                return self.head.value
+
+            # Iterate
+            h = h.next
+        
+        # Default
+        return None
+
+    def update(self, cid, content):
+        ''' Updates the content in the list. 
+        
+            Updates a ContentItem with a given id in the list. If a match is found, 
+            it is moved to the beginning of the list and the old ContentItem is entirely 
+            replaced with the new ContentItem. You can assume the size of the content 
+            will not change while updating it
+        '''
+
+        # Search for the given cid
+        c = self.find(cid)
+
+        if c:
+
+            # Remove given cid, add new content to front
+            self.remove(cid)
+            self.put(content, 'mru')
+
+            return f'UPDATED: {content}'
+
+        else:
+            return None
+
+    def mruEvict(self):
+        ''' Removes the first item of the list. '''
+
+        self.remainingSize += self.head.value.size  # Increase the remaining size
+        self.numItems -= 1                          # Decrement the number of items
+
+        # Make the head the head's next value
+        self.head.next, self.head = None, self.head.next
+    
+    def lruEvict(self):
+        ''' Removes the last item of the list. '''
+        
+        h = self.head
+
+        if self.numItems >= 2:
+
+            # Get the next to last node, h
+            for i in range(self.numItems-2):
+
+                h = h.next
+
+            self.remainingSize += h.next.value.size # Increase the reamining size
+            self.numItems -= 1                      # Decrement the number of items
+
+            h.next = None                           # Remove next pointer'
+
+        else:
+            # Size must be 1, just clear
+            self.clear()
+     
+    def clear(self):
+        ''' Removes all items from the list. '''
+
+        # Remove the head and reset original values
+        self.head = None
+
+        self.numItems = 0
+        self.remainingSize = self.maxSize
+    
+        return 'Cleared cache!'
+
+    def remove(self, cid):
+
+        h = self.head
+
+        # Iterate through all items to find cid
+        for i in range(self.numItems):
+
+            # This is the node to be removed
+            if h.value.cid == cid:
+
+                # Remove the head
+                if h == self.head:
+
+                    # Adjust size and # of items
+                    self.remainingSize += self.head.value.size
+                    self.numItems -= 1
+
+                    # Make the head the head's next value
+                    self.head = self.head.next
+
+                # Remove the tail
+                elif h.next == None:
+
+                    # This is the last node
+
+                    # Get the second to last node to remove its reference to the tail node
+                    j = self.head
+
+                    for i in range(self.numItems-2):
+
+                        j = j.next
+
+                    # Adjust size and # of items
+                    self.remainingSize += j.next.value.size
+                    self.numItems -= 1
+
+                    # Remove pointer
+                    j.next = None
+
+                # Remove node between two other nodes
+                else:
+
+                    # Most general case
+
+                    j = self.head
+
+                    # Iterate through the items to find the correct cid
+                    for i in range(self.numItems):
+
+                        # Avoid attr error, no None value
+                        if j.next:
+
+                            if j.next.value.cid == cid:
+
+                                # Adjust size and # of items
+                                self.remainingSize += j.next.value.size
+                                self.numItems -= 1
+
+                                # Reassign left node's next to right node (remove pointer to node that were removing.. j.next)
+                                j.next = j.next.next
+
+                        # Reached the end
+                        else:
+                            break
+
+                        j = j.next
+
+            h = h.next
+
+class Cache:
+   
+    def __init__(self):
+        ''' Constructor '''
+        self.hierarchy = [CacheList(200), CacheList(200), CacheList(200)]
+        self.size = 3
+    
+    def __str__(self):
+        ''' Object's str representation '''
+        return ('L1 CACHE:\n{}\nL2 CACHE:\n{}\nL3 CACHE:\n{}\n'.format(self.hierarchy[0], self.hierarchy[1], self.hierarchy[2]))
+    
+    __repr__=__str__
+
+    def clear(self):
+        ''' Clears all CacheLists in the hierarchy. '''
+        for item in self.hierarchy:
+            item.clear()
+        return 'Cache cleared!'
+
+    def insert(self, content, evictionPolicy):
+        ''' Adds an item into the proper cache list
+        
+            Inserts a ContentItem into the proper CacheList.
+            After using the hash function to determine which CacheList 
+            the content should go into, call that CacheList’s put 
+            method to add the content
+        '''
+
+        # Get the hash value of the content
+        h = hash(content)
+
+        # Put the content in the appropriate linked list
+        return self.hierarchy[h].put(content, evictionPolicy)
+
+    def retrieveContent(self, content):
+        ''' Gets an item from the proper cache list
+
+            After using the hash function to determine which CacheList the content 
+            should exist in, call that CacheList’s find method to find the content 
+        '''
+
+        # Get the hash value of the content
+        h = hash(content)
+
+        # find the content in the appropriate linked list
+        x = self.hierarchy[h].find(content.cid)
+
+        # Return item if found, otherwise return string
+        if x:
+            return x
+        else:
+            return 'Cache miss!'
+
+    def updateContent(self, content):
+        ''' Updates an item from the proper cache list.
+        
+            After using the hash function to determine which CacheList 
+            the content would be in, call that CacheList’s update method 
+            to update the content.
+        '''
+
+        # Get the hash value of the content
+        h = hash(content)
+
+        # find the content in the appropriate linked list
+        x = self.hierarchy[h].update(content.cid, content)
+
+        # Return item if found, otherwise return string
+        if x:
+            return x
+        else:
+            return 'Cache miss!'
