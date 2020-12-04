@@ -25,9 +25,8 @@ def digitSum(num):
         True
         >>> digitSum(258)(1011010101010)
         False
-    ''' 
-    # Adds the digit for later, but removes the digit for recursive call
-    return num%10 + ( 0 if num==0 else digitSum(num//10) )
+    '''
+    return lambda n: True if num == sum( [ int(str(n)[i]) for i in range(len(str(n)))] ) else False
 
 
 def repeat(itr, n):
