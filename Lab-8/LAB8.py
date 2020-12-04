@@ -26,6 +26,7 @@ def digitSum(num):
         >>> digitSum(258)(1011010101010)
         False
     ''' 
+    # Adds the digit for later, but removes the digit for recursive call
     return num%10 + ( 0 if num==0 else digitSum(num//10) )
 
 
@@ -45,8 +46,20 @@ def repeat(itr, n):
     >>> repeat(numList3, 3)
     5
     '''
-    # YOUR CODE STARTS HERE
-    pass
+    t = 1
+    while n > 1:
+
+        h = next(itr)
+        i = next(itr)
+        j = next(itr)
+
+        if h == i or i == j:
+            t += 1
+        
+        if n == t:
+            return i
+        
+    return next(itr)
 
 
 def genAccum(seq, fn):
@@ -58,5 +71,15 @@ def genAccum(seq, fn):
         >>> list(genAccum([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], mul))
         [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
     '''
-    # YOUR CODE STARTS HERE
-    pass
+    t = 1
+    i = iter(seq)
+
+    # Initally iterate & yield
+    u = next(i)
+    yield u
+
+    # Continue until no more length, reassign var and yield
+    while t <= len(seq):
+
+        u = fn(u, next(i))
+        yield u
