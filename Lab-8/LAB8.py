@@ -87,7 +87,8 @@ def genAccum(seq, fn):
     yield u
 
     # Continue until no more length, reassign var and yield
-    while t <= len(seq):
+    while t < len(seq):
 
         u = fn(u, next(i))
         yield u
+        t+=1
