@@ -46,19 +46,28 @@ def repeat(itr, n):
     >>> repeat(numList3, 3)
     5
     '''
+    # Initialize
     t = 1
+    i = next(itr)
+    j = next(itr)
+
+    # Loop while its not the first index / StopIteration
     while n > 1:
 
-        h = next(itr)
-        i = next(itr)
+        # Check if they're equal
+        if i == j:
+            t += 1
+        else:
+            t = 1
+
+        # Check num of iterations
+        if t == n:
+            return i
+
+        # Iterate
+        i = j
         j = next(itr)
 
-        if h == i or i == j:
-            t += 1
-        
-        if n == t:
-            return i
-        
     return next(itr)
 
 
