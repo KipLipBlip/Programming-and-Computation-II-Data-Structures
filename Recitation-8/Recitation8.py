@@ -12,8 +12,10 @@ def missing(n):
     1
     '''
 
-    for i in range(1,len(n)+2):
+    # for i in range(1,len(n)+2):
 
-        if i not in n:
+    #     if i not in n:
 
-            return i
+    #         return i
+
+    return int(''.join([str(i) for i in range(1,len(n)+2) if i not in n]))
