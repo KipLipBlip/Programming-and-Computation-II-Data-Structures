@@ -30,13 +30,17 @@
 
 ## Assignments
 
-| Assignment | Description | Classes/Functions |
-| -----------|------------ | ----------------- |
-| 
-| 
-| 
-| 
-
+|        Assignment       | Description | Classes/Functions |
+| ------------------------|------------ | ----------------- |
+| [Lab 0](/Lab-0/LAB0.py) | Ethics
+| [Lab 1](/Lab-1/LAB1.py) | 
+| [Lab 2](/Lab-2/LAB2.py) |
+| [Lab 3](/Lab-3/LAB3.py) |
+| [Lab 4](/Lab-4/LAB4.py) |
+| [Lab 5](/Lab-5/LAB5.py) |
+| [Lab 6](/Lab-6/LAB6.py) |
+| [Lab 7](/Lab-7/LAB7.py) | 
+| [Lab 8](/Lab-8/LAB8.py) | Higher Order Functions & Generators
 
 
 [Lab 1]() - Ethics
