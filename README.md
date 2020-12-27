@@ -33,4 +33,4 @@
 | [Lab 7](/Lab-7/LAB7.py)    | Graphs                                       | *Node, Queue, Graph* |
 | [Lab 8](/Lab-8/LAB8.py)    | Higher Order Functions & Generators          | *sumMatricies(), digitSum(), repeat(), genAccum()* |
 
-**dominicassia/CMPSC-132 is licensed under the GNU General Public License v3.0**
+[**dominicassia/CMPSC-132 is licensed under the GNU General Public License v3.0**](LICENSE)
