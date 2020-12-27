@@ -2,3 +2,5 @@
 **/Handouts
 *.pdf
 *__pycache__
+/.vscode
+settings.json
