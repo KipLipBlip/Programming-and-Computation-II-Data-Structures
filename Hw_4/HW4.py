@@ -47,7 +47,8 @@ class ContentItem:
 
     def __str__(self):
         ''' Object's string representation '''
-        return f'CONTENT ID: {self.cid} SIZE: {self.size} HEADER: {self.header} CONTENT: {self.content}'
+        # return f'CONTENT ID: {self.cid} SIZE: {self.size} HEADER: {self.header} CONTENT: {self.content}'
+        return 'CONTENT ID: {} SIZE: {} HEADER: {} CONTENT: {}'.format(self.cid, self.zise, self.header, self.content)
 
     __repr__=__str__
 
